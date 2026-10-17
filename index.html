@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
   
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body class="theme-night">
   <!-- Interactive Stardust Canvas for Particle Trail -->
@@ -56,14 +56,13 @@
         <button class="nav-item" data-tab="secret" id="nav-secret">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <span>Secret</span>
-          <span class="nav-badge" id="secret-badge">🔒</span>
         </button>
       </nav>
 
       <!-- Sidebar Bottom Character Widget -->
       <div class="sidebar-footer">
         <div class="cloud-mascot-wrapper" id="cloud-mascot" title="Click me to hear a gentle chime!">
-          <img src="assets/sidebar_cloud.jpg" alt="Dream Cloud Buddy" class="sidebar-cloud-img">
+          <img src="assets/sidebar_cloud_hd.jpg" alt="Dream Cloud Buddy" class="sidebar-cloud-img">
           <div class="cloud-blush"></div>
         </div>
         <div class="speech-bubble">
@@ -90,7 +89,7 @@
 
     <!-- MAIN CONTENT AREA -->
     <main class="main-content">
-      <!-- TOP NAVIGATION BAR -->
+      <!-- TOP NAVIGATION BAR (Exact Match to Reference Image) -->
       <header class="topbar">
         <!-- Search Bar with Dream Filtering -->
         <div class="search-box">
@@ -101,13 +100,6 @@
 
         <!-- Top Right Actions -->
         <div class="topbar-actions">
-          <!-- Retro Wishes Delivered Odometer Counter (+1 bonus pt) -->
-          <div class="wish-odometer" title="Dreams delivered to sleepy minds across the cosmos">
-            <span class="odometer-sparkle">✨</span>
-            <span class="odometer-label">Wishes woven:</span>
-            <span class="odometer-number" id="odometer-val">3,492</span>
-          </div>
-
           <!-- Web Audio API Music Box Pill (+3 bonus pts) -->
           <button class="music-pill" id="lullaby-toggle" aria-label="Toggle Dreamy Lullaby Music">
             <span class="music-icon" id="music-note-icon">🎵</span>
@@ -115,12 +107,7 @@
             <div class="sound-wave-bars" id="sound-bars">
               <span></span><span></span><span></span><span></span>
             </div>
-            <span class="music-state-icon" id="music-state">▶</span>
-          </button>
-
-          <!-- Day/Night/Chaos Mode Toggle (+5 bonus pts) -->
-          <button class="theme-toggle-btn" id="theme-toggle" title="Switch Atmosphere">
-            <span id="theme-icon">🌙</span>
+            <span class="music-state-icon" id="music-state">⏸</span>
           </button>
 
           <!-- User / Lumi Profile Circle -->
@@ -130,11 +117,11 @@
         </div>
       </header>
 
-      <!-- HERO BANNER SECTION -->
+      <!-- HERO BANNER SECTION (HD Composite) -->
       <section class="hero-section" id="hero-banner">
         <!-- Layered Dream Landscape Background -->
         <div class="hero-bg-container">
-          <img src="assets/hero_banner_clean.jpg?v=2" alt="Lumi Dreamscape" class="hero-backdrop-img">
+          <img src="assets/hero_banner_hd.jpg" alt="Lumi Dreamscape" class="hero-backdrop-img">
           <div class="hero-gradient-overlay"></div>
         </div>
 
@@ -189,7 +176,7 @@
           </div>
           <div class="about-body">
             <div class="about-photo-wrap" id="about-photo-interactive">
-              <img src="assets/about_photo.jpg" alt="Lumi Portrait with Star" class="about-photo-img">
+              <img src="assets/about_photo_hd.jpg" alt="Lumi Portrait with Star" class="about-photo-img">
               <div class="photo-glow"></div>
             </div>
             <div class="about-text-content">
@@ -253,7 +240,7 @@
             <!-- Project 1: Dream Bubble Maker -->
             <div class="project-mini-card" data-project="bubble">
               <div class="project-img-box">
-                <img src="assets/proj1_clean.jpg" alt="Dream Bubble Maker" class="project-thumb">
+                <img src="assets/proj1_bubble_hd.jpg" alt="Dream Bubble Maker" class="project-thumb">
                 <div class="project-overlay-glow"></div>
               </div>
               <h4 class="project-mini-title">Dream Bubble Maker</h4>
@@ -266,7 +253,7 @@
             <!-- Project 2: Nightlight Guardian -->
             <div class="project-mini-card" data-project="nightlight">
               <div class="project-img-box">
-                <img src="assets/proj2_clean.jpg" alt="Nightlight Guardian" class="project-thumb">
+                <img src="assets/proj2_lantern_hd.jpg" alt="Nightlight Guardian" class="project-thumb">
                 <div class="project-overlay-glow"></div>
               </div>
               <h4 class="project-mini-title">Nightlight Guardian</h4>
@@ -279,7 +266,7 @@
             <!-- Project 3: Memory Garden -->
             <div class="project-mini-card" data-project="garden">
               <div class="project-img-box">
-                <img src="assets/proj3_clean.jpg" alt="Memory Garden" class="project-thumb">
+                <img src="assets/proj3_garden_hd.jpg" alt="Memory Garden" class="project-thumb">
                 <div class="project-overlay-glow"></div>
               </div>
               <h4 class="project-mini-title">Memory Garden</h4>
@@ -315,7 +302,7 @@
               <!-- Milestone 1 -->
               <div class="milestone-item active" data-step="1">
                 <div class="milestone-img-wrap">
-                  <img src="assets/journey1_clean.jpg" alt="A Tiny Spark" class="milestone-thumb">
+                  <img src="assets/journey1_spark_hd.jpg" alt="A Tiny Spark" class="milestone-thumb">
                   <span class="milestone-star-node">✦</span>
                 </div>
                 <h4 class="milestone-title">A Tiny Spark</h4>
@@ -325,7 +312,7 @@
               <!-- Milestone 2 -->
               <div class="milestone-item" data-step="2">
                 <div class="milestone-img-wrap">
-                  <img src="assets/journey2_clean.jpg" alt="First Discovery" class="milestone-thumb">
+                  <img src="assets/journey2_portal_hd.jpg" alt="First Discovery" class="milestone-thumb">
                   <span class="milestone-star-node">✦</span>
                 </div>
                 <h4 class="milestone-title">First Discovery</h4>
@@ -335,7 +322,7 @@
               <!-- Milestone 3 -->
               <div class="milestone-item" data-step="3">
                 <div class="milestone-img-wrap">
-                  <img src="assets/journey3_clean.jpg" alt="The Dream Machine" class="milestone-thumb">
+                  <img src="assets/journey3_machine_hd.jpg" alt="The Dream Machine" class="milestone-thumb">
                   <span class="milestone-star-node">✦</span>
                 </div>
                 <h4 class="milestone-title">The Dream Machine</h4>
@@ -345,7 +332,7 @@
               <!-- Milestone 4 -->
               <div class="milestone-item" data-step="4">
                 <div class="milestone-img-wrap">
-                  <img src="assets/journey4_clean.jpg" alt="Becoming a Dream Architect" class="milestone-thumb">
+                  <img src="assets/journey4_architect_hd.jpg" alt="Becoming a Dream Architect" class="milestone-thumb">
                   <span class="milestone-star-node">✦</span>
                 </div>
                 <h4 class="milestone-title">Becoming a Dream Architect</h4>
@@ -358,15 +345,7 @@
         <!-- CARD 2: THE HIDDEN ROOM (EASTER EGG!) -->
         <article class="card card-hidden-room" id="secret">
           <div class="hidden-room-artwork-wrap" id="hidden-arch-trigger">
-            <img src="assets/hidden_room_arch.jpg" alt="Secret Stone Archway" class="hidden-room-bg-img">
-            <div class="padlock-glow-center">
-              <span class="glowing-lock-icon" id="lock-icon">🔒</span>
-            </div>
-            <!-- Star Click Counter Indicator -->
-            <div class="click-counter-badge" id="click-counter-display">
-              <span class="star-counter-icon">⭐</span>
-              <span id="click-count-text">0 / 5 clicks</span>
-            </div>
+            <img src="assets/hidden_room_hd.jpg" alt="Secret Stone Archway" class="hidden-room-bg-img">
           </div>
           <div class="hidden-room-body">
             <h4 class="hidden-room-title">The Hidden Room</h4>
