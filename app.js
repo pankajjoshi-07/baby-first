@@ -697,6 +697,9 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       if (window.LumiCinematic) {
         window.LumiCinematic.open();
+      } else {
+        const m = document.getElementById('modal-intro');
+        if (m) m.hidden = false;
       }
     });
   }
@@ -706,6 +709,9 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       if (window.LumiCinematic) {
         window.LumiCinematic.open();
+      } else {
+        const m = document.getElementById('modal-intro');
+        if (m) m.hidden = false;
       }
     });
   }

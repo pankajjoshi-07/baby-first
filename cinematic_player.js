@@ -1148,7 +1148,15 @@
   }
 
   // --- INITIALIZATION ---
-  document.addEventListener('DOMContentLoaded', () => {
-    window.LumiCinematic = new LumiCinematicPlayer();
-  });
+  function initLumiCinematic() {
+    if (!window.LumiCinematic) {
+      window.LumiCinematic = new LumiCinematicPlayer();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLumiCinematic);
+  } else {
+    initLumiCinematic();
+  }
 })();
