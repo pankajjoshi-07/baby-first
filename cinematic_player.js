@@ -360,14 +360,8 @@
 
       if (this.skipBtn) {
         this.skipBtn.addEventListener('click', () => {
-          if (this.currentTime < 48.5) {
-            this.seek(48.5);
-            this.play();
-          } else {
-            this.close();
-            const proj = document.getElementById('projects');
-            if (proj) proj.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
+          this.seek(48.5);
+          this.play();
         });
       }
 
