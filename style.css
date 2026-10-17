@@ -798,9 +798,9 @@ body {
 .hero-star-trigger {
   position: absolute;
   bottom: 25px;
-  right: 55px;
-  width: 55px;
-  height: 55px;
+  right: 275px;
+  width: 60px;
+  height: 60px;
   cursor: pointer;
   border-radius: 50%;
   z-index: 25;
