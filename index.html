@@ -467,7 +467,7 @@
         </div>
         <div class="cinematic-header-actions">
           <button class="btn-cinematic-skip" id="btn-intro-skip" title="Skip to finale">
-            <span>Skip to Finale ⏭</span>
+            <span>Skip Intro ⏭</span>
           </button>
           <button class="modal-close-btn cinematic-close-btn" data-close="modal-intro" aria-label="Close cinematic video">&times;</button>
         </div>
@@ -485,8 +485,8 @@
         <!-- Dynamic Scene Title Card Overlay -->
         <div class="cinematic-overlay-card" id="cinematic-overlay-card">
           <span class="overlay-scene-tag" id="overlay-scene-tag">Scene 1 of 5</span>
-          <h3 class="overlay-scene-heading" id="overlay-scene-heading">A Quiet Wish</h3>
-          <p class="overlay-scene-caption" id="overlay-scene-caption">In a cozy bedroom at night, a little dreamer makes a wish...</p>
+          <h3 class="overlay-scene-heading" id="overlay-scene-heading">Galaxy Awakening</h3>
+          <p class="overlay-scene-caption" id="overlay-scene-caption">A dark purple galaxy appears as tiny stars twinkle...</p>
         </div>
 
         <!-- Scene 5 Ending Banner "Lumi — The Dream Architect" -->
@@ -494,13 +494,13 @@
           <div class="welcome-banner-glow"></div>
           <span class="welcome-pretitle">✨ EVERY DREAM MATTERS ✨</span>
           <h1 class="welcome-main-title">Lumi — The Dream Architect</h1>
-          <p class="welcome-subtitle">“Even the smallest dream can light up the universe.”</p>
+          <p class="welcome-subtitle">“Every dream matters.”</p>
           <div class="welcome-cta-row" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; z-index: 20;">
             <button class="btn-primary welcome-explore-btn" id="cinematic-btn-explore">
               <span>Explore Lumi's World ➔</span>
             </button>
             <button class="btn-secondary welcome-replay-btn" id="cinematic-btn-replay-end" style="border-radius: var(--radius-pill); padding: 12px 24px; font-weight: 600; font-size: 0.92rem; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.25); color: #fff; cursor: pointer; transition: all 0.2s ease;">
-              <span>Replay Film ↺</span>
+              <span>Replay Intro ↺</span>
             </button>
           </div>
         </div>
@@ -508,16 +508,16 @@
 
       <!-- Player Controls Bar -->
       <div class="cinematic-controls-bar">
-        <!-- Interactive Progress Scrubber with 5 Scene Markers -->
-        <div class="cinematic-timeline-track" id="cinematic-timeline-track" role="slider" aria-label="Video scrubber" aria-valuemin="0" aria-valuemax="55" aria-valuenow="0" tabindex="0">
+        <!-- Interactive Progress Scrubber with 5 Scene Markers (45 seconds) -->
+        <div class="cinematic-timeline-track" id="cinematic-timeline-track" role="slider" aria-label="Video scrubber" aria-valuemin="0" aria-valuemax="45" aria-valuenow="0" tabindex="0">
           <div class="cinematic-timeline-fill" id="cinematic-timeline-fill"></div>
           <div class="cinematic-timeline-handle" id="cinematic-timeline-handle"></div>
-          <!-- 5 Scene Chapter Markers (0%, 20%, 40%, 60%, 80%) -->
-          <div class="timeline-marker" style="left: 0%;" title="Scene 1: A Quiet Wish (00:00)"></div>
-          <div class="timeline-marker" style="left: 20%;" title="Scene 2: Lumi Is Born (00:11)"></div>
-          <div class="timeline-marker" style="left: 40%;" title="Scene 3: The Lost Dream (00:22)"></div>
-          <div class="timeline-marker" style="left: 60%;" title="Scene 4: The Magic of Kindness (00:33)"></div>
-          <div class="timeline-marker" style="left: 80%;" title="Scene 5: Every Dream Matters (00:44)"></div>
+          <!-- 5 Scene Chapter Markers (0s/0%, 8s/17.8%, 17s/37.8%, 27s/60%, 37s/82.2%) -->
+          <div class="timeline-marker" style="left: 0%;" title="Scene 1: Galaxy Awakening (00:00)"></div>
+          <div class="timeline-marker" style="left: 17.78%;" title="Scene 2: Starlight Dance (00:08)"></div>
+          <div class="timeline-marker" style="left: 37.78%;" title="Scene 3: The Glowing Portal (00:17)"></div>
+          <div class="timeline-marker" style="left: 60.0%;" title="Scene 4: The Kindness Wave (00:27)"></div>
+          <div class="timeline-marker" style="left: 82.22%;" title="Scene 5: Every Dream Matters (00:37)"></div>
         </div>
 
         <!-- Controls Row -->
@@ -536,17 +536,17 @@
             <div class="cinematic-time-display">
               <span id="cinematic-current-time">00:00</span>
               <span class="time-divider">/</span>
-              <span id="cinematic-total-time">00:55</span>
+              <span id="cinematic-total-time">00:45</span>
             </div>
           </div>
 
           <div class="cinematic-chapter-indicator" id="cinematic-chapter-indicator">
-            Scene 1: A Quiet Wish
+            Scene 1: Galaxy Awakening
           </div>
 
           <div class="cinematic-right-controls">
-            <!-- Mute / Unmute -->
-            <button class="ctrl-btn" id="ctrl-mute-toggle" aria-label="Toggle Sound" title="Mute / Unmute (M)">
+            <!-- Mute / Unmute / Sound Status -->
+            <button class="ctrl-btn" id="ctrl-mute-toggle" aria-label="Toggle Web Audio Synth" title="Web Audio Synth Sound (No external media files in project)">
               <svg id="ctrl-icon-vol-on" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
               <svg id="ctrl-icon-vol-off" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" hidden><path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6"/></svg>
             </button>
@@ -640,9 +640,9 @@
   <!-- Audio Synthesizer Script -->
   <script src="audio.js?v=6"></script>
   <!-- Lumi Cinematic Intro Engine -->
-  <script src="cinematic_player.js?v=33"></script>
+  <script src="cinematic_player.js?v=45"></script>
   <!-- Main Application Script -->
-  <script src="app.js?v=33"></script>
+  <script src="app.js?v=45"></script>
 </body>
 
 </html>

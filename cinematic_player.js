@@ -1,22 +1,22 @@
 /**
- * LUMI CINEMATIC INTRO: "EVERY DREAM MATTERS"
+ * LUMI CINEMATIC ANIMATION: "EVERY DREAM MATTERS" (45 Seconds)
  * 60 FPS HTML5 Canvas Animation Engine & Interactive Video Player
  * 
  * Title: LUMI — EVERY DREAM MATTERS
- * Duration: 55.0 Seconds (5 Scenes x 11.0 Seconds)
+ * Duration: 45.0 Seconds
  * 
  * Story:
- * 1. A Quiet Wish (0-11s): Cozy bedroom at night; a dreamer's wish turns into a glowing golden star.
- * 2. Lumi Is Born (11-22s): Golden star becomes Lumi; meets smiling star companion; flight into dream universe.
- * 3. The Lost Dream (22-33s): Lumi guides a lost dream to the Dream Machine; a purple storm strikes and steals light.
- * 4. The Magic of Kindness (33-44s): Lumi's inner kindness starlight awakens; colossal radiant shockwave breaks the storm.
- * 5. Every Dream Matters (44-55s): Islands glow again; Lumi hugs star companion beneath giant Dream Tree; "Lumi — The Dream Architect".
+ * SCENE 1 (0–8s): Dark purple galaxy appears; stars twinkle; Lumi awakens, blinks, tilts head, notices golden star.
+ * SCENE 2 (8–17s): Golden star circles Lumi; Lumi reaches toward it; spiral particles; background transitions to dream world.
+ * SCENE 3 (17–27s): Glowing portal opens; Lumi flies toward it; natural hair & cloak motion; multi-depth parallax.
+ * SCENE 4 (27–37s): Dream world dims; Lumi looks worried, hugs star companion; wave of golden & violet light restores stars.
+ * SCENE 5 (37–45s): World glows; Lumi & companion float beneath magical tree; Lumi smiles & waves; "Lumi — The Dream Architect" & "Every dream matters."
  */
 
 (function () {
   'use strict';
 
-  // --- 1. PROCEDURAL CINEMATIC AUDIO ENGINE (WEB AUDIO API) ---
+  // --- 1. PROCEDURAL CINEMATIC AUDIO SYNTHESIZER (WEB AUDIO API) ---
   class CinematicAudioEngine {
     constructor() {
       this.ctx = null;
@@ -38,7 +38,7 @@
         if (AudioContextClass) {
           this.ctx = new AudioContextClass();
           this.masterGain = this.ctx.createGain();
-          this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : 0.32, this.ctx.currentTime);
+          this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : 0.3, this.ctx.currentTime);
           this.masterGain.connect(this.ctx.destination);
         }
       }
@@ -50,7 +50,7 @@
     setMuted(muted) {
       this.isMuted = muted;
       if (this.masterGain && this.ctx) {
-        this.masterGain.gain.setTargetAtTime(this.isMuted ? 0 : 0.32, this.ctx.currentTime, 0.05);
+        this.masterGain.gain.setTargetAtTime(this.isMuted ? 0 : 0.3, this.ctx.currentTime, 0.05);
       }
     }
 
@@ -79,40 +79,14 @@
       this.playTone(f * 3, duration * 0.4, 'sine', gainVal * 0.15);
     }
 
-    playStormRumble() {
+    playKindnessWave() {
       if (!this.ctx || this.isMuted) return;
-      try {
-        const osc = this.ctx.createOscillator();
-        const filter = this.ctx.createBiquadFilter();
-        const gain = this.ctx.createGain();
-
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(55, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 1.2);
-
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(140, this.ctx.currentTime);
-
-        gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.2);
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(this.masterGain);
-
-        osc.start();
-        osc.stop(this.ctx.currentTime + 1.2);
-      } catch (e) {}
-    }
-
-    playShockwaveBlast() {
-      if (!this.ctx || this.isMuted) return;
-      const majorChord = ['C4', 'G4', 'C5', 'E5', 'G5', 'C6'];
-      majorChord.forEach((note, idx) => {
-        setTimeout(() => this.playChime(note, 2.5, 0.24), idx * 40);
+      const waveChord = ['C4', 'G4', 'C5', 'E5', 'G5', 'C6'];
+      waveChord.forEach((note, idx) => {
+        setTimeout(() => this.playChime(note, 2.5, 0.22), idx * 45);
       });
-      ['E6', 'G6', 'C6', 'G5'].forEach((note, idx) => {
-        setTimeout(() => this.playChime(note, 1.2, 0.15), 300 + idx * 90);
+      ['E6', 'G6', 'C6'].forEach((note, idx) => {
+        setTimeout(() => this.playChime(note, 1.2, 0.14), 280 + idx * 80);
       });
     }
 
@@ -122,60 +96,49 @@
       if (beat === this.lastBeat) return;
       this.lastBeat = beat;
 
-      // Scene 1: A Quiet Wish (0-11s) - Soft music box celesta lullaby
-      if (t < 11.0) {
+      // Scene 1: Galaxy Awakening (0-8s) - Quiet celestial lullaby
+      if (t < 8.0) {
         if (beat % 2 === 0) {
-          const lullabyNotes = ['C4', 'E4', 'G4', 'C5', 'B4', 'G4', 'E4', 'D4', 'C4', 'G4', 'C5', 'E5'];
-          const n = lullabyNotes[(beat / 2) % lullabyNotes.length];
-          this.playChime(n, 1.1, 0.18);
-        }
-        if (beat === 15) {
-          ['C5', 'E5', 'G5', 'C6'].forEach((n, i) => setTimeout(() => this.playChime(n, 0.9, 0.2), i * 110));
+          const notes = ['C4', 'E4', 'G4', 'C5', 'B4', 'G4', 'E4', 'D4'];
+          this.playChime(notes[(beat / 2) % notes.length], 1.2, 0.17);
         }
       }
-      // Scene 2: Lumi Is Born (11-22s) - Whimsical flight arpeggios
-      else if (t < 22.0) {
-        const flightMelody = ['F4', 'A4', 'C5', 'F5', 'G5', 'E5', 'C5', 'G4'];
-        this.playChime(flightMelody[beat % flightMelody.length], 0.6, 0.16);
+      // Scene 2: Starlight Dance (8-17s) - Playful circling arpeggios
+      else if (t < 17.0) {
+        const danceNotes = ['F4', 'A4', 'C5', 'F5', 'G5', 'E5', 'C5', 'G4'];
+        this.playChime(danceNotes[beat % danceNotes.length], 0.6, 0.16);
         if (beat % 8 === 0) {
           this.playTone(this.notesMap['F2'], 2.0, 'sine', 0.2);
         }
       }
-      // Scene 3: The Lost Dream & The Storm (22-33s) - Minor tension & storm rumble
-      else if (t < 33.0) {
-        if (t < 26.0) {
-          const curiousNotes = ['D4', 'F4', 'A4', 'C5', 'Bb4'];
-          this.playChime(curiousNotes[beat % curiousNotes.length], 0.7, 0.15);
-        } else {
-          if (beat % 4 === 0) {
-            this.playStormRumble();
-            this.playTone(this.notesMap['D2'], 1.4, 'sawtooth', 0.12);
-          }
-          if (beat % 2 === 1) {
-            const stormNotes = ['Ab3', 'D4', 'F4', 'Ab4'];
-            this.playTone(this.notesMap[stormNotes[beat % stormNotes.length]], 0.4, 'triangle', 0.14);
-          }
+      // Scene 3: The Glowing Portal (17-27s) - Wonder-filled flight with portal resonance
+      else if (t < 27.0) {
+        const portalNotes = ['Eb4', 'G4', 'Bb4', 'Eb5', 'F5', 'Bb5'];
+        this.playChime(portalNotes[beat % portalNotes.length], 0.7, 0.17);
+        if (beat % 4 === 0) {
+          this.playTone(this.notesMap['Eb3'], 1.6, 'triangle', 0.15);
         }
       }
-      // Scene 4: The Magic of Kindness (33-44s) - Emotional heartbeat into radiant blast
-      else if (t < 44.0) {
-        if (t < 37.5) {
+      // Scene 4: The Kindness Wave (27-37s) - Tension, heartbeat, into radiant blast at 32.5s
+      else if (t < 37.0) {
+        if (t < 32.5) {
           if (beat % 2 === 0) {
-            this.playTone(this.notesMap['C3'], 0.5, 'sine', 0.22);
-            setTimeout(() => this.playChime('C5', 0.6, 0.14), 160);
+            this.playTone(this.notesMap['C3'], 0.5, 'sine', 0.2);
+            setTimeout(() => this.playChime('Eb4', 0.5, 0.12), 150);
           }
-        } else if (beat === 75) {
-          this.playShockwaveBlast();
+        } else if (beat === 65) {
+          // 32.5s: EXACT KINDNESS WAVE
+          this.playKindnessWave();
         } else {
           const joyfulArp = ['C5', 'E5', 'G5', 'C6', 'G5', 'E5'];
-          this.playChime(joyfulArp[beat % joyfulArp.length], 0.8, 0.2);
+          this.playChime(joyfulArp[beat % joyfulArp.length], 0.8, 0.18);
         }
       }
-      // Scene 5: Every Dream Matters (44-55s) - Peaceful celestial lullaby resolution
+      // Scene 5: Every Dream Matters (37-45s) - Sweet peaceful resolution under Dream Tree
       else {
         if (beat % 2 === 0) {
-          const peaceMelody = ['G5', 'E5', 'C5', 'D5', 'E5', 'G5', 'C6', 'G5'];
-          this.playChime(peaceMelody[(beat / 2) % peaceMelody.length], 1.4, 0.19);
+          const peaceNotes = ['G5', 'E5', 'C5', 'D5', 'E5', 'G5', 'C6', 'G5'];
+          this.playChime(peaceNotes[(beat / 2) % peaceNotes.length], 1.4, 0.19);
         }
         if (beat % 8 === 0) {
           this.playTone(this.notesMap['C3'], 2.8, 'sine', 0.22);
@@ -188,13 +151,13 @@
   // --- 2. MAIN 60 FPS CINEMATIC ENGINE & TIMELINE CONTROLLER ---
   class LumiCinematicPlayer {
     constructor() {
-      this.duration = 55.0; // 55.0-second complete animated short
+      this.duration = 45.0; // Exact 45.0-Second Story
       this.currentTime = 0.0;
       this.isPlaying = false;
       this.lastFrameTime = 0;
       this.rafId = null;
 
-      // Audio Engine
+      // Audio
       this.audio = new CinematicAudioEngine();
 
       // DOM Elements
@@ -225,69 +188,68 @@
       this.exploreBtn = document.getElementById('cinematic-btn-explore');
       this.endReplayBtn = document.getElementById('cinematic-btn-replay-end');
 
-      // Asset Preloads
+      // Asset Preloads (Preserving Established Lumi Design)
       this.images = {
-        bedroomWish: this.loadImage('assets/proj2_lantern_hd.jpg'),
         sparkAwake: this.loadImage('assets/journey1_spark_hd.jpg'),
+        lumiPortrait: this.loadImage('assets/about_photo_hd.jpg'),
         lumiFly: this.loadImage('assets/journey4_architect_hd.jpg'),
-        dreamMachine: this.loadImage('assets/journey3_machine_hd.jpg'),
-        kindnessClimax: this.loadImage('assets/about_photo_hd.jpg'),
-        dreamTree: this.loadImage('assets/proj3_garden_hd.jpg')
+        portal: this.loadImage('assets/journey2_portal_hd.jpg'),
+        dreamTree: this.loadImage('assets/proj3_garden_hd.jpg'),
+        dreamWorldBg: this.loadImage('assets/hero_clean_bg.jpg')
       };
 
       // Procedural Particle Systems
-      this.roomDust = this.createParticles(70, { xRange: 1280, yRange: 720, speed: 0.25, size: 2.2, colors: ['#fcd34d', '#fed7aa', '#ffffff'] });
-      this.flightTrail = [];
-      this.stormTendrils = this.createStormTendrils(30);
+      this.stars = this.createGalaxyStars(140);
+      this.spiralParticles = [];
       this.climaxSparkles = this.createParticles(160, { xRange: 1280, yRange: 720, speed: 1.8, size: 3.5, colors: ['#fcd34d', '#ec4899', '#a855f7', '#38bdf8', '#ffffff'] });
       this.treePetals = this.createParticles(90, { xRange: 1280, yRange: 720, speed: 0.5, size: 2.8, colors: ['#fcd34d', '#f472b6', '#c084fc', '#ffffff'] });
 
-      // 5 Coherent Story Scenes
+      // 5 Coherent Story Scenes (45s Total)
       this.scenes = [
         {
           start: 0.0,
-          end: 11.0,
+          end: 8.0,
           id: 1,
-          name: "Scene 1: A Quiet Wish",
-          title: "A Quiet Wish",
-          tag: "🌙 Scene 1 of 5 · The Bedroom Window",
-          caption: "In a cozy bedroom at night, a little dreamer wishes that nobody with a dream should ever feel alone. The wish transforms into a glowing golden star."
+          name: "Scene 1: Galaxy Awakening",
+          title: "Galaxy Awakening",
+          tag: "🌌 Scene 1 of 5 (0s – 8s)",
+          caption: "A dark purple galaxy slowly appears as tiny stars twinkle. Lumi wakes up, blinks, tilts her head, and notices a tiny golden star floating toward her."
         },
         {
-          start: 11.0,
-          end: 22.0,
+          start: 8.0,
+          end: 17.0,
           id: 2,
-          name: "Scene 2: Lumi Is Born",
-          title: "Lumi Is Born",
-          tag: "✨ Scene 2 of 5 · A Wizard of Starlight",
-          caption: "The star awakens as Lumi, a tiny lavender-haired wizard with a starry purple cloak. Joined by a cheerful star companion, they fly into the dream universe."
+          name: "Scene 2: Starlight Dance",
+          title: "Starlight Dance",
+          tag: "✨ Scene 2 of 5 (8s – 17s)",
+          caption: "The golden star circles Lumi. Lumi reaches toward it. Magical particles spiral around her, and the background transitions into a beautiful dream world."
         },
         {
-          start: 22.0,
-          end: 33.0,
+          start: 17.0,
+          end: 27.0,
           id: 3,
-          name: "Scene 3: The Lost Dream",
-          title: "The Lost Dream & The Storm",
-          tag: "⛈ Scene 3 of 5 · Shadows Over the Sky",
-          caption: "Lumi helps a tiny lost dream find its way home. Suddenly, an ancient purple storm gathers, stealing the light from the entire dream world."
+          name: "Scene 3: The Glowing Portal",
+          title: "The Glowing Portal",
+          tag: "🌀 Scene 3 of 5 (17s – 27s)",
+          caption: "A glowing portal opens. Lumi flies toward it, her hair and cloak moving naturally. Floating islands, clouds, and stars move at different depths to create parallax."
         },
         {
-          start: 33.0,
-          end: 44.0,
+          start: 27.0,
+          end: 37.0,
           id: 4,
-          name: "Scene 4: The Magic of Kindness",
-          title: "The Magic of Kindness",
-          tag: "💖 Scene 4 of 5 · The Radiant Light Within",
-          caption: "Lumi discovers that every dream she ever helped left a little light inside her. Together with her star, they release a radiant wave of light that restores the world!"
+          name: "Scene 4: The Kindness Wave",
+          title: "The Kindness Wave",
+          tag: "💖 Scene 4 of 5 (27s – 37s)",
+          caption: "The dream world begins losing its light. Lumi looks worried, then hugs her golden star companion. A wave of golden and violet light spreads across the environment, restoring the stars."
         },
         {
-          start: 44.0,
-          end: 55.0,
+          start: 37.0,
+          end: 45.0,
           id: 5,
           name: "Scene 5: Every Dream Matters",
           title: "Every Dream Matters",
-          tag: "🌟 Scene 5 of 5 · The Grand Finale",
-          caption: "The islands glow again. Beneath the giant magical Dream Tree, Lumi hugs her star companion and smiles: Even the smallest dream can light up the universe."
+          tag: "🌟 Scene 5 of 5 (37s – 45s)",
+          caption: "The world glows beautifully. Lumi and her companion float beneath a magical tree. Lumi smiles and waves at the viewer."
         }
       ];
 
@@ -301,6 +263,21 @@
       return img;
     }
 
+    createGalaxyStars(count) {
+      const arr = [];
+      for (let i = 0; i < count; i++) {
+        arr.push({
+          x: Math.random() * 1280,
+          y: Math.random() * 720,
+          size: Math.random() * 2.5 + 0.8,
+          alpha: Math.random() * 0.8 + 0.2,
+          twinkleSpeed: Math.random() * 0.05 + 0.015,
+          color: ['#fcd34d', '#fed7aa', '#c084fc', '#38bdf8', '#ffffff'][Math.floor(Math.random() * 5)]
+        });
+      }
+      return arr;
+    }
+
     createParticles(count, opt) {
       const arr = [];
       for (let i = 0; i < count; i++) {
@@ -312,21 +289,6 @@
           speedX: (Math.random() - 0.5) * (opt.speed || 0.4),
           speedY: (Math.random() * -0.5 - 0.2) * (opt.speed || 0.4),
           color: opt.colors[Math.floor(Math.random() * opt.colors.length)]
-        });
-      }
-      return arr;
-    }
-
-    createStormTendrils(count) {
-      const arr = [];
-      for (let i = 0; i < count; i++) {
-        arr.push({
-          x: Math.random() * 1280,
-          y: Math.random() * 400,
-          len: Math.random() * 120 + 40,
-          angle: Math.random() * Math.PI * 2,
-          speed: Math.random() * 0.05 + 0.02,
-          alpha: Math.random() * 0.6 + 0.2
         });
       }
       return arr;
@@ -358,9 +320,10 @@
         });
       }
 
+      // Skip Intro: jumps to Scene 5 finale card (39.5s)
       if (this.skipBtn) {
         this.skipBtn.addEventListener('click', () => {
-          this.seek(48.5);
+          this.seek(39.5);
           this.play();
         });
       }
@@ -474,7 +437,7 @@
       this.isPlaying = false;
       if (this.playIcon) this.playIcon.hidden = false;
       if (this.pauseIcon) this.pauseIcon.hidden = true;
-      if (this.bigPlayBtn && this.currentTime < 48.5) {
+      if (this.bigPlayBtn && this.currentTime < 39.5) {
         this.bigPlayBtn.classList.add('visible');
         this.bigPlayBtn.style.display = 'flex';
       }
@@ -540,8 +503,8 @@
 
       const sceneElapsed = this.currentTime - activeScene.start;
       if (this.overlayCard) {
-        if (sceneElapsed < 4.0 && activeScene.id < 5) {
-          const fade = sceneElapsed < 0.6 ? sceneElapsed / 0.6 : (sceneElapsed > 3.2 ? (4.0 - sceneElapsed) / 0.8 : 1);
+        if (sceneElapsed < 3.8 && activeScene.id < 5) {
+          const fade = sceneElapsed < 0.6 ? sceneElapsed / 0.6 : (sceneElapsed > 3.0 ? (3.8 - sceneElapsed) / 0.8 : 1);
           this.overlayCard.style.opacity = fade;
           this.overlayCard.classList.add('visible');
           this.overlayCard.style.display = 'block';
@@ -555,10 +518,10 @@
       }
 
       if (this.welcomeBanner) {
-        if (this.currentTime >= 48.5) {
+        if (this.currentTime >= 39.5) {
           this.welcomeBanner.classList.add('visible');
           this.welcomeBanner.style.display = 'flex';
-          const bannerOpacity = Math.min(1, (this.currentTime - 48.5) / 0.8);
+          const bannerOpacity = Math.min(1, (this.currentTime - 39.5) / 0.8);
           this.welcomeBanner.style.opacity = bannerOpacity;
         } else {
           this.welcomeBanner.classList.remove('visible');
@@ -568,7 +531,7 @@
       }
 
       if (this.bigPlayBtn) {
-        if (!this.isPlaying && this.currentTime < 48.5) {
+        if (!this.isPlaying && this.currentTime < 39.5) {
           this.bigPlayBtn.classList.add('visible');
           this.bigPlayBtn.style.display = 'flex';
         } else {
@@ -587,308 +550,262 @@
       ctx.save();
       ctx.clearRect(0, 0, W, H);
 
-      if (t < 11.0) {
+      if (t < 8.0) {
         this.renderScene1(ctx, t, W, H);
-      } else if (t < 22.0) {
-        this.renderScene2(ctx, t - 11.0, W, H);
-      } else if (t < 33.0) {
-        this.renderScene3(ctx, t - 22.0, W, H);
-      } else if (t < 44.0) {
-        this.renderScene4(ctx, t - 33.0, W, H);
+      } else if (t < 17.0) {
+        this.renderScene2(ctx, t - 8.0, W, H);
+      } else if (t < 27.0) {
+        this.renderScene3(ctx, t - 17.0, W, H);
+      } else if (t < 37.0) {
+        this.renderScene4(ctx, t - 27.0, W, H);
       } else {
-        this.renderScene5(ctx, t - 44.0, W, H);
+        this.renderScene5(ctx, t - 37.0, W, H);
       }
 
       ctx.restore();
     }
 
-    // SCENE 1: A QUIET WISH (0.0s – 11.0s)
+    // SCENE 1 (0–8s): Galaxy Awakening
+    // Dark purple galaxy slowly appears. Tiny stars twinkle. Lumi wakes up, blinks, tilts her head, and notices a tiny golden star floating toward her.
     renderScene1(ctx, t, W, H) {
-      const p = t / 11.0;
-      const img = this.images.bedroomWish;
+      const p = t / 8.0;
 
-      const zoom = 1.15 - p * 0.12;
-      const panX = -20 + p * 40;
-      const panY = 10 - p * 25;
-
-      ctx.save();
-      ctx.translate(W / 2 + panX, H / 2 + panY);
-      ctx.scale(zoom, zoom);
-      ctx.translate(-W / 2, -H / 2);
-
-      if (img && img.complete) {
-        ctx.drawImage(img, 0, 0, W, H);
-      } else {
-        ctx.fillStyle = '#0a0d24';
-        ctx.fillRect(0, 0, W, H);
-      }
-
-      const ambGrad = ctx.createRadialGradient(680, 360, 40, 680, 360, 480);
-      ambGrad.addColorStop(0, 'rgba(254, 215, 170, 0.18)');
-      ambGrad.addColorStop(0.5, 'rgba(168, 85, 247, 0.08)');
-      ambGrad.addColorStop(1, 'rgba(0, 0, 0, 0.4)');
-      ctx.fillStyle = ambGrad;
+      // Dark purple galaxy gradient background
+      const galGrad = ctx.createRadialGradient(W / 2, H / 2, 40, W / 2, H / 2, 600);
+      galGrad.addColorStop(0, '#2d144d');
+      galGrad.addColorStop(0.5, '#160a2b');
+      galGrad.addColorStop(1, '#080314');
+      ctx.fillStyle = galGrad;
       ctx.fillRect(0, 0, W, H);
 
-      this.roomDust.forEach(pt => {
-        pt.y += pt.speedY;
-        pt.x += pt.speedX;
-        if (pt.y < 0) pt.y = H;
-        if (pt.x < 0) pt.x = W;
-        ctx.fillStyle = pt.color;
-        ctx.globalAlpha = pt.alpha * (0.6 + Math.sin(t * 2 + pt.x) * 0.4);
+      // Twinkling stars field
+      this.stars.forEach(s => {
+        const twinkle = 0.4 + Math.sin(t * s.twinkleSpeed * 100 + s.x) * 0.6;
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha * twinkle;
         ctx.beginPath();
-        ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
         ctx.fill();
       });
       ctx.globalAlpha = 1.0;
 
-      let starX = 680;
-      let starY = 390;
-      let starScale = 1.0;
-      let starGlow = 0.5 + Math.sin(t * 3.5) * 0.3;
-
-      if (t > 4.5) {
-        const riseProgress = Math.min(1, (t - 4.5) / 6.0);
-        const easeRise = Math.pow(riseProgress, 1.4);
-        starX = 680 + Math.sin(easeRise * Math.PI * 2) * 45 + easeRise * 40;
-        starY = 390 - easeRise * 240;
-        starScale = 1.0 + easeRise * 0.8;
-        starGlow = 0.8 + Math.sin(t * 6) * 0.4;
-
-        if (Math.random() < 0.6) {
-          this.flightTrail.push({
-            x: starX + (Math.random() - 0.5) * 20,
-            y: starY + (Math.random() - 0.5) * 20,
-            size: Math.random() * 3 + 1,
-            alpha: 1.0,
-            life: 1.0,
-            color: ['#fcd34d', '#fed7aa', '#ffffff'][Math.floor(Math.random() * 3)]
-          });
-        }
-      }
-
-      for (let i = this.flightTrail.length - 1; i >= 0; i--) {
-        const sp = this.flightTrail[i];
-        sp.y += 0.8;
-        sp.alpha -= 0.02;
-        if (sp.alpha <= 0) {
-          this.flightTrail.splice(i, 1);
-          continue;
-        }
-        ctx.fillStyle = sp.color;
-        ctx.globalAlpha = sp.alpha;
-        ctx.beginPath();
-        ctx.arc(sp.x, sp.y, sp.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1.0;
-
-      this.drawStarWish(ctx, starX, starY, 32 * starScale, starGlow, t);
-
-      ctx.restore();
-      this.drawCinematicVignette(ctx, W, H);
-    }
-
-    // SCENE 2: LUMI IS BORN & FLIGHT (11.0s – 22.0s)
-    renderScene2(ctx, t, W, H) {
-      if (t < 5.0) {
-        const subP = t / 5.0;
-        const img = this.images.sparkAwake;
-        const zoom = 1.05 + subP * 0.08;
-
-        ctx.save();
-        ctx.translate(W / 2, H / 2);
-        ctx.scale(zoom, zoom);
-        ctx.translate(-W / 2, -H / 2);
-
-        if (img && img.complete) {
-          ctx.drawImage(img, 0, 0, W, H);
-        }
-
-        const ringGrad = ctx.createRadialGradient(W / 2, H / 2 - 20, 60, W / 2, H / 2 - 20, 280);
-        ringGrad.addColorStop(0, 'rgba(252, 211, 77, 0.25)');
-        ringGrad.addColorStop(0.4, 'rgba(168, 85, 247, 0.2)');
-        ringGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = ringGrad;
-        ctx.fillRect(0, 0, W, H);
-
-        const eyeSparkleAlpha = Math.max(0, Math.sin(t * 3));
-        ctx.fillStyle = '#ffffff';
-        ctx.globalAlpha = eyeSparkleAlpha * 0.8;
-        ctx.beginPath();
-        ctx.arc(625, 435, 4, 0, Math.PI * 2);
-        ctx.arc(655, 435, 4, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1.0;
-
-        ctx.restore();
-      } else {
-        const flyP = (t - 5.0) / 6.0;
-        const bg = this.images.lumiFly;
-
-        ctx.save();
-        const panX = -40 + flyP * 80;
-        const panY = Math.sin(t * 1.8) * 15;
-
-        ctx.translate(panX, panY);
-
-        if (bg && bg.complete) {
-          ctx.drawImage(bg, 0, 0, W, H);
-        }
-
-        const lumiX = 520;
-        const lumiY = 360 + Math.sin(t * 2.5) * 14;
-
-        const orbitAngle = t * 3.2;
-        const compX = lumiX + Math.cos(orbitAngle) * 140;
-        const compY = lumiY + Math.sin(orbitAngle) * 60 - 30;
-
-        this.flightTrail.push({
-          x: compX,
-          y: compY,
-          size: Math.random() * 3 + 1.2,
-          alpha: 0.9,
-          color: ['#fcd34d', '#fed7aa', '#38bdf8'][Math.floor(Math.random() * 3)]
-        });
-
-        for (let i = this.flightTrail.length - 1; i >= 0; i--) {
-          const sp = this.flightTrail[i];
-          sp.x -= 3.0;
-          sp.alpha -= 0.025;
-          if (sp.alpha <= 0) {
-            this.flightTrail.splice(i, 1);
-            continue;
-          }
-          ctx.fillStyle = sp.color;
-          ctx.globalAlpha = sp.alpha;
-          ctx.beginPath();
-          ctx.arc(sp.x, sp.y, sp.size, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.globalAlpha = 1.0;
-
-        this.drawSmilingStarCompanion(ctx, compX, compY, 26, t);
-
-        ctx.restore();
-      }
-
-      this.drawCinematicVignette(ctx, W, H);
-    }
-
-    // SCENE 3: THE LOST DREAM & THE PURPLE STORM (22.0s – 33.0s)
-    renderScene3(ctx, t, W, H) {
-      const img = this.images.dreamMachine;
-
+      // Lumi Awakening in center (with head tilt & eye blink animation)
+      const img = this.images.sparkAwake;
       ctx.save();
 
-      let shakeX = 0;
-      let shakeY = 0;
-      if (t > 4.5) {
-        const lightningCycle = (t - 4.5) % 2.2;
-        if (lightningCycle < 0.18) {
-          shakeX = (Math.random() - 0.5) * 12;
-          shakeY = (Math.random() - 0.5) * 10;
-        }
+      // Head tilt animation: tilts at 3.5s as she wakes up
+      let headTilt = 0;
+      if (t > 3.0) {
+        headTilt = Math.sin((t - 3.0) * 1.5) * 0.07;
       }
-      ctx.translate(shakeX, shakeY);
+      const breathe = Math.sin(t * 2.2) * 6;
+
+      ctx.translate(W / 2, H / 2 + breathe);
+      ctx.rotate(headTilt);
+      ctx.translate(-W / 2, -(H / 2 + breathe));
 
       if (img && img.complete) {
+        const imgAlpha = Math.min(1, Math.max(0, t / 2.0));
+        ctx.globalAlpha = imgAlpha;
         ctx.drawImage(img, 0, 0, W, H);
+        ctx.globalAlpha = 1.0;
       }
 
-      if (t < 4.5) {
-        const guideP = t / 4.5;
-        const dreamOrbX = 760 - guideP * 280;
-        const dreamOrbY = 240 + Math.sin(t * 3) * 20 + guideP * 140;
+      // Eyelid Blinking Animation (blinks at 2.5s, 4.2s, 6.5s)
+      let eyeOpen = 1.0;
+      if (t < 2.0) eyeOpen = 0.1; // sleeping initially
+      else if (t >= 2.0 && t < 2.4) eyeOpen = (t - 2.0) / 0.4;
+      else if (t >= 4.0 && t < 4.3) eyeOpen = 0.2; // cute blink
+      else if (t >= 6.2 && t < 6.5) eyeOpen = 0.25; // second blink
 
-        for (let i = 0; i < 8; i++) {
-          const bx = 380 + Math.sin(t * 2 + i) * 30 + i * 25;
-          const by = 260 - ((t * 80 + i * 45) % 260);
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-          ctx.fillStyle = 'rgba(252, 211, 77, 0.2)';
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.arc(bx, by, 10 + i * 2, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-        }
-
-        const orbGrad = ctx.createRadialGradient(dreamOrbX, dreamOrbY, 2, dreamOrbX, dreamOrbY, 28);
-        orbGrad.addColorStop(0, '#ffffff');
-        orbGrad.addColorStop(0.3, '#38bdf8');
-        orbGrad.addColorStop(0.7, 'rgba(236, 72, 153, 0.5)');
-        orbGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = orbGrad;
+      if (eyeOpen < 0.9) {
+        ctx.fillStyle = '#fce7f3';
         ctx.beginPath();
-        ctx.arc(dreamOrbX, dreamOrbY, 28, 0, Math.PI * 2);
+        ctx.ellipse(625, 435 + (1 - eyeOpen) * 6, 12, 10 * (1 - eyeOpen), 0, 0, Math.PI * 2);
+        ctx.ellipse(655, 435 + (1 - eyeOpen) * 6, 12, 10 * (1 - eyeOpen), 0, 0, Math.PI * 2);
         ctx.fill();
-      } else {
-        const stormP = (t - 4.5) / 6.5;
-
-        ctx.fillStyle = `rgba(10, 6, 28, ${Math.min(0.72, stormP * 0.8)})`;
-        ctx.fillRect(0, 0, W, H);
-
-        const vortexX = 640;
-        const vortexY = 160;
-        ctx.save();
-        ctx.translate(vortexX, vortexY);
-        ctx.rotate(t * 1.5);
-
-        for (let r = 0; r < 5; r++) {
-          const vortexRadius = 60 + r * 45;
-          ctx.strokeStyle = r % 2 === 0 ? 'rgba(147, 51, 234, 0.5)' : 'rgba(219, 39, 119, 0.4)';
-          ctx.lineWidth = 12 + r * 6;
-          ctx.beginPath();
-          ctx.arc(0, 0, vortexRadius, 0, Math.PI * 1.6);
-          ctx.stroke();
-        }
-        ctx.restore();
-
-        const lightningCycle = (t - 4.5) % 2.2;
-        if (lightningCycle < 0.18) {
-          ctx.strokeStyle = '#fbcfe8';
-          ctx.shadowColor = '#d946ef';
-          ctx.shadowBlur = 25;
-          ctx.lineWidth = 3.5;
-          ctx.beginPath();
-          ctx.moveTo(vortexX, vortexY);
-          ctx.lineTo(580, 260);
-          ctx.lineTo(620, 340);
-          ctx.lineTo(530, 480);
-          ctx.stroke();
-
-          ctx.fillStyle = 'rgba(192, 132, 252, 0.28)';
-          ctx.fillRect(0, 0, W, H);
-          ctx.shadowBlur = 0;
-        }
-
-        this.stormTendrils.forEach(td => {
-          td.angle += td.speed;
-          const tx = td.x + Math.cos(td.angle) * 30;
-          const ty = td.y + Math.sin(td.angle) * 20;
-          ctx.strokeStyle = 'rgba(88, 28, 135, 0.6)';
-          ctx.lineWidth = 4;
-          ctx.beginPath();
-          ctx.moveTo(tx, ty);
-          ctx.quadraticCurveTo(tx + 20, ty - 30, tx + td.len, ty + 10);
-          ctx.stroke();
-        });
       }
 
       ctx.restore();
+
+      // Golden Star floating toward Lumi from upper right (noticed at 4.5s)
+      if (t > 3.8) {
+        const starP = Math.min(1, (t - 3.8) / 4.2);
+        const starX = 1100 - starP * 460 + Math.sin(t * 3) * 20;
+        const starY = 120 + starP * 240 + Math.cos(t * 3) * 15;
+        this.drawSmilingStarCompanion(ctx, starX, starY, 24, t);
+
+        // Little stardust trail
+        this.spiralParticles.push({
+          x: starX + (Math.random() - 0.5) * 12,
+          y: starY + (Math.random() - 0.5) * 12,
+          size: Math.random() * 3 + 1,
+          alpha: 0.9,
+          color: '#fcd34d'
+        });
+      }
+
+      this.updateAndDrawParticles(ctx, this.spiralParticles, 0.025);
       this.drawCinematicVignette(ctx, W, H);
     }
 
-    // SCENE 4: THE MAGIC OF KINDNESS (33.0s – 44.0s)
+    // SCENE 2 (8–17s): Starlight Dance & Reaching
+    // Golden star circles Lumi. Lumi reaches toward it. Magical particles spiral around her, and background transitions into dream world.
+    renderScene2(ctx, t, W, H) {
+      const p = t / 9.0;
+      const worldBg = this.images.dreamWorldBg;
+      const lumiFly = this.images.lumiFly;
+
+      // Background transition from purple galaxy into beautiful dream world
+      const bgAlpha = Math.min(1, p * 1.2);
+      ctx.fillStyle = '#110927';
+      ctx.fillRect(0, 0, W, H);
+
+      if (worldBg && worldBg.complete) {
+        ctx.save();
+        ctx.globalAlpha = bgAlpha;
+        ctx.drawImage(worldBg, 0, 0, W, H);
+        ctx.restore();
+      }
+
+      // Parallax drifting stars
+      this.stars.forEach(s => {
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha * (1 - bgAlpha * 0.5);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1.0;
+
+      // Lumi Floating & Reaching toward the star
+      const lumiX = W / 2 - 20;
+      const lumiY = H / 2 + 10 + Math.sin(t * 2.5) * 12;
+      const reachTilt = Math.sin(t * 1.8) * 0.06;
+
+      ctx.save();
+      ctx.translate(lumiX, lumiY);
+      ctx.rotate(reachTilt);
+
+      if (lumiFly && lumiFly.complete) {
+        ctx.drawImage(lumiFly, -W / 2 + 20, -H / 2 - 10, W, H);
+      }
+      ctx.restore();
+
+      // Golden Star circling Lumi in 3D-like elliptical orbit
+      const circleAngle = t * 3.5;
+      const starRadiusX = 170;
+      const starRadiusY = 70;
+      const starX = lumiX + Math.cos(circleAngle) * starRadiusX;
+      const starY = lumiY + Math.sin(circleAngle) * starRadiusY - 20;
+
+      // Double-Helix Spiral Magical Particles
+      for (let k = 0; k < 2; k++) {
+        const spiralAngle = t * 4.0 + k * Math.PI;
+        this.spiralParticles.push({
+          x: lumiX + Math.cos(spiralAngle) * (140 - p * 30),
+          y: lumiY + Math.sin(spiralAngle) * (90 - p * 20),
+          size: Math.random() * 3.5 + 1.2,
+          alpha: 1.0,
+          color: k === 0 ? '#fcd34d' : '#38bdf8'
+        });
+      }
+
+      this.updateAndDrawParticles(ctx, this.spiralParticles, 0.03);
+      this.drawSmilingStarCompanion(ctx, starX, starY, 26, t);
+      this.drawCinematicVignette(ctx, W, H);
+    }
+
+    // SCENE 3 (17–27s): The Glowing Portal & Parallax Flight
+    // A glowing portal opens. Lumi flies toward it, her hair and cloak moving naturally. Floating islands, clouds, and stars move at different depths.
+    renderScene3(ctx, t, W, H) {
+      const p = t / 10.0;
+      const portalImg = this.images.portal;
+
+      ctx.fillStyle = '#06081c';
+      ctx.fillRect(0, 0, W, H);
+
+      // Depth Layer 1 (Slow Parallax 0.25x): Far cosmos & nebula
+      this.stars.forEach(s => {
+        const px = (s.x - t * 15) % W;
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.alpha * 0.7;
+        ctx.beginPath();
+        ctx.arc(px < 0 ? px + W : px, s.y, s.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1.0;
+
+      // Depth Layer 2 (Mid Parallax 0.65x): Ancient Portal & Floating Islands
+      const portalZoom = 1.0 + p * 0.12;
+      ctx.save();
+      ctx.translate(W / 2, H / 2);
+      ctx.scale(portalZoom, portalZoom);
+      ctx.translate(-W / 2, -H / 2);
+
+      if (portalImg && portalImg.complete) {
+        ctx.drawImage(portalImg, 0, 0, W, H);
+      }
+
+      // Active Rotating Hyperspace Vortex inside the portal arch (x: 640, y: 355)
+      const vortexX = W / 2;
+      const vortexY = 355;
+      ctx.save();
+      ctx.translate(vortexX, vortexY);
+      ctx.rotate(t * 2.2);
+
+      for (let r = 0; r < 4; r++) {
+        const rad = 45 + r * 30;
+        ctx.strokeStyle = r % 2 === 0 ? 'rgba(56, 189, 248, 0.65)' : 'rgba(168, 85, 247, 0.55)';
+        ctx.lineWidth = 14 + r * 4;
+        ctx.beginPath();
+        ctx.arc(0, 0, rad, 0, Math.PI * 1.5);
+        ctx.stroke();
+      }
+      ctx.restore();
+      ctx.restore();
+
+      // Depth Layer 3 (Foreground Fast Parallax 1.4x): Lumi Flying Toward Portal
+      // Hair and cloak fluttering naturally with undulating motion
+      const lumiProgress = Math.min(1, p * 1.15);
+      const lumiX = 300 + lumiProgress * 320;
+      const lumiY = 480 - lumiProgress * 110 + Math.sin(t * 3.5) * 14;
+      const flightScale = 0.85 - lumiProgress * 0.25;
+
+      ctx.save();
+      ctx.translate(lumiX, lumiY);
+      ctx.scale(flightScale, flightScale);
+      ctx.rotate(Math.sin(t * 3.0) * 0.08);
+
+      // Star companion flying alongside Lumi
+      this.drawSmilingStarCompanion(ctx, -70, -35, 24, t);
+
+      // Flying Starlight Ribbon Particles behind cloak
+      this.spiralParticles.push({
+        x: lumiX - 40 * flightScale,
+        y: lumiY + 15 * flightScale,
+        size: Math.random() * 3 + 1.5,
+        alpha: 0.9,
+        color: ['#fcd34d', '#38bdf8', '#c084fc'][Math.floor(Math.random() * 3)]
+      });
+
+      ctx.restore();
+      this.updateAndDrawParticles(ctx, this.spiralParticles, 0.03);
+      this.drawCinematicVignette(ctx, W, H);
+    }
+
+    // SCENE 4 (27–37s): The Kindness Wave
+    // Dream world begins losing light. Lumi looks worried, hugs star companion. A wave of golden and violet light spreads, restoring stars.
     renderScene4(ctx, t, W, H) {
-      const portrait = this.images.kindnessClimax;
+      const p = t / 10.0;
+      const portrait = this.images.lumiPortrait;
 
       ctx.save();
 
-      if (t < 4.5) {
-        const subP = t / 4.5;
-        const zoom = 1.08 + subP * 0.12;
+      if (t < 5.5) {
+        // Part A (27s - 32.5s): World dims, Lumi looks worried & hugs star companion close
+        const dimP = Math.min(1, t / 4.0);
+        const zoom = 1.06 + t * 0.01;
 
         ctx.translate(W / 2, H / 2);
         ctx.scale(zoom, zoom);
@@ -898,70 +815,68 @@
           ctx.drawImage(portrait, 0, 0, W, H);
         }
 
-        const pulse = Math.sin(t * 8) * 0.5 + 0.5;
-        const heartGrad = ctx.createRadialGradient(640, 480, 10, 640, 480, 160);
-        heartGrad.addColorStop(0, `rgba(252, 211, 77, ${0.4 + pulse * 0.4})`);
-        heartGrad.addColorStop(0.5, `rgba(236, 72, 153, ${0.2 + pulse * 0.3})`);
+        // Shadows creeping & dimming overlay
+        ctx.fillStyle = `rgba(11, 8, 28, ${dimP * 0.55})`;
+        ctx.fillRect(0, 0, W, H);
+
+        // Starlight inside Lumi's chest starts to swell and glow with heartbeat
+        const heartPulse = Math.sin(t * 8) * 0.5 + 0.5;
+        const heartGrad = ctx.createRadialGradient(640, 480, 5, 640, 480, 140);
+        heartGrad.addColorStop(0, `rgba(252, 211, 77, ${0.3 + heartPulse * 0.5})`);
+        heartGrad.addColorStop(0.6, `rgba(168, 85, 247, ${0.15 + heartPulse * 0.3})`);
         heartGrad.addColorStop(1, 'transparent');
         ctx.fillStyle = heartGrad;
         ctx.beginPath();
-        ctx.arc(640, 480, 160, 0, Math.PI * 2);
+        ctx.arc(640, 480, 140, 0, Math.PI * 2);
         ctx.fill();
-
-        ctx.fillStyle = '#ffffff';
-        ctx.globalAlpha = 0.8 + pulse * 0.2;
-        ctx.beginPath();
-        ctx.arc(580, 360, 5, 0, Math.PI * 2);
-        ctx.arc(680, 360, 5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1.0;
       } else {
-        const waveP = (t - 4.5) / 6.5;
+        // Part B (32.5s - 37s): COLOSSAL WAVE OF GOLDEN & VIOLET LIGHT RESTORING THE WORLD!
+        const waveP = (t - 5.5) / 4.5;
 
         if (portrait && portrait.complete) {
           ctx.drawImage(portrait, 0, 0, W, H);
         }
 
-        const waveRadius = waveP * 950;
+        // Expanding radial shockwave wave of golden, pink, and violet light
+        const waveRadius = waveP * 1100;
         const rings = [
-          { color: '#fcd34d', offset: 0, width: 28 },
-          { color: '#ec4899', offset: 40, width: 22 },
-          { color: '#a855f7', offset: 80, width: 18 },
-          { color: '#38bdf8', offset: 120, width: 14 }
+          { color: '#fcd34d', offset: 0, width: 32 },
+          { color: '#ec4899', offset: 45, width: 24 },
+          { color: '#a855f7', offset: 90, width: 20 },
+          { color: '#38bdf8', offset: 130, width: 14 }
         ];
 
-        ctx.save();
         rings.forEach(ring => {
           const r = Math.max(0, waveRadius - ring.offset);
-          if (r > 0 && r < 1100) {
+          if (r > 0 && r < 1200) {
+            ctx.save();
             ctx.strokeStyle = ring.color;
             ctx.shadowColor = ring.color;
-            ctx.shadowBlur = 30;
+            ctx.shadowBlur = 35;
             ctx.lineWidth = ring.width * (1.0 - waveP * 0.5);
-            ctx.globalAlpha = Math.max(0, 1.0 - waveP * 0.7);
+            ctx.globalAlpha = Math.max(0, 1.0 - waveP * 0.65);
             ctx.beginPath();
             ctx.arc(640, 450, r, 0, Math.PI * 2);
             ctx.stroke();
+            ctx.restore();
           }
         });
-        ctx.restore();
 
+        // Restoring and sparkling constellation particles
         this.climaxSparkles.forEach(pt => {
-          pt.y += pt.speedY * 2.5;
-          pt.x += pt.speedX * 1.5;
+          pt.y += pt.speedY * 2.2;
+          pt.x += pt.speedX * 1.4;
           if (pt.y < 0) pt.y = H;
           ctx.fillStyle = pt.color;
-          ctx.shadowColor = pt.color;
-          ctx.shadowBlur = 10;
-          ctx.globalAlpha = pt.alpha * (0.7 + Math.sin(t * 5 + pt.x) * 0.3);
+          ctx.globalAlpha = pt.alpha * (0.7 + Math.sin(t * 6 + pt.x) * 0.3);
           ctx.beginPath();
           ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
           ctx.fill();
         });
-        ctx.shadowBlur = 0;
         ctx.globalAlpha = 1.0;
 
-        const washAlpha = Math.max(0, 0.45 - waveP * 0.45);
+        // Warm golden wash restoring vibrancy
+        const washAlpha = Math.max(0, 0.4 - waveP * 0.4);
         ctx.fillStyle = `rgba(254, 215, 170, ${washAlpha})`;
         ctx.fillRect(0, 0, W, H);
       }
@@ -970,18 +885,20 @@
       this.drawCinematicVignette(ctx, W, H);
     }
 
-    // SCENE 5: EVERY DREAM MATTERS (44.0s – 55.0s)
+    // SCENE 5 (37–45s): Every Dream Matters
+    // World glows beautifully. Lumi & companion float beneath magical tree. Lumi smiles & waves at viewer.
     renderScene5(ctx, t, W, H) {
+      const p = t / 8.0;
       const treeBg = this.images.dreamTree;
-      const lumiPortrait = this.images.kindnessClimax;
+      const lumiPortrait = this.images.lumiPortrait;
 
       ctx.save();
 
-      if (t < 4.5) {
-        // Shot A: Wide cinematic sweep of the restored glowing Dream Tree on the floating island
-        const shotP = t / 4.5;
-        const panX = -20 + shotP * 40;
-        const zoom = 1.05 - shotP * 0.04;
+      // Shot A (37s - 40.5s): Restored glowing Dream Tree
+      if (t < 3.5) {
+        const shotP = t / 3.5;
+        const panX = -15 + shotP * 30;
+        const zoom = 1.04 - shotP * 0.03;
 
         ctx.translate(W / 2 + panX, H / 2);
         ctx.scale(zoom, zoom);
@@ -991,18 +908,19 @@
           ctx.drawImage(treeBg, 0, 0, W, H);
         }
 
+        // Restored Bioluminescent Golden Glow
         const lanternGlow = 0.7 + Math.sin(t * 3) * 0.3;
-        const glowGrad = ctx.createRadialGradient(W / 2, H * 0.4, 40, W / 2, H * 0.4, 500);
+        const glowGrad = ctx.createRadialGradient(W / 2, H * 0.4, 40, W / 2, H * 0.4, 480);
         glowGrad.addColorStop(0, `rgba(252, 211, 77, ${0.28 * lanternGlow})`);
-        glowGrad.addColorStop(0.5, `rgba(168, 85, 247, ${0.16 * lanternGlow})`);
+        glowGrad.addColorStop(0.5, `rgba(168, 85, 247, ${0.15 * lanternGlow})`);
         glowGrad.addColorStop(1, 'transparent');
         ctx.fillStyle = glowGrad;
         ctx.fillRect(0, 0, W, H);
       } else {
-        // Shot B: Emotional Close-up of Lumi hugging star companion, looking toward camera and smiling!
-        const closeP = (t - 4.5) / 6.5;
-        const zoom = 1.08 + closeP * 0.06;
-        const panY = Math.sin(t * 1.8) * 6;
+        // Shot B (40.5s - 45s): Lumi smiling & waving warmly toward the camera!
+        const closeP = (t - 3.5) / 4.5;
+        const zoom = 1.08 + closeP * 0.05;
+        const panY = Math.sin(t * 2.0) * 5;
 
         ctx.translate(W / 2, H / 2 + panY);
         ctx.scale(zoom, zoom);
@@ -1012,34 +930,40 @@
           ctx.drawImage(lumiPortrait, 0, 0, W, H);
         }
 
-        if (t < 5.5) {
-          const blendOut = 1.0 - (t - 4.5) / 1.0;
+        if (t < 4.2) {
+          const blendOut = 1.0 - (t - 3.5) / 0.7;
           ctx.save();
           ctx.globalAlpha = blendOut;
           if (treeBg && treeBg.complete) ctx.drawImage(treeBg, 0, 0, W, H);
           ctx.restore();
         }
 
-        const haloGrad = ctx.createRadialGradient(W / 2, H * 0.6, 60, W / 2, H * 0.6, 420);
-        haloGrad.addColorStop(0, 'rgba(252, 211, 77, 0.28)');
-        haloGrad.addColorStop(0.5, 'rgba(236, 72, 153, 0.14)');
-        haloGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = haloGrad;
-        ctx.fillRect(0, 0, W, H);
-
-        const glint = Math.max(0, Math.sin(t * 2.5));
+        // Loving eye twinkle
+        const glint = Math.max(0, Math.sin(t * 3.0));
         ctx.fillStyle = '#ffffff';
-        ctx.globalAlpha = glint * 0.75;
+        ctx.globalAlpha = glint * 0.8;
         ctx.beginPath();
         ctx.arc(580, 360, 4.5, 0, Math.PI * 2);
         ctx.arc(680, 360, 4.5, 0, Math.PI * 2);
         ctx.fill();
         ctx.globalAlpha = 1.0;
+
+        // Friendly wave sparkles around Lumi's hand
+        const waveX = 690 + Math.sin(t * 6) * 12;
+        const waveY = 480 + Math.cos(t * 6) * 8;
+        ctx.fillStyle = '#fcd34d';
+        ctx.shadowColor = '#fcd34d';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(waveX, waveY, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
       }
 
+      // Drifting Starlight Petals
       this.treePetals.forEach(pt => {
         pt.y += 0.85;
-        pt.x += Math.sin(t * 1.6 + pt.y * 0.02) * 1.0;
+        pt.x += Math.sin(t * 1.8 + pt.y * 0.02) * 1.0;
         if (pt.y > H) pt.y = 0;
         ctx.fillStyle = pt.color;
         ctx.globalAlpha = pt.alpha * (0.6 + Math.sin(t * 2 + pt.x) * 0.4);
@@ -1053,25 +977,28 @@
       this.drawCinematicVignette(ctx, W, H);
     }
 
-    drawStarWish(ctx, x, y, radius, glow, t) {
-      ctx.save();
-      const auraGrad = ctx.createRadialGradient(x, y, radius * 0.2, x, y, radius * 3.5);
-      auraGrad.addColorStop(0, `rgba(252, 211, 77, ${glow * 0.8})`);
-      auraGrad.addColorStop(0.5, `rgba(254, 215, 170, ${glow * 0.35})`);
-      auraGrad.addColorStop(1, 'transparent');
-      ctx.fillStyle = auraGrad;
-      ctx.beginPath();
-      ctx.arc(x, y, radius * 3.5, 0, Math.PI * 2);
-      ctx.fill();
-
-      this.drawStarShape(ctx, x, y, 5, radius, radius * 0.45, t * 0.8, '#fcd34d', '#ffffff');
-      ctx.restore();
+    // Helper: Particle update & draw
+    updateAndDrawParticles(ctx, arr, decay) {
+      for (let i = arr.length - 1; i >= 0; i--) {
+        const pt = arr[i];
+        pt.alpha -= decay;
+        if (pt.alpha <= 0) {
+          arr.splice(i, 1);
+          continue;
+        }
+        ctx.fillStyle = pt.color;
+        ctx.globalAlpha = pt.alpha;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1.0;
     }
 
     drawSmilingStarCompanion(ctx, x, y, radius, t) {
       ctx.save();
       const glowGrad = ctx.createRadialGradient(x, y, radius * 0.2, x, y, radius * 2.5);
-      glowGrad.addColorStop(0, 'rgba(252, 211, 77, 0.8)');
+      glowGrad.addColorStop(0, 'rgba(252, 211, 77, 0.85)');
       glowGrad.addColorStop(0.6, 'rgba(236, 72, 153, 0.25)');
       glowGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = glowGrad;

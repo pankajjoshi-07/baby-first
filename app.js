@@ -3,7 +3,7 @@
  * Interactive Core, Modals, Easter Eggs, Parallax & Stardust Canvas Engine
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initLumiApp() {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ==========================================================================
@@ -1027,4 +1027,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.style.overflow = '';
     }
   });
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initLumiApp);
+} else {
+  initLumiApp();
+}
