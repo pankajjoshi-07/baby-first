@@ -379,6 +379,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const resetSecretBtn = document.getElementById('reset-secret-btn');
+  if (resetSecretBtn) {
+    resetSecretBtn.addEventListener('click', () => {
+      starClickCount = 0;
+      if (lockIcon) lockIcon.textContent = '🔒';
+      if (secretBadge) secretBadge.textContent = '⭐';
+      if (clickCountText) clickCountText.textContent = `0 / ${targetClicks} clicks`;
+      if (modalEasterEgg) modalEasterEgg.hidden = true;
+      if (window.dreamAudio) window.dreamAudio.playTap();
+      spawnFloatingFeedback(window.innerWidth / 2, window.innerHeight / 2, '🔒 Chamber Relocked');
+    });
+  }
+
   /* ==========================================================================
      7. CONFETTI CELESTIAL CANNON FOR EASTER EGG
      ========================================================================== */
@@ -691,6 +704,19 @@ document.addEventListener('DOMContentLoaded', () => {
     btnWatchIntro.addEventListener('click', () => {
       if (window.dreamAudio) window.dreamAudio.playChime('G5');
       modalIntro.hidden = false;
+    });
+  }
+
+  const btnExplore = document.getElementById('btn-explore');
+  if (btnExplore) {
+    btnExplore.addEventListener('click', (e) => {
+      e.preventDefault();
+      const proj = document.getElementById('projects');
+      if (proj) {
+        proj.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        proj.classList.add('target-highlight');
+        setTimeout(() => { proj.classList.remove('target-highlight'); }, 1200);
+      }
     });
   }
 

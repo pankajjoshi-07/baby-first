@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
   
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body class="theme-night">
   <!-- Interactive Stardust Canvas for Particle Trail -->
@@ -405,10 +405,10 @@
       </div>
       <div class="intro-storybook">
         <div class="storybook-page active">
-          <img src="assets/hero_clean_bg.jpg" alt="Dream Sky" class="storybook-img">
+          <img src="assets/about_photo_hd.jpg" alt="Meet Lumi the Dream Architect" class="storybook-img">
           <div class="storybook-text">
             <h3>Chapter 1: The Nebula of Forgotten Wishes</h3>
-            <p>High above the quiet rooftops of sleeping villages rests the Dream Nebula. In this sanctuary, lost bedtime wishes condense into gentle glowing embers — and that is where Lumi first opened their eyes.</p>
+            <p>High above the quiet rooftops of sleeping villages rests the Dream Nebula. In this sanctuary, lost bedtime wishes condense into gentle glowing embers — and that is where Lumi first opened their eyes, armed with a stardust wand and a heart full of wonder.</p>
           </div>
         </div>
       </div>
@@ -442,14 +442,17 @@
       </div>
       <div class="secret-chamber-content">
         <div class="secret-avatar-dance">
-          <img src="assets/lumi_hero_character.png" alt="Dancing Lumi" class="dancing-lumi-img">
+          <img src="assets/about_photo_hd.jpg" alt="Dancing Lumi" class="dancing-lumi-img" style="border-radius:50%;width:100px;height:100px;object-fit:cover;border:3px solid var(--accent-gold);box-shadow:0 0 20px var(--accent-gold-glow);">
         </div>
         <div class="secret-reward-box">
           <h4>🌟 Secret Celestial Track: "Lumi's Midnight Waltz"</h4>
           <p>You have unlocked the exclusive secret music box variation and earned the title of <strong>Honorary Master Dream Architect</strong>!</p>
-          <div class="secret-track-player">
+          <div class="secret-track-player" style="display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
             <button class="btn-primary" id="play-secret-tune-btn">
               <span>🎵 Play Secret Melody</span>
+            </button>
+            <button class="btn-secondary" id="reset-secret-btn" title="Reset click progress to try again">
+              <span>🔁 Relock Chamber</span>
             </button>
           </div>
         </div>
@@ -493,8 +496,8 @@
   </div>
 
   <!-- Audio Synthesizer Script -->
-  <script src="audio.js?v=4"></script>
+  <script src="audio.js?v=6"></script>
   <!-- Main Application Script -->
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

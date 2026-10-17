@@ -45,12 +45,21 @@ class DreamAudioEngine {
   }
 
   initContext() {
-    if (!this.ctx) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      this.ctx = new AudioContext();
-    }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
+    try {
+      if (!this.ctx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          this.ctx = new AudioContext();
+          this.isSupported = true;
+        } else {
+          this.isSupported = false;
+        }
+      }
+      if (this.ctx && this.ctx.state === 'suspended') {
+        this.ctx.resume();
+      }
+    } catch (e) {
+      this.isSupported = false;
     }
   }
 
@@ -58,6 +67,7 @@ class DreamAudioEngine {
   playChime(noteName = 'C5', customFreq = null) {
     if (this.isMuted) return;
     this.initContext();
+    if (!this.ctx) return;
 
     const freq = customFreq || this.notes[noteName] || 523.25;
     const now = this.ctx.currentTime;
@@ -106,6 +116,7 @@ class DreamAudioEngine {
   playTap() {
     if (this.isMuted) return;
     this.initContext();
+    if (!this.ctx) return;
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
@@ -125,6 +136,7 @@ class DreamAudioEngine {
   // Play magical unlock fanfare
   playUnlockSound() {
     this.initContext();
+    if (!this.ctx) return;
     const chord = ['C5', 'E5', 'G5', 'C6'];
     chord.forEach((n, idx) => {
       setTimeout(() => {
@@ -136,6 +148,7 @@ class DreamAudioEngine {
   // Start continuous generative lullaby loop
   startLullaby(score = this.lullabyScore) {
     this.initContext();
+    if (!this.ctx) return;
     this.isPlaying = true;
     this.currentNoteIndex = 0;
 

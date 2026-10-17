@@ -1860,6 +1860,16 @@ body {
   text-shadow: 0 0 8px rgba(252, 211, 77, 0.5);
 }
 
+/* Focus & Click Feedback for Accessibility */
+:focus-visible {
+  outline: 2px solid var(--accent-purple) !important;
+  outline-offset: 3px !important;
+}
+
+button:active, .btn-primary:active, .btn-secondary:active, .project-mini-card:active {
+  transform: scale(0.97) !important;
+}
+
 /* Respect Reduced Motion Preferences */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
