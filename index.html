@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
   
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body class="theme-night">
   <!-- Interactive Stardust Canvas for Particle Trail -->
@@ -88,60 +88,66 @@
     </aside>
 
     <!-- MAIN CONTENT AREA -->
-    <main class="main-content">
+    <main class="main-content" id="home">
       <!-- TOP NAVIGATION BAR (Exact Match to Reference Image) -->
       <header class="topbar">
         <!-- Search Bar with Dream Filtering -->
         <div class="search-box">
           <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="dream-search" placeholder="What dream shall we explore today?" autocomplete="off">
+          <input type="text" id="dream-search" placeholder="What dream shall we explore today?" autocomplete="off" aria-label="Search dreams">
           <div class="search-dropdown" id="search-dropdown" hidden></div>
         </div>
 
         <!-- Top Right Actions -->
         <div class="topbar-actions">
           <!-- Web Audio API Music Box Pill (+3 bonus pts) -->
-          <button class="music-pill" id="lullaby-toggle" aria-label="Toggle Dreamy Lullaby Music">
+          <button class="music-pill" id="lullaby-toggle" aria-label="Play Dreamy Lullaby (Music Toggle)" title="Toggle Lullaby Music (M to mute/unmute)">
             <span class="music-icon" id="music-note-icon">🎵</span>
             <span class="music-title">Dreamy Lullaby</span>
             <div class="sound-wave-bars" id="sound-bars">
               <span></span><span></span><span></span><span></span>
             </div>
-            <span class="music-state-icon" id="music-state">⏸</span>
+            <span class="music-state-icon" id="music-state">▶</span>
           </button>
 
           <!-- User / Lumi Profile Circle -->
-          <button class="profile-avatar-btn" id="profile-btn" title="Lumi's Profile">
+          <button class="profile-avatar-btn" id="profile-btn" title="About Lumi" aria-label="View Lumi's Profile">
             <img src="assets/top_avatar.jpg" alt="Lumi Avatar" class="profile-avatar-img">
           </button>
         </div>
       </header>
 
-      <!-- HERO BANNER SECTION (HD Composite) -->
+      <!-- HERO BANNER SECTION (HD Composite with Cinematic Layers) -->
       <section class="hero-section" id="hero-banner">
         <!-- Layered Dream Landscape Background -->
-        <div class="hero-bg-container">
+        <div class="hero-bg-container" id="hero-parallax-bg">
           <img src="assets/hero_banner_hd.jpg" alt="Lumi Dreamscape" class="hero-backdrop-img">
           <div class="hero-gradient-overlay"></div>
         </div>
 
-        <!-- Floating Interactive Stars in Sky -->
-        <div class="sky-stars-layer" id="sky-stars"></div>
+        <!-- Floating Twinkling Stars Layer in Sky -->
+        <div class="sky-stars-layer" id="sky-stars" aria-hidden="true">
+          <span class="twinkle-star star-1">✦</span>
+          <span class="twinkle-star star-2">✧</span>
+          <span class="twinkle-star star-3">✦</span>
+          <span class="twinkle-star star-4">✧</span>
+          <span class="twinkle-star star-5">✦</span>
+        </div>
 
         <!-- Hero Content Overlay -->
         <div class="hero-content">
           <div class="hero-text-col">
-            <p class="hero-greeting">Hi, I'm</p>
-            <h1 class="hero-name">
+            <p class="hero-greeting cinematic-in">Hi, I'm</p>
+            <h1 class="hero-name cinematic-in">
               <span class="hero-sparkle-star left">✦</span>
               Lumi
               <span class="hero-sparkle-star right">✧</span>
             </h1>
-            <h2 class="hero-title">The Little Dream Architect</h2>
-            <p class="hero-desc">
+            <h2 class="hero-title cinematic-in">The Little Dream Architect</h2>
+            <p class="hero-desc cinematic-in">
               I craft cozy dream worlds, turn worries into stars, and help lost dreams find their way home.
             </p>
-            <div class="hero-cta-group">
+            <div class="hero-cta-group cinematic-in">
               <a href="#projects" class="btn-primary" id="btn-explore">
                 <span>Explore My World</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -153,18 +159,22 @@
             </div>
           </div>
 
-          <!-- Hero Character Hotspot for Easter Egg Star Click -->
-          <div class="hero-interactive-zone">
-            <!-- Clicking Lumi's star in hero contributes to Easter Egg! -->
-            <div class="hero-star-trigger" id="hero-special-star" title="Click the smiling star! ✨">
-              <div class="star-pulse-glow"></div>
+          <!-- Hero Character Hotspot for Floating Animation & Easter Egg Star Click -->
+          <div class="hero-interactive-zone" id="hero-interactive-zone">
+            <!-- Animated Floating Lumi Element -->
+            <div class="hero-lumi-float" id="hero-lumi-character" title="Click Lumi or the smiling star! ✨">
+              <img src="assets/lumi_hero_character.png" alt="Lumi holding glowing star" class="hero-lumi-character-img">
+              <!-- Star Pulsing Hitbox -->
+              <div class="hero-star-trigger" id="hero-special-star" title="Click the smiling star! (Easter Egg) ✨">
+                <div class="star-pulse-glow"></div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <!-- MIDDLE ROW: ABOUT LUMI, QUICK FACTS, AND MY DREAM PROJECTS -->
-      <section class="middle-grid">
+      <section class="middle-grid" id="about">
         <!-- CARD 1: ABOUT LUMI -->
         <article class="card card-about" id="about-card">
           <div class="card-header">
@@ -344,8 +354,15 @@
 
         <!-- CARD 2: THE HIDDEN ROOM (EASTER EGG!) -->
         <article class="card card-hidden-room" id="secret">
-          <div class="hidden-room-artwork-wrap" id="hidden-arch-trigger">
+          <div class="hidden-room-artwork-wrap" id="hidden-arch-trigger" title="Click to unlock the secret room! (5 clicks)">
             <img src="assets/hidden_room_hd.jpg" alt="Secret Stone Archway" class="hidden-room-bg-img">
+            <div class="padlock-glow-center">
+              <span class="glowing-lock-icon" id="lock-icon">🔒</span>
+            </div>
+            <div class="click-counter-badge">
+              <span id="secret-badge">⭐</span>
+              <span id="click-count-text">0 / 5 clicks</span>
+            </div>
           </div>
           <div class="hidden-room-body">
             <h4 class="hidden-room-title">The Hidden Room</h4>
@@ -483,8 +500,8 @@
   </div>
 
   <!-- Audio Synthesizer Script -->
-  <script src="audio.js"></script>
+  <script src="audio.js?v=4"></script>
   <!-- Main Application Script -->
-  <script src="app.js"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>

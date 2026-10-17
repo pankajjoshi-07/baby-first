@@ -567,6 +567,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+  transition: transform 0.15s ease-out;
+  will-change: transform;
 }
 
 .hero-backdrop-img {
@@ -601,7 +603,23 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  overflow: hidden;
+  z-index: 4;
 }
+
+.twinkle-star {
+  position: absolute;
+  color: var(--accent-gold);
+  font-size: 1rem;
+  opacity: 0.3;
+  animation: twinkle-float 3.5s infinite ease-in-out;
+}
+
+.star-1 { top: 22%; left: 32%; animation-delay: 0.3s; font-size: 1.1rem; }
+.star-2 { top: 15%; left: 52%; animation-delay: 1.1s; font-size: 0.85rem; color: #f472b6; }
+.star-3 { top: 40%; left: 24%; animation-delay: 2.0s; font-size: 0.95rem; }
+.star-4 { top: 28%; left: 74%; animation-delay: 1.7s; font-size: 1.2rem; }
+.star-5 { top: 58%; left: 42%; animation-delay: 0.8s; font-size: 0.75rem; color: #a78bfa; }
 
 /* Hero Content */
 .hero-content {
@@ -620,6 +638,28 @@ body {
   flex-direction: column;
 }
 
+/* Cinematic Entrance Animations */
+.cinematic-in {
+  animation: hero-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+.hero-greeting.cinematic-in { animation-delay: 0.1s; }
+.hero-name.cinematic-in { animation-delay: 0.25s; }
+.hero-title.cinematic-in { animation-delay: 0.4s; }
+.hero-desc.cinematic-in { animation-delay: 0.55s; }
+.hero-cta-group.cinematic-in { animation-delay: 0.7s; }
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .hero-greeting {
   font-family: var(--font-display);
   font-size: 1.15rem;
@@ -630,7 +670,7 @@ body {
 
 .hero-name {
   font-family: var(--font-display);
-  font-size: 3.1rem;
+  font-size: clamp(2.4rem, 4vw, 3.2rem);
   font-weight: 700;
   line-height: 1;
   color: #fff4d4;
@@ -719,32 +759,58 @@ body {
   transform: translateY(-2px);
 }
 
-/* Hero Right Signpost */
+/* Hero Character Hotspot & Animated Floating Lumi */
 .hero-interactive-zone {
   position: relative;
   height: 100%;
   display: flex;
   align-items: flex-end;
   padding-bottom: 10px;
+  transition: transform 0.15s ease-out;
+  will-change: transform;
 }
 
-/* Clicking this trigger in hero increments the secret Easter Egg */
+.hero-lumi-float {
+  position: absolute;
+  right: 230px;
+  bottom: 0px;
+  width: 250px;
+  height: 195px;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: lumi-float 4.8s ease-in-out infinite;
+  pointer-events: auto;
+  z-index: 15;
+}
+
+.hero-lumi-float:hover {
+  transform: scale(1.04) translateY(-3px);
+}
+
+.hero-lumi-character-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(252, 211, 77, 0.3));
+}
+
+/* Clicking this star in hero triggers Easter Egg */
 .hero-star-trigger {
   position: absolute;
-  top: 15%;
-  left: -120px;
-  width: 50px;
-  height: 50px;
+  bottom: 25px;
+  right: 55px;
+  width: 55px;
+  height: 55px;
   cursor: pointer;
   border-radius: 50%;
-  z-index: 20;
+  z-index: 25;
 }
 
 .star-pulse-glow {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(253, 224, 71, 0.35) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(253, 224, 71, 0.45) 0%, transparent 70%);
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
@@ -1368,6 +1434,8 @@ body {
   position: relative;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(168, 85, 247, 0.25);
   animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-close-btn {
@@ -1724,3 +1792,87 @@ body {
     display: none;
   }
 }
+
+/* ==========================================================================
+   IMMERSIVE KEYFRAMES & ACCESSIBILITY
+   ========================================================================== */
+@keyframes lumi-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1.2deg);
+  }
+}
+
+@keyframes twinkle-float {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.25);
+  }
+}
+
+@keyframes star-pulse {
+  0% { transform: scale(0.9); opacity: 0.4; }
+  100% { transform: scale(1.15); opacity: 0.85; }
+}
+
+.star-float-feedback {
+  position: fixed;
+  color: var(--accent-gold);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  pointer-events: none;
+  z-index: 10000;
+  animation: star-float-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  text-shadow: 0 0 12px var(--accent-gold-glow);
+}
+
+@keyframes star-float-up {
+  0% { opacity: 1; transform: translateY(0) scale(0.8); }
+  50% { opacity: 1; transform: translateY(-24px) scale(1.25); }
+  100% { opacity: 0; transform: translateY(-50px) scale(1); }
+}
+
+/* Target Section Highlight on Nav click */
+.target-highlight {
+  outline: 2px solid var(--accent-purple) !important;
+  box-shadow: 0 0 28px rgba(168, 85, 247, 0.5) !important;
+  transition: all 0.4s ease;
+}
+
+/* Scroll Journey Active Node Styling */
+.milestone-item.active .milestone-img-wrap,
+.milestone-item.in-view .milestone-img-wrap {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 18px var(--accent-gold-glow);
+  transform: scale(1.05);
+}
+
+.milestone-item.active .milestone-title,
+.milestone-item.in-view .milestone-title {
+  color: var(--accent-gold);
+  text-shadow: 0 0 8px rgba(252, 211, 77, 0.5);
+}
+
+/* Respect Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero-lumi-float, .twinkle-star, .brand-icon-wrapper, .cloud-mascot-wrapper, .dancing-lumi-img {
+    animation: none !important;
+  }
+  #hero-parallax-bg {
+    transform: none !important;
+  }
+}
+
