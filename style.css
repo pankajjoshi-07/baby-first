@@ -1574,8 +1574,17 @@ body {
 }
 
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(0.8); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
 }
 
 .cinematic-title {
@@ -1653,17 +1662,13 @@ body {
   background: linear-gradient(135deg, rgba(236, 72, 153, 0.85), rgba(168, 85, 247, 0.85));
   border: 2px solid rgba(255, 255, 255, 0.4);
   color: #ffffff;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 10;
-}
-
-.cinematic-big-play-btn.visible {
-  display: flex !important;
 }
 
 .cinematic-big-play-btn:hover {
@@ -1690,11 +1695,6 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
   transition: opacity 0.4s ease;
   z-index: 8;
-  display: none;
-}
-
-.cinematic-overlay-card.visible {
-  display: block !important;
 }
 
 .overlay-scene-tag {
@@ -1725,7 +1725,7 @@ body {
 .cinematic-welcome-banner {
   position: absolute;
   inset: 0;
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -1734,10 +1734,6 @@ body {
   padding: 24px;
   z-index: 15;
   transition: opacity 0.6s ease;
-}
-
-.cinematic-welcome-banner.visible {
-  display: flex !important;
 }
 
 .welcome-banner-glow {
@@ -1913,21 +1909,26 @@ body {
   .cinematic-player-window {
     padding: 12px 14px 16px 14px;
   }
+
   .welcome-main-title {
     font-size: 1.6rem;
   }
+
   .cinematic-overlay-card {
     bottom: 10px;
     left: 10px;
     right: 10px;
     padding: 8px 12px;
   }
+
   .overlay-scene-heading {
     font-size: 1rem;
   }
+
   .overlay-scene-caption {
     font-size: 0.74rem;
   }
+
   .cinematic-chapter-indicator {
     display: none;
   }
@@ -1937,6 +1938,7 @@ body {
   .badge-dot {
     animation: none;
   }
+
   .cinematic-big-play-btn {
     transition: none;
   }
