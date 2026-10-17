@@ -687,131 +687,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     9. WATCH INTRO: CINEMATIC 3-SCENE STORYBOOK MODAL
+     9. WATCH INTRO: CINEMATIC VIDEO PLAYER
      ========================================================================== */
-  const modalIntro = document.getElementById('modal-intro');
   const btnWatchIntro = document.getElementById('btn-watch-intro');
   const aboutViewMore = document.getElementById('about-view-more');
-  const btnIntroPrev = document.getElementById('btn-intro-prev');
-  const btnIntroNext = document.getElementById('btn-intro-next');
-  const btnIntroReplay = document.getElementById('btn-intro-replay');
-  const btnIntroExplore = document.getElementById('btn-intro-explore');
-  const sceneDots = document.querySelectorAll('.scene-dot');
-  const storyScenes = document.querySelectorAll('.storybook-scene');
-  let currentIntroScene = 1;
-  const totalIntroScenes = 3;
-
-  function showIntroScene(index) {
-    if (index < 1 || index > totalIntroScenes) return;
-    currentIntroScene = index;
-
-    // Play chime sound on scene transition
-    if (window.dreamAudio) {
-      const sceneNotes = ['C5', 'E5', 'G5'];
-      window.dreamAudio.playChime(sceneNotes[index - 1] || 'C5');
-    }
-
-    // Toggle scenes visibility & CSS animation
-    storyScenes.forEach(scene => {
-      const idx = parseInt(scene.dataset.sceneIndex, 10);
-      if (idx === currentIntroScene) {
-        scene.hidden = false;
-        scene.classList.remove('active');
-        void scene.offsetWidth; // trigger reflow
-        scene.classList.add('active');
-      } else {
-        scene.hidden = true;
-        scene.classList.remove('active');
-      }
-    });
-
-    // Update progress dots
-    sceneDots.forEach(dot => {
-      const idx = parseInt(dot.dataset.scene, 10);
-      if (idx === currentIntroScene) {
-        dot.classList.add('active');
-      } else {
-        dot.classList.remove('active');
-      }
-    });
-
-    // Update controls state
-    if (btnIntroPrev) {
-      btnIntroPrev.disabled = (currentIntroScene === 1);
-    }
-    if (btnIntroNext && btnIntroReplay) {
-      if (currentIntroScene === totalIntroScenes) {
-        btnIntroNext.hidden = true;
-        btnIntroReplay.hidden = false;
-      } else {
-        btnIntroNext.hidden = false;
-        btnIntroReplay.hidden = true;
-      }
-    }
-  }
-
-  function openIntroModal() {
-    if (!modalIntro) return;
-    modalIntro.hidden = false;
-    document.body.style.overflow = 'hidden'; // prevent background scrolling
-    showIntroScene(1);
-  }
-
-  function closeIntroModal() {
-    if (!modalIntro) return;
-    modalIntro.hidden = true;
-    document.body.style.overflow = ''; // restore scrolling
-  }
 
   if (btnWatchIntro) {
-    btnWatchIntro.addEventListener('click', () => {
-      openIntroModal();
+    btnWatchIntro.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.LumiCinematic) {
+        window.LumiCinematic.open();
+      }
     });
   }
 
   if (aboutViewMore) {
-    aboutViewMore.addEventListener('click', () => {
-      openIntroModal();
-    });
-  }
-
-  if (btnIntroNext) {
-    btnIntroNext.addEventListener('click', () => {
-      showIntroScene(currentIntroScene + 1);
-    });
-  }
-
-  if (btnIntroPrev) {
-    btnIntroPrev.addEventListener('click', () => {
-      showIntroScene(currentIntroScene - 1);
-    });
-  }
-
-  if (btnIntroReplay) {
-    btnIntroReplay.addEventListener('click', () => {
-      showIntroScene(1);
-    });
-  }
-
-  sceneDots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      const targetScene = parseInt(dot.dataset.scene, 10);
-      if (targetScene) showIntroScene(targetScene);
-    });
-  });
-
-  // "Explore Lumi's World" button inside modal:
-  // Closes modal, restores scroll, smoothly scrolls to Projects with highlight
-  if (btnIntroExplore) {
-    btnIntroExplore.addEventListener('click', (e) => {
+    aboutViewMore.addEventListener('click', (e) => {
       e.preventDefault();
-      closeIntroModal();
-      if (window.dreamAudio) window.dreamAudio.playTap();
-      const proj = document.getElementById('projects');
-      if (proj) {
-        proj.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        proj.classList.add('target-highlight');
-        setTimeout(() => { proj.classList.remove('target-highlight'); }, 1200);
+      if (window.LumiCinematic) {
+        window.LumiCinematic.open();
       }
     });
   }
@@ -829,21 +723,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
-  // Keyboard navigation for Intro Modal (Left/Right arrow keys)
-  window.addEventListener('keydown', (e) => {
-    if (modalIntro && !modalIntro.hidden) {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        if (currentIntroScene < totalIntroScenes) {
-          showIntroScene(currentIntroScene + 1);
-        }
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        if (currentIntroScene > 1) {
-          showIntroScene(currentIntroScene - 1);
-        }
-      }
-    }
-  });
 
   /* ==========================================================================
      10. SCROLL-DRIVEN ORIGIN STORY TIMELINE ANIMATION
@@ -1104,7 +983,14 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', () => {
         const modalId = btn.dataset.close;
         const modal = document.getElementById(modalId);
-        if (modal) modal.hidden = true;
+        if (modal) {
+          if (modalId === 'modal-intro' && window.LumiCinematic) {
+            window.LumiCinematic.close();
+          } else {
+            modal.hidden = true;
+            document.body.style.overflow = '';
+          }
+        }
       });
     });
   }
@@ -1113,7 +999,12 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.modal-backdrop').forEach(modal => {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
-        modal.hidden = true;
+        if (modal.id === 'modal-intro' && window.LumiCinematic) {
+          window.LumiCinematic.close();
+        } else {
+          modal.hidden = true;
+          document.body.style.overflow = '';
+        }
       }
     });
   });
@@ -1121,9 +1012,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // ESC key closes any open modal
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+      if (window.LumiCinematic && document.getElementById('modal-intro') && !document.getElementById('modal-intro').hidden) {
+        window.LumiCinematic.close();
+      }
       document.querySelectorAll('.modal-backdrop:not([hidden])').forEach(m => {
         m.hidden = true;
       });
+      document.body.style.overflow = '';
     }
   });
 });

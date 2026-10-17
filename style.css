@@ -1520,183 +1520,426 @@ body {
   transform: rotate(90deg);
 }
 
-/* Intro Modal & Cinematic Storybook */
-.intro-modal-header {
-  margin-bottom: 16px;
+/* ==========================================================================
+   CINEMATIC INTRO VIDEO PLAYER MODAL & HUD CONTROLS
+   ========================================================================== */
+.cinematic-player-window {
+  max-width: 980px;
+  width: 95vw;
+  padding: 16px 20px 20px 20px;
+  background: #090c24;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(168, 85, 247, 0.25);
+  border-radius: 20px;
 }
 
-.intro-header-top {
+/* Player Header Bar */
+.cinematic-player-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 4px;
+  margin-bottom: 12px;
+  gap: 12px;
 }
 
-.intro-badge {
-  font-size: 0.72rem;
-  color: var(--accent-gold);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Scene Progress Dots */
-.scene-progress-dots {
+.cinematic-title-box {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  min-width: 0;
 }
 
-.scene-dot {
-  width: 10px;
-  height: 10px;
+.cinematic-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  background: rgba(252, 211, 77, 0.12);
+  border: 1px solid rgba(252, 211, 77, 0.3);
+  padding: 3px 8px;
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  padding: 0;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
-.scene-dot:hover {
-  background: rgba(252, 211, 77, 0.5);
-  transform: scale(1.2);
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+  animation: pulse-dot 1.4s ease infinite;
 }
 
-.scene-dot.active {
-  width: 26px;
-  background: var(--accent-gold);
-  border-color: var(--accent-gold);
-  box-shadow: 0 0 12px var(--accent-gold-glow);
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.8); }
 }
 
-.intro-modal-header h2 {
+.cinematic-title {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   color: #ffffff;
-  margin: 4px 0 2px 0;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.intro-modal-header p {
-  font-size: 0.85rem;
-  color: var(--text-muted);
+.cinematic-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
-.intro-storybook {
+.btn-cinematic-skip {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #e2e8f0;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cinematic-skip:hover {
+  background: rgba(168, 85, 247, 0.25);
+  border-color: var(--accent-purple);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.cinematic-close-btn {
+  position: static;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+/* 16:9 Video Screen Container */
+.cinematic-screen-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #03040e;
   border-radius: 14px;
   overflow: hidden;
-  border: 1px solid var(--border-card);
-  background: rgba(8, 10, 30, 0.6);
-  margin-bottom: 20px;
   position: relative;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9), 0 8px 24px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.storybook-scene {
-  animation: scene-fade-scale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes scene-fade-scale {
-  from {
-    opacity: 0;
-    transform: scale(0.96) translateY(6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-.storybook-img-wrap {
-  width: 100%;
-  height: 210px;
-  position: relative;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.storybook-img {
+#cinematic-canvas {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s ease;
+  display: block;
+  object-fit: contain;
+  cursor: pointer;
 }
 
-.storybook-scene:hover .storybook-img {
-  transform: scale(1.04);
-}
-
-.scene-sparkle-layer {
+/* Big Play Button Overlay on Pause */
+.cinematic-big-play-btn {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.85), rgba(168, 85, 247, 0.85));
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+}
+
+.cinematic-big-play-btn.visible {
+  display: flex !important;
+}
+
+.cinematic-big-play-btn:hover {
+  transform: translate(-50%, -50%) scale(1.12);
+  box-shadow: 0 0 40px rgba(252, 211, 77, 0.8);
+}
+
+.cinematic-big-play-btn svg {
+  margin-left: 5px;
+}
+
+/* Dynamic Scene Title Card Overlay (Bottom-Left) */
+.cinematic-overlay-card {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  max-width: 480px;
+  background: rgba(7, 9, 25, 0.82);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  border-radius: 12px;
+  padding: 12px 16px;
   pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  transition: opacity 0.4s ease;
+  z-index: 8;
+  display: none;
 }
 
-.scene-star {
-  position: absolute;
-  color: var(--accent-gold);
-  text-shadow: 0 0 10px var(--accent-gold-glow);
-  animation: twinkle-float 3s ease-in-out infinite;
+.cinematic-overlay-card.visible {
+  display: block !important;
 }
 
-.star-s1 {
-  top: 20%;
-  right: 25%;
-  font-size: 1.2rem;
-}
-
-.star-s2 {
-  bottom: 30%;
-  left: 20%;
-  font-size: 0.9rem;
-  animation-delay: 1.5s;
-  color: var(--accent-pink);
-}
-
-.storybook-text {
-  padding: 16px;
-}
-
-.scene-tag {
+.overlay-scene-tag {
   display: inline-block;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: var(--accent-purple);
-  background: rgba(168, 85, 247, 0.15);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
 }
 
-.storybook-text h3 {
+.overlay-scene-heading {
   font-family: var(--font-display);
   font-size: 1.15rem;
   color: #fed7aa;
-  margin-bottom: 6px;
+  margin: 0 0 4px 0;
 }
 
-.storybook-text p {
-  font-size: 0.85rem;
+.overlay-scene-caption {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Scene 4 Welcome Banner Overlay */
+.cinematic-welcome-banner {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 50%, rgba(13, 15, 45, 0.75) 0%, rgba(4, 5, 18, 0.92) 80%);
+  text-align: center;
+  padding: 24px;
+  z-index: 15;
+  transition: opacity 0.6s ease;
+}
+
+.cinematic-welcome-banner.visible {
+  display: flex !important;
+}
+
+.welcome-banner-glow {
+  position: absolute;
+  width: 400px;
+  height: 200px;
+  background: radial-gradient(ellipse, rgba(252, 211, 77, 0.25) 0%, rgba(168, 85, 247, 0.2) 50%, transparent 80%);
+  pointer-events: none;
+}
+
+.welcome-pretitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+  text-shadow: 0 0 12px var(--accent-gold-glow);
+}
+
+.welcome-main-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  text-shadow: 0 0 25px rgba(252, 211, 77, 0.5), 0 4px 12px rgba(0, 0, 0, 0.8);
+  letter-spacing: -0.01em;
+}
+
+.welcome-subtitle {
+  font-size: 0.95rem;
   color: #e2e8f0;
-  line-height: 1.55;
+  max-width: 480px;
+  margin-bottom: 20px;
+  line-height: 1.5;
 }
 
-.intro-modal-footer {
+.welcome-explore-btn {
+  font-size: 0.92rem;
+  padding: 12px 28px;
+  box-shadow: 0 0 25px rgba(252, 211, 77, 0.4);
+}
+
+.welcome-explore-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 35px rgba(252, 211, 77, 0.7);
+}
+
+/* Player Controls Bar */
+.cinematic-controls-bar {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Timeline Scrubber Track */
+.cinematic-timeline-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-pill);
+  position: relative;
+  cursor: pointer;
+  transition: height 0.2s ease;
+}
+
+.cinematic-timeline-track:hover,
+.cinematic-timeline-track:focus {
+  height: 12px;
+}
+
+.cinematic-timeline-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink), var(--accent-gold));
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 10px rgba(252, 211, 77, 0.5);
+  pointer-events: none;
+}
+
+.cinematic-timeline-handle {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--accent-gold);
+  box-shadow: 0 0 10px var(--accent-gold-glow);
+  pointer-events: none;
+  transition: transform 0.15s ease;
+}
+
+.cinematic-timeline-track:hover .cinematic-timeline-handle {
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+/* Timeline Chapter Markers */
+.timeline-marker {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+
+/* Controls Buttons Row */
+.cinematic-controls-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  flex-wrap: wrap;
 }
 
-.intro-nav-controls {
+.cinematic-left-controls,
+.cinematic-right-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+.ctrl-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ctrl-btn:hover {
+  background: rgba(168, 85, 247, 0.3);
+  border-color: var(--accent-purple);
+  transform: scale(1.08);
+}
+
+.cinematic-time-display {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 4px;
+}
+
+.time-divider {
+  color: var(--text-dim);
+}
+
+.cinematic-chapter-indicator {
+  font-size: 0.78rem;
+  color: var(--accent-gold);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+/* Responsive Rules */
+@media (max-width: 768px) {
+  .cinematic-player-window {
+    padding: 12px 14px 16px 14px;
+  }
+  .welcome-main-title {
+    font-size: 1.6rem;
+  }
+  .cinematic-overlay-card {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    padding: 8px 12px;
+  }
+  .overlay-scene-heading {
+    font-size: 1rem;
+  }
+  .overlay-scene-caption {
+    font-size: 0.74rem;
+  }
+  .cinematic-chapter-indicator {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge-dot {
+    animation: none;
+  }
+  .cinematic-big-play-btn {
+    transition: none;
+  }
 }
 
 /* Wish Form */
