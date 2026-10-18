@@ -50,6 +50,9 @@ function initLumiApp() {
       if (window.dreamAudio) {
         const isNowPlaying = window.dreamAudio.toggleMusic();
         updateMusicUI(isNowPlaying);
+        if (!isNowPlaying && !window.dreamAudio.isPlaying && !window.dreamAudio.isSupported) {
+          spawnFloatingFeedback(window.innerWidth - 140, 70, '🔇 Audio not supported');
+        }
       }
     });
   }
@@ -194,11 +197,13 @@ function initLumiApp() {
   }
 
   /* ==========================================================================
-     4. LAYERED BACKGROUND PARALLAX
+     4. LAYERED BACKGROUND PARALLAX (Subtle pointer effect on bg layers only)
      ========================================================================== */
   const heroBanner = document.getElementById('hero-banner');
   const heroParallaxBg = document.getElementById('hero-parallax-bg');
-  const heroZone = document.getElementById('hero-interactive-zone');
+  const heroClouds = heroBanner ? heroBanner.querySelector('.hero-clouds-layer') : null;
+  const heroParticles = heroBanner ? heroBanner.querySelector('.hero-particles-layer') : null;
+  const skyStars = document.getElementById('sky-stars');
 
   if (heroBanner && !prefersReducedMotion) {
     let ticking = false;
@@ -209,8 +214,9 @@ function initLumiApp() {
       const rect = heroBanner.getBoundingClientRect();
       const relX = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
       const relY = (e.clientY - rect.top) / rect.height - 0.5;
-      targetX = relX * 24;
-      targetY = relY * 16;
+      // Gentle dampening for subtle, elegant depth
+      targetX = relX * 16;
+      targetY = relY * 12;
 
       if (!ticking) {
         requestAnimationFrame(updateParallax);
@@ -228,17 +234,24 @@ function initLumiApp() {
     });
 
     function updateParallax() {
-      currentX += (targetX - currentX) * 0.12;
-      currentY += (targetY - currentY) * 0.12;
+      currentX += (targetX - currentX) * 0.1;
+      currentY += (targetY - currentY) * 0.1;
 
+      // Only move background layers; keep text & buttons rock-solid
       if (heroParallaxBg) {
-        heroParallaxBg.style.transform = `translate(${currentX * 0.4}px, ${currentY * 0.4}px)`;
+        heroParallaxBg.style.transform = `translate(${currentX * 0.25}px, ${currentY * 0.2}px)`;
       }
-      if (heroZone) {
-        heroZone.style.transform = `translate(${currentX * -0.5}px, ${currentY * -0.5}px)`;
+      if (heroClouds) {
+        heroClouds.style.transform = `translate(${currentX * -0.35}px, ${currentY * -0.25}px)`;
+      }
+      if (heroParticles) {
+        heroParticles.style.transform = `translate(${currentX * 0.45}px, ${currentY * 0.35}px)`;
+      }
+      if (skyStars) {
+        skyStars.style.transform = `translate(${currentX * 0.3}px, ${currentY * 0.25}px)`;
       }
 
-      if (Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05) {
+      if (Math.abs(targetX - currentX) > 0.04 || Math.abs(targetY - currentY) > 0.04) {
         requestAnimationFrame(updateParallax);
       } else {
         ticking = false;
@@ -267,106 +280,66 @@ function initLumiApp() {
     });
   }
 
-  // Cinematic Showcase Background Mouse Parallax
-  const showcaseSection = document.querySelector('.about-cinematic-showcase');
-  const showcaseBg = document.getElementById('showcase-parallax-bg');
-
-  if (showcaseSection && showcaseBg && !prefersReducedMotion) {
-    let sTicking = false;
-    let sTargetX = 0, sTargetY = 0;
-    let sCurrentX = 0, sCurrentY = 0;
-
-    showcaseSection.addEventListener('mousemove', (e) => {
-      const rect = showcaseSection.getBoundingClientRect();
-      const relX = (e.clientX - rect.left) / rect.width - 0.5;
-      const relY = (e.clientY - rect.top) / rect.height - 0.5;
-      sTargetX = relX * 18;
-      sTargetY = relY * 12;
-
-      if (!sTicking) {
-        requestAnimationFrame(updateShowcaseParallax);
-        sTicking = true;
-      }
-    }, { passive: true });
-
-    showcaseSection.addEventListener('mouseleave', () => {
-      sTargetX = 0;
-      sTargetY = 0;
-      if (!sTicking) {
-        requestAnimationFrame(updateShowcaseParallax);
-        sTicking = true;
-      }
-    });
-
-    function updateShowcaseParallax() {
-      sCurrentX += (sTargetX - sCurrentX) * 0.1;
-      sCurrentY += (sTargetY - sCurrentY) * 0.1;
-
-      if (showcaseBg) {
-        showcaseBg.style.transform = `translate(${sCurrentX * -0.6}px, ${sCurrentY * -0.6}px)`;
-      }
-
-      if (Math.abs(sTargetX - sCurrentX) > 0.04 || Math.abs(sTargetY - sCurrentY) > 0.04) {
-        requestAnimationFrame(updateShowcaseParallax);
-      } else {
-        sTicking = false;
-      }
-    }
-  }
-
-  // Pip the Golden Star Companion Interaction
-  const companionStar = document.getElementById('showcase-companion-star');
-  if (companionStar) {
-    companionStar.addEventListener('click', (e) => {
-      if (window.dreamAudio) window.dreamAudio.playChime('C6');
-      companionStar.style.transform = 'translate(-50%, -50%) scale(1.3) rotate(15deg)';
-      setTimeout(() => { companionStar.style.transform = ''; }, 350);
-      spawnFloatingFeedback(e.clientX, e.clientY - 20, '⭐ Pip: *Twinkle!* ✨');
-      if (speechBubble) {
-        speechBubble.textContent = "Pip says: 'Lumi and I will guide your dreams tonight!' ⭐";
-      }
-    });
-
-    companionStar.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        companionStar.click();
-      }
+  // About Photo Interactive Wink / Bounce
+  const aboutPhoto = document.getElementById('about-photo-interactive');
+  if (aboutPhoto) {
+    aboutPhoto.addEventListener('click', (e) => {
+      if (window.dreamAudio) window.dreamAudio.playChime('C5');
+      aboutPhoto.style.transform = 'scale(1.08) rotate(-4deg)';
+      setTimeout(() => { aboutPhoto.style.transform = ''; }, 300);
+      spawnFloatingFeedback(e.clientX, e.clientY, '⭐ Lumi & Star');
     });
   }
 
-  // Interactive Constellation Whispers
-  const constellationPoints = document.querySelectorAll('.showcase-constellation-point');
-  const whisperBox = document.getElementById('showcase-whisper-box');
-  const whisperText = whisperBox ? whisperBox.querySelector('.whisper-text') : null;
-  const constellationNotes = ['E5', 'G5', 'A5'];
-  const defaultWhisper = "A curious dreamer watching over forgotten wishes in the celestial sky.";
+  // Personality Tag Pills (Interactive Sparks & Quotes)
+  const tagPhrases = {
+    curious: "✨ Curious: 'I chart uncharted skies to find forgotten wishes!'",
+    kind: "🌸 Kind: 'No dreamer with a quiet wish should ever feel alone.'",
+    creative: "🎨 Creative: 'I weave starlight and memories into cozy worlds!'",
+    mischievous: "💫 Mischievous: 'Sometimes I tickle the clouds until they giggle stardust!'"
+  };
 
-  constellationPoints.forEach((point, idx) => {
-    point.addEventListener('mouseenter', () => {
-      if (window.dreamAudio) window.dreamAudio.playChime(constellationNotes[idx % constellationNotes.length]);
-      const whisper = point.dataset.whisper;
-      if (whisperText && whisper) {
-        whisperText.textContent = whisper;
-        whisperBox.style.borderColor = 'var(--accent-gold)';
-        whisperBox.style.color = '#fff4d4';
+  document.querySelectorAll('.tag-pill').forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      const tag = pill.dataset.tag;
+      const phrase = tagPhrases[tag] || "✨ Lumi's magical spark!";
+      
+      document.querySelectorAll('.tag-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const aboutQuoteText = document.getElementById('about-quote-text');
+      if (aboutQuoteText) {
+        aboutQuoteText.style.opacity = '0';
+        setTimeout(() => {
+          aboutQuoteText.textContent = phrase;
+          aboutQuoteText.style.opacity = '1';
+        }, 150);
       }
-    });
 
-    point.addEventListener('mouseleave', () => {
-      if (whisperText) {
-        whisperText.textContent = defaultWhisper;
-        whisperBox.style.borderColor = '';
-        whisperBox.style.color = '';
-      }
-    });
-
-    point.addEventListener('click', (e) => {
-      if (window.dreamAudio) window.dreamAudio.playChime('C6');
-      const whisper = point.dataset.whisper || '✨ Celestial Starlight';
-      spawnFloatingFeedback(e.clientX, e.clientY - 15, `✦ ${point.title || 'Star'}`);
+      if (speechBubble) speechBubble.textContent = phrase;
+      if (window.dreamAudio) window.dreamAudio.playChime('E5');
+      spawnFloatingFeedback(e.clientX, e.clientY, `✨ ${pill.textContent}`);
+      pill.style.transform = 'scale(1.12)';
+      setTimeout(() => { pill.style.transform = ''; }, 220);
     });
   });
+
+  // Topbar Profile Avatar Button (About Lumi quick access)
+  const profileBtn = document.getElementById('profile-btn');
+  if (profileBtn) {
+    profileBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const aboutEl = document.getElementById('about-card') || document.getElementById('about');
+      if (aboutEl) {
+        aboutEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        aboutEl.classList.add('target-highlight');
+        setTimeout(() => aboutEl.classList.remove('target-highlight'), 1200);
+      }
+      if (typeof setActiveNav === 'function') setActiveNav('about');
+      if (window.dreamAudio) window.dreamAudio.playChime('C5');
+      if (speechBubble) speechBubble.textContent = "✨ Welcome! Let me tell you about my dream world!";
+    });
+  }
 
   /* ==========================================================================
      6. EASTER EGG: THE HIDDEN ROOM (5 Clicks Unlock!)
@@ -392,7 +365,10 @@ function initLumiApp() {
 
   const registerSecretClick = (e) => {
     if (starClickCount >= targetClicks) {
-      if (modalEasterEgg) modalEasterEgg.hidden = false;
+      if (modalEasterEgg) {
+        modalEasterEgg.hidden = false;
+        document.body.style.overflow = 'hidden';
+      }
       return;
     }
 
@@ -416,6 +392,12 @@ function initLumiApp() {
 
     if (clickCountText) {
       clickCountText.textContent = `${starClickCount} / ${targetClicks} clicks`;
+    }
+
+    const secretBarFill = document.getElementById('secret-bar-fill');
+    if (secretBarFill) {
+      const pct = Math.min(100, Math.round((starClickCount / targetClicks) * 100));
+      secretBarFill.style.width = `${pct}%`;
     }
 
     // When 5 clicks reached: UNLOCK!
@@ -445,12 +427,26 @@ function initLumiApp() {
       e.stopPropagation();
       registerSecretClick(e);
     });
+    heroSpecialStar.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        registerSecretClick(e);
+      }
+    });
   }
 
   const hiddenArchTrigger = document.getElementById('hidden-arch-trigger');
   if (hiddenArchTrigger) {
+    hiddenArchTrigger.setAttribute('role', 'button');
+    hiddenArchTrigger.setAttribute('tabindex', '0');
     hiddenArchTrigger.addEventListener('click', (e) => {
       registerSecretClick(e);
+    });
+    hiddenArchTrigger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        registerSecretClick(e);
+      }
     });
   }
 
@@ -461,6 +457,7 @@ function initLumiApp() {
       if (window.dreamAudio) {
         window.dreamAudio.stopLullaby();
         window.dreamAudio.startLullaby(window.dreamAudio.secretScore);
+        updateMusicUI(true);
         playSecretTuneBtn.innerHTML = '<span>🎶 Playing "Lumi\'s Midnight Waltz"...</span>';
         setTimeout(() => {
           playSecretTuneBtn.innerHTML = '<span>🎵 Replay Secret Melody</span>';
@@ -476,8 +473,15 @@ function initLumiApp() {
       if (lockIcon) lockIcon.textContent = '🔒';
       if (secretBadge) secretBadge.textContent = '⭐';
       if (clickCountText) clickCountText.textContent = `0 / ${targetClicks} clicks`;
+      const secretBarFill = document.getElementById('secret-bar-fill');
+      if (secretBarFill) secretBarFill.style.width = '0%';
       if (modalEasterEgg) modalEasterEgg.hidden = true;
-      if (window.dreamAudio) window.dreamAudio.playTap();
+      document.body.style.overflow = '';
+      if (window.dreamAudio) {
+        window.dreamAudio.stopLullaby();
+        window.dreamAudio.playTap();
+      }
+      updateMusicUI(false);
       spawnFloatingFeedback(window.innerWidth / 2, window.innerHeight / 2, '🔒 Chamber Relocked');
     });
   }
@@ -594,6 +598,19 @@ function initLumiApp() {
     if (window.dreamAudio) window.dreamAudio.playChime('C5');
 
     projectModalBody.innerHTML = `
+      <!-- Project Switcher Tabs -->
+      <div class="project-modal-tabs" style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;">
+        <button class="project-tab-btn ${data.id === 'bubble' ? 'active' : ''}" data-project-tab="bubble" style="padding:6px 14px;border-radius:20px;font-size:0.78rem;font-weight:600;cursor:pointer;border:1px solid ${data.id === 'bubble' ? 'var(--accent-purple)' : 'var(--border-card)'};background:${data.id === 'bubble' ? 'linear-gradient(135deg, rgba(244,114,182,0.35), rgba(192,132,252,0.35))' : 'rgba(255,255,255,0.06)'};color:#fff;transition:all 0.2s;">
+          🫧 Dream Bubble Maker
+        </button>
+        <button class="project-tab-btn ${data.id === 'nightlight' ? 'active' : ''}" data-project-tab="nightlight" style="padding:6px 14px;border-radius:20px;font-size:0.78rem;font-weight:600;cursor:pointer;border:1px solid ${data.id === 'nightlight' ? 'var(--accent-purple)' : 'var(--border-card)'};background:${data.id === 'nightlight' ? 'linear-gradient(135deg, rgba(244,114,182,0.35), rgba(192,132,252,0.35))' : 'rgba(255,255,255,0.06)'};color:#fff;transition:all 0.2s;">
+          🏮 Nightlight Guardian
+        </button>
+        <button class="project-tab-btn ${data.id === 'garden' ? 'active' : ''}" data-project-tab="garden" style="padding:6px 14px;border-radius:20px;font-size:0.78rem;font-weight:600;cursor:pointer;border:1px solid ${data.id === 'garden' ? 'var(--accent-purple)' : 'var(--border-card)'};background:${data.id === 'garden' ? 'linear-gradient(135deg, rgba(244,114,182,0.35), rgba(192,132,252,0.35))' : 'rgba(255,255,255,0.06)'};color:#fff;transition:all 0.2s;">
+          🌸 Memory Garden
+        </button>
+      </div>
+
       <div class="project-modal-hero">
         <div style="position:relative;overflow:hidden;border-radius:14px;border:1px solid var(--border-card);margin-bottom:14px;height:210px;">
           <img id="project-modal-hero-img" src="${data.img}" alt="${data.title}" style="width:100%;height:100%;object-fit:cover;transition:filter 0.4s ease;">
@@ -629,10 +646,18 @@ function initLumiApp() {
       </div>
     `;
 
+    // Connect switcher tabs inside modal
+    projectModalBody.querySelectorAll('.project-tab-btn').forEach(tab => {
+      tab.addEventListener('click', () => {
+        openProjectModal(tab.dataset.projectTab);
+      });
+    });
+
     // Mount specific interactive toy
     mountInteractiveToy(data.interactiveType);
 
     projectModal.hidden = false;
+    document.body.style.overflow = 'hidden';
     attachModalCloseEvents();
   }
 
@@ -760,10 +785,29 @@ function initLumiApp() {
     }
   }
 
-  // Open modal when clicking project mini cards
+  // Open modal when clicking project mini cards (click & keyboard Enter/Space)
   document.querySelectorAll('.project-mini-card').forEach(card => {
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
     card.addEventListener('click', () => {
       const type = card.dataset.project;
+      openProjectModal(type);
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const type = card.dataset.project;
+        openProjectModal(type);
+      }
+    });
+  });
+
+  // Circle arrow button inside each project card
+  document.querySelectorAll('.project-circle-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = btn.closest('.project-mini-card');
+      const type = card ? card.dataset.project : 'bubble';
       openProjectModal(type);
     });
   });
@@ -817,6 +861,8 @@ function initLumiApp() {
         proj.classList.add('target-highlight');
         setTimeout(() => { proj.classList.remove('target-highlight'); }, 1200);
       }
+      if (typeof setActiveNav === 'function') setActiveNav('projects');
+      if (window.dreamAudio) window.dreamAudio.playChime('E5');
     });
   }
 
@@ -850,9 +896,9 @@ function initLumiApp() {
 
     storyObserver.observe(storySection);
 
-    // Interactive milestone click
+    // Interactive milestone click & keyboard activation
     milestones.forEach(m => {
-      m.addEventListener('click', () => {
+      const activateMilestone = () => {
         milestones.forEach(node => node.classList.remove('active'));
         m.classList.add('active');
         if (window.dreamAudio) {
@@ -863,6 +909,15 @@ function initLumiApp() {
         const title = m.querySelector('.milestone-title')?.textContent || '';
         if (speechBubble) {
           speechBubble.textContent = `📖 Story: "${title}" - Lumi's journey continues! ✨`;
+        }
+      };
+
+      m.addEventListener('click', activateMilestone);
+
+      m.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activateMilestone();
         }
       });
     });
@@ -876,26 +931,41 @@ function initLumiApp() {
   }
 
   /* ==========================================================================
-     11. NAVIGATION & SCROLLSPY
+     11. NAVIGATION & SCROLLSPY (Robust Section Mapping & Smooth Tracking)
      ========================================================================== */
   const navItems = document.querySelectorAll('.nav-item');
-  const sections = [
-    { id: 'home', el: document.getElementById('home'), nav: document.getElementById('nav-home') },
-    { id: 'about', el: document.getElementById('about'), nav: document.getElementById('nav-about') },
+  const navTargets = [
+    { id: 'home', el: document.getElementById('hero-banner'), nav: document.getElementById('nav-home') },
+    { id: 'about', el: document.getElementById('about-card') || document.getElementById('about'), nav: document.getElementById('nav-about') },
     { id: 'projects', el: document.getElementById('projects'), nav: document.getElementById('nav-projects') },
     { id: 'story', el: document.getElementById('story'), nav: document.getElementById('nav-story') },
     { id: 'secret', el: document.getElementById('secret'), nav: document.getElementById('nav-secret') }
   ];
 
+  let isNavClicking = false;
+  let navClickTimer = null;
+
+  function setActiveNav(tabId) {
+    navItems.forEach(n => {
+      if (n.dataset.tab === tabId) {
+        n.classList.add('active');
+      } else {
+        n.classList.remove('active');
+      }
+    });
+  }
+
   // Nav click handling
   navItems.forEach(item => {
     item.addEventListener('click', () => {
-      navItems.forEach(n => n.classList.remove('active'));
-      item.classList.add('active');
-
       const tab = item.dataset.tab;
-      let targetEl = null;
+      setActiveNav(tab);
 
+      isNavClicking = true;
+      if (navClickTimer) clearTimeout(navClickTimer);
+      navClickTimer = setTimeout(() => { isNavClicking = false; }, 900);
+
+      let targetEl = null;
       if (tab === 'home') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         targetEl = document.getElementById('hero-banner');
@@ -909,8 +979,11 @@ function initLumiApp() {
         targetEl = document.getElementById('secret');
       }
 
-      if (targetEl) {
+      if (targetEl && tab !== 'home') {
         targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      if (targetEl) {
         targetEl.classList.add('target-highlight');
         setTimeout(() => {
           targetEl.classList.remove('target-highlight');
@@ -919,23 +992,48 @@ function initLumiApp() {
     });
   });
 
-  // ScrollSpy with IntersectionObserver
-  const spyObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        const matched = sections.find(s => s.id === id);
-        if (matched && matched.nav) {
-          navItems.forEach(n => n.classList.remove('active'));
-          matched.nav.classList.add('active');
+  // Accurate ScrollSpy to update active nav state based on viewport position
+  function updateScrollSpy() {
+    if (isNavClicking) return;
+
+    // Top of page
+    if (window.scrollY < 120) {
+      setActiveNav('home');
+      return;
+    }
+
+    // Bottom of page
+    if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 90)) {
+      setActiveNav('secret');
+      return;
+    }
+
+    const scrollFocus = window.scrollY + (window.innerHeight * 0.38);
+    let activeId = 'home';
+
+    navTargets.forEach(target => {
+      if (target.el) {
+        const top = target.el.offsetTop;
+        const height = target.el.offsetHeight;
+        if (scrollFocus >= top && scrollFocus < top + height + 60) {
+          activeId = target.id;
         }
       }
     });
-  }, { threshold: 0.35 });
 
-  sections.forEach(s => {
-    if (s.el) spyObserver.observe(s.el);
-  });
+    setActiveNav(activeId);
+  }
+
+  let scrollTicking = false;
+  window.addEventListener('scroll', () => {
+    if (!scrollTicking) {
+      requestAnimationFrame(() => {
+        updateScrollSpy();
+        scrollTicking = false;
+      });
+      scrollTicking = true;
+    }
+  }, { passive: true });
 
   /* ==========================================================================
      12. GUESTBOOK / CELESTIAL WISHES POST OFFICE
@@ -943,16 +1041,55 @@ function initLumiApp() {
   const defaultWishes = [
     { author: "Dreamer Aya", text: "May all anxious hearts find gentle sleep and warm dreams tonight.", charm: "⭐", time: "Just now" },
     { author: "Kieran Cloudkeeper", text: "Lumi, please deliver a quiet starlight boat to the tired children.", charm: "🌙", time: "10m ago" },
-    { author: "Little Ghost Bo", text: "I love the lullaby notes! May your wand never run out of stardust! ✨", charm: "🧸", time: "1h ago" }
+    { author: "Little Ghost Bo", text: "I love the lullaby notes! May your wand never run out of stardust! ✨", charm: "🧸", time: "1h ago" },
+    { author: "Starhopper Leo", text: "Hoping the night sky keeps guiding every little dreamer safely home.", charm: "🚀", time: "2h ago" },
+    { author: "Mira the Stargazer", text: "May soft dreams weave comfort across every bedtime pillow tonight.", charm: "🔮", time: "3h ago" },
+    { author: "Petal Pixie Nori", text: "Wishing sweet lavender scents and blossoming cozy smiles for everyone resting.", charm: "🌸", time: "4h ago" },
+    { author: "Orion the Wanderer", text: "Turn every restless storm cloud into gentle glowing aurora lights.", charm: "✨", time: "5h ago" },
+    { author: "Captain Zephyr", text: "Charted through the Dream Nebula today. The starlight machinery is humming beautifully!", charm: "🪐", time: "6h ago" },
+    { author: "Nana Willow", text: "Blessings to all the sleepy little ones waking up to bright new adventures tomorrow.", charm: "🕯️", time: "7h ago" },
+    { author: "Coral of Cloud Sea", text: "May the tide of peaceful dreams wash away all daytime worries.", charm: "🌊", time: "8h ago" },
+    { author: "Painter Pipkin", text: "I painted the midnight sky purple and gold just like Lumi taught me!", charm: "🎨", time: "9h ago" },
+    { author: "Stardust Weaver Talia", text: "Wrapping every little dream in silk starlight until the morning sun rises.", charm: "🌟", time: "10h ago" }
   ];
 
-  const wishKey = 'lumi_celestial_wishes';
+  const wishKey = 'lumi_celestial_wishes_v4';
   const getStoredWishes = () => {
     try {
       const data = localStorage.getItem(wishKey);
-      return data ? JSON.parse(data) : defaultWishes;
+      let wishes = data ? JSON.parse(data) : null;
+      if (!wishes || !Array.isArray(wishes) || wishes.length < 12) {
+        wishes = defaultWishes;
+      }
+      // Auto-purge any test wishes like "vcfcc" or "vvv"
+      wishes = wishes.filter(w => {
+        const author = (w.author || '').trim().toLowerCase();
+        const text = (w.text || '').trim().toLowerCase();
+        return author !== 'vcfcc' && text !== 'vvv';
+      });
+      localStorage.setItem(wishKey, JSON.stringify(wishes));
+      return wishes;
     } catch {
       return defaultWishes;
+    }
+  };
+
+  const escapeHtml = (str) => {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  };
+
+  const openWishModalBtn = document.getElementById('open-wish-modal-btn');
+  const modalWish = document.getElementById('modal-wish');
+  const wishForm = document.getElementById('wish-form');
+
+  const triggerOpenWishModal = () => {
+    if (window.dreamAudio) window.dreamAudio.playChime('C5');
+    if (modalWish) {
+      modalWish.hidden = false;
+      const input = document.getElementById('wish-author');
+      if (input) input.focus();
     }
   };
 
@@ -960,27 +1097,22 @@ function initLumiApp() {
     const stream = document.getElementById('wishes-stream');
     if (!stream) return;
     const wishes = getStoredWishes();
-    stream.innerHTML = wishes.map(w => `
-      <div class="wish-tile">
+    
+    // Render clean wish cards (without cross and without inline make-a-wish tile)
+    stream.innerHTML = wishes.map((w, index) => `
+      <div class="wish-tile" data-index="${index}">
         <div class="wish-tile-top">
-          <span>${w.charm} ${w.author}</span>
-          <span class="wish-tile-time">${w.time}</span>
+          <span class="wish-author">${w.charm} ${escapeHtml(w.author)}</span>
+          <span class="wish-tile-time">${escapeHtml(w.time)}</span>
         </div>
-        <p class="wish-tile-text">"${w.text}"</p>
+        <p class="wish-tile-text">"${escapeHtml(w.text)}"</p>
       </div>
     `).join('');
   };
   renderWishes();
 
-  const openWishModalBtn = document.getElementById('open-wish-modal-btn');
-  const modalWish = document.getElementById('modal-wish');
-  const wishForm = document.getElementById('wish-form');
-
-  if (openWishModalBtn && modalWish) {
-    openWishModalBtn.addEventListener('click', () => {
-      if (window.dreamAudio) window.dreamAudio.playChime('C5');
-      modalWish.hidden = false;
-    });
+  if (openWishModalBtn) {
+    openWishModalBtn.addEventListener('click', triggerOpenWishModal);
   }
 
   if (wishForm) {
@@ -1015,15 +1147,14 @@ function initLumiApp() {
   const searchDropdown = document.getElementById('search-dropdown');
 
   const searchableIndex = [
-    { title: "Meet Lumi", type: "Character", section: "#about" },
-    { title: "The Little Dream Architect", type: "Role", section: "#about" },
-    { title: "Pip the Golden Star", type: "Companion", section: "#about" },
     { title: "Dream Bubble Maker", type: "Project", section: "#projects" },
     { title: "Nightlight Guardian", type: "Project", section: "#projects" },
     { title: "Memory Garden", type: "Project", section: "#projects" },
     { title: "A Tiny Spark (Origin)", type: "Story", section: "#story" },
     { title: "The Dream Machine", type: "Story", section: "#story" },
-    { title: "The Hidden Room", type: "Secret", section: "#secret" }
+    { title: "The Hidden Room", type: "Secret", section: "#secret" },
+    { title: "Star Wand", type: "Quick Fact", section: "#quickfacts-card" },
+    { title: "Dream Spirit", type: "Species", section: "#quickfacts-card" }
   ];
 
   if (searchInput && searchDropdown) {

@@ -263,6 +263,20 @@
       this.modal.hidden = false;
       document.body.style.overflow = 'hidden';
 
+      // Pause background lullaby if active so intro video audio is isolated
+      if (window.dreamAudio && window.dreamAudio.isPlaying) {
+        this.wasBackgroundMusicPlaying = true;
+        window.dreamAudio.stopLullaby();
+        const lullabyToggle = document.getElementById('lullaby-toggle');
+        if (lullabyToggle) lullabyToggle.classList.remove('playing');
+        const musicState = document.getElementById('music-state');
+        if (musicState) musicState.textContent = '▶';
+        const musicNoteIcon = document.getElementById('music-note-icon');
+        if (musicNoteIcon) musicNoteIcon.textContent = '🎵';
+      } else {
+        this.wasBackgroundMusicPlaying = false;
+      }
+
       if (this.video) {
         this.video.currentTime = 0;
         this.updateUI(0);
@@ -289,6 +303,18 @@
       }
       this.modal.hidden = true;
       document.body.style.overflow = '';
+
+      // Resume background lullaby if it was playing before opening
+      if (this.wasBackgroundMusicPlaying && window.dreamAudio) {
+        window.dreamAudio.startLullaby();
+        const lullabyToggle = document.getElementById('lullaby-toggle');
+        if (lullabyToggle) lullabyToggle.classList.add('playing');
+        const musicState = document.getElementById('music-state');
+        if (musicState) musicState.textContent = '⏸';
+        const musicNoteIcon = document.getElementById('music-note-icon');
+        if (musicNoteIcon) musicNoteIcon.textContent = '🎶';
+        this.wasBackgroundMusicPlaying = false;
+      }
     }
 
     play() {

@@ -148,7 +148,10 @@ class DreamAudioEngine {
   // Start continuous generative lullaby loop
   startLullaby(score = this.lullabyScore) {
     this.initContext();
-    if (!this.ctx) return;
+    if (!this.ctx || !this.isSupported) {
+      this.isPlaying = false;
+      return false;
+    }
     this.isPlaying = true;
     this.currentNoteIndex = 0;
 
@@ -164,6 +167,7 @@ class DreamAudioEngine {
     };
 
     playNext();
+    return true;
   }
 
   // Stop lullaby loop
@@ -183,7 +187,7 @@ class DreamAudioEngine {
     } else {
       this.isMuted = false;
       this.startLullaby();
-      return true;
+      return this.isPlaying;
     }
   }
 

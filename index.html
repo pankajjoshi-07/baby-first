@@ -165,6 +165,24 @@
         <div class="hero-bg-container" id="hero-parallax-bg">
           <img src="assets/hero_banner_hd.jpg" alt="Lumi Dreamscape" class="hero-backdrop-img">
           <div class="hero-gradient-overlay"></div>
+          <div class="hero-ambient-glow" aria-hidden="true"></div>
+          <div class="hero-dawn-glow" aria-hidden="true"></div>
+        </div>
+
+        <!-- Drifting Clouds Layer -->
+        <div class="hero-clouds-layer" aria-hidden="true">
+          <div class="hero-cloud-drift cloud-1"></div>
+          <div class="hero-cloud-drift cloud-2"></div>
+        </div>
+
+        <!-- Subtle Animated Golden Particles Layer -->
+        <div class="hero-particles-layer" aria-hidden="true">
+          <span class="hero-particle p1"></span>
+          <span class="hero-particle p2"></span>
+          <span class="hero-particle p3"></span>
+          <span class="hero-particle p4"></span>
+          <span class="hero-particle p5"></span>
+          <span class="hero-particle p6"></span>
         </div>
 
         <!-- Floating Twinkling Stars Layer in Sky -->
@@ -183,7 +201,7 @@
             <h1 class="hero-name cinematic-in">
               <span class="hero-sparkle-star left">✦</span>
               Lumi
-              <span class="hero-sparkle-star right">✧</span>
+              <span class="hero-sparkle-star right">☆</span>
             </h1>
             <h2 class="hero-title cinematic-in">The Little Dream Architect</h2>
             <p class="hero-desc cinematic-in">
@@ -192,12 +210,12 @@
             <div class="hero-cta-group cinematic-in">
               <a href="#projects" class="btn-primary" id="btn-explore">
                 <span>Explore My World</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </a>
               <button class="btn-secondary" id="btn-watch-intro">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="5 3 19 12 5 21 5 3" />
                 </svg>
                 <span>Watch Intro</span>
@@ -206,133 +224,181 @@
           </div>
 
           <!-- Hero Star Interactive Hotspot for Easter Egg -->
-          <div class="hero-star-trigger" id="hero-special-star" title="Click the smiling star! ✨">
+          <div class="hero-star-trigger" id="hero-special-star" title="Click the smiling star! ✨" role="button" tabindex="0" aria-label="Smiling golden star companion">
             <div class="star-pulse-glow"></div>
           </div>
         </div>
       </section>
 
-      <!-- CINEMATIC ABOUT LUMI SHOWCASE SECTION -->
-      <section class="about-cinematic-showcase" id="about" aria-label="About Lumi">
-        <!-- Background Art Container with Parallax Layers -->
-        <div class="showcase-backdrop-wrap" id="showcase-parallax-bg">
-          <img src="assets/about_showcase_cinematic.jpg" alt="Lumi sitting on a floating island holding a glowing star" class="showcase-bg-img">
-
-          <!-- Atmospheric lighting & vignette overlays -->
-          <div class="showcase-vignette-overlay"></div>
-          <div class="showcase-light-beam"></div>
-
-          <!-- Floating ambient stardust & glowing motes -->
-          <div class="showcase-particles-layer" aria-hidden="true">
-            <span class="mote-particle m1"></span>
-            <span class="mote-particle m2"></span>
-            <span class="mote-particle m3"></span>
-            <span class="mote-particle m4"></span>
-            <span class="mote-particle m5"></span>
-            <span class="mote-particle m6"></span>
-          </div>
-
-          <!-- Subtle interactive starlight hotspot on Pip the Star companion -->
-          <div class="showcase-star-hotspot" id="showcase-companion-star" title="Pip the Starlight Companion · Click to hear a gentle chime ✨" role="button" tabindex="0" aria-label="Pip the golden star companion">
-            <div class="star-halo-pulse"></div>
-            <span class="star-twinkle-accent">✦</span>
-          </div>
-
-          <!-- Minimal, elegant constellation whispers -->
-          <div class="showcase-constellation-point cp-curious" data-whisper="Curious — charting uncharted skies in search of forgotten wishes." title="Curious nature">
-            <span class="constellation-star">✧</span>
-            <span class="constellation-tooltip">Curious</span>
-          </div>
-          <div class="showcase-constellation-point cp-kind" data-whisper="Kind — comforting every wandering wish so nobody dreams alone." title="Kind spirit">
-            <span class="constellation-star">✦</span>
-            <span class="constellation-tooltip">Kind</span>
-          </div>
-          <div class="showcase-constellation-point cp-creative" data-whisper="Creative — transforming ideas and starlight into living worlds." title="Creative heart">
-            <span class="constellation-star">✧</span>
-            <span class="constellation-tooltip">Creative</span>
-          </div>
-        </div>
-
-        <!-- Foreground Cinematic Introduction Text -->
-        <div class="showcase-content-overlay">
-          <div class="showcase-text-col">
-            <div class="showcase-eyebrow">
-              <span class="eyebrow-line"></span>
-              <span class="eyebrow-text">Meet Lumi</span>
-            </div>
-
-            <h2 class="showcase-title">
-              <span class="title-greeting">I'm Lumi.</span>
-              <span class="title-role">The Little Dream Architect.</span>
-            </h2>
-
-            <p class="showcase-philosophy">
-              “I turn little sparks of imagination into extraordinary dreams.”
-            </p>
-
-            <div class="showcase-whisper-hint" id="showcase-whisper-box">
-              <span class="whisper-icon">✨</span>
-              <span class="whisper-text">A curious dreamer watching over forgotten wishes in the celestial sky.</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- CARD 3: MY DREAM PROJECTS -->
-      <article class="card card-projects" id="projects">
+      <!-- MIDDLE ROW: ABOUT LUMI, QUICK FACTS, AND MY DREAM PROJECTS -->
+      <section class="middle-grid" id="about">
+        <!-- CARD 1: ABOUT LUMI -->
+        <article class="card card-about" id="about-card">
           <div class="card-header">
-            <h3 class="card-title">My Dream Projects</h3>
-            <button class="card-link-btn" id="projects-view-all">
-              <span>View All</span>
+            <div class="about-title-group">
+              <span class="about-pre-badge">✦ Little Architect</span>
+              <h3 class="card-title">About Lumi</h3>
+            </div>
+            <button class="card-link-btn" id="about-view-more" aria-label="View more about Lumi">
+              <span>View More</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+          <div class="about-body">
+            <div class="about-photo-wrap" id="about-photo-interactive" title="Click to greet Lumi!">
+              <img src="assets/about_photo_hd.jpg" alt="Lumi Portrait with Star" class="about-photo-img">
+              <div class="photo-glow"></div>
+            </div>
+            <div class="about-text-content">
+              <span class="about-role-pill">✦ Dream Weaver</span>
+              <p class="about-bio">
+                A curious, kind and mischievous dream architect who believes every dream — no matter how small — deserves a sky of its own.
+              </p>
+            </div>
+          </div>
+          
+          <div class="about-tags-row">
+            <span class="tag-pill" data-tag="curious">✨ Curious</span>
+            <span class="tag-pill" data-tag="kind">🌸 Kind</span>
+            <span class="tag-pill" data-tag="creative">🎨 Creative</span>
+            <span class="tag-pill" data-tag="mischievous">💫 Mischievous</span>
+          </div>
+
+          <!-- Dynamic Trait Whisper Quote Card -->
+          <div class="about-quote-box" id="about-quote-box">
+            <span class="quote-sparkle">✦</span>
+            <p class="quote-text" id="about-quote-text">"Every dream — no matter how small — deserves a sky of its own."</p>
+          </div>
+
+          <!-- Live Architect Status Pill -->
+          <div class="about-status-banner">
+            <div class="status-indicator">
+              <span class="status-pulsing-dot"></span>
+              <span class="status-text">Dream Nebula Active</span>
+            </div>
+            <span class="status-tag">✨ Level 5 Architect</span>
+          </div>
+        </article>
+
+        <!-- CARD 2: QUICK FACTS (Track 2 Character Sheet!) -->
+        <article class="card card-quickfacts" id="quickfacts-card">
+          <div class="card-header">
+            <h3 class="card-title">Quick Facts</h3>
+            <span class="facts-header-pill">✦ Profile</span>
+          </div>
+          <ul class="facts-list">
+            <li class="fact-item">
+              <span class="fact-icon star-icon">⭐</span>
+              <span class="fact-label">Species</span>
+              <span class="fact-value">Dream Spirit</span>
+            </li>
+            <li class="fact-item">
+              <span class="fact-icon heart-icon">❤️</span>
+              <span class="fact-label">Role</span>
+              <span class="fact-value">Dream Architect</span>
+            </li>
+            <li class="fact-item">
+              <span class="fact-icon planet-icon">🪐</span>
+              <span class="fact-label">Home</span>
+              <span class="fact-value">The Dream Nebula</span>
+            </li>
+            <li class="fact-item">
+              <span class="fact-icon wand-icon">🪄</span>
+              <span class="fact-label">Weapon</span>
+              <span class="fact-value">Star Wand</span>
+            </li>
+            <li class="fact-item">
+              <span class="fact-icon companion-icon">🌟</span>
+              <span class="fact-label">Companion</span>
+              <span class="fact-value">Pip the Star</span>
+            </li>
+            <li class="fact-item">
+              <span class="fact-icon target-icon">🎯</span>
+              <span class="fact-label">Mission</span>
+              <span class="fact-value">Turn worries into light</span>
+            </li>
+          </ul>
+          <div class="facts-cert-seal">
+            <span class="seal-sparkle">🌌</span>
+            <span class="seal-title">Verified Celestial Spirit</span>
+          </div>
+        </article>
+
+        <!-- CARD 3: MY DREAM PROJECTS -->
+        <article class="card card-projects" id="projects">
+          <div class="card-header projects-header">
+            <div class="projects-title-group">
+              <span class="projects-pre-tag">✦ Interactive Creations</span>
+              <h3 class="card-title">My Dream Projects</h3>
+            </div>
+            <button class="card-link-btn projects-view-all-btn" id="projects-view-all" aria-label="View All Projects">
+              <span>View Gallery</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </button>
           </div>
           <div class="projects-items-row">
             <!-- Project 1: Dream Bubble Maker -->
-            <div class="project-mini-card" data-project="bubble">
+            <div class="project-mini-card project-card-bubble" data-project="bubble">
               <div class="project-img-box">
                 <img src="assets/proj1_bubble_hd.jpg" alt="Dream Bubble Maker" class="project-thumb">
                 <div class="project-overlay-glow"></div>
+                <span class="project-badge badge-bubble">🫧 Wish Worlds</span>
               </div>
+              <span class="project-category">Interactive Apparatus</span>
               <h4 class="project-mini-title">Dream Bubble Maker</h4>
-              <p class="project-mini-desc">Turns forgotten wishes into floating worlds.</p>
-              <button class="project-circle-btn" aria-label="Open Dream Bubble Maker">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
+              <p class="project-mini-desc">Turns fragile bedtime thoughts into luminous, safe bubble sanctuaries.</p>
+              <div class="project-action-row">
+                <span class="project-action-hint">Explore Workshop ✦</span>
+                <button class="project-circle-btn" aria-label="Open Dream Bubble Maker">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <!-- Project 2: Nightlight Guardian -->
-            <div class="project-mini-card" data-project="nightlight">
+            <div class="project-mini-card project-card-nightlight" data-project="nightlight">
               <div class="project-img-box">
                 <img src="assets/proj2_lantern_hd.jpg" alt="Nightlight Guardian" class="project-thumb">
                 <div class="project-overlay-glow"></div>
+                <span class="project-badge badge-nightlight">🏮 Warm Guardian</span>
               </div>
+              <span class="project-category">Protective Beacon</span>
               <h4 class="project-mini-title">Nightlight Guardian</h4>
-              <p class="project-mini-desc">Transforms nightmares into friendly companions.</p>
-              <button class="project-circle-btn" aria-label="Open Nightlight Guardian">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
+              <p class="project-mini-desc">Casts cozy moonbeam shadows that transform bad dreams into friendly companions.</p>
+              <div class="project-action-row">
+                <span class="project-action-hint">Explore Workshop ✦</span>
+                <button class="project-circle-btn" aria-label="Open Nightlight Guardian">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <!-- Project 3: Memory Garden -->
-            <div class="project-mini-card" data-project="garden">
+            <div class="project-mini-card project-card-garden" data-project="garden">
               <div class="project-img-box">
                 <img src="assets/proj3_garden_hd.jpg" alt="Memory Garden" class="project-thumb">
                 <div class="project-overlay-glow"></div>
+                <span class="project-badge badge-garden">🌸 Memory Flora</span>
               </div>
+              <span class="project-category">Living Sanctuary</span>
               <h4 class="project-mini-title">Memory Garden</h4>
-              <p class="project-mini-desc">Stores precious memories as glowing flowers.</p>
-              <button class="project-circle-btn" aria-label="Open Memory Garden">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
+              <p class="project-mini-desc">Cultivates memories of joy and laughter into radiant cosmic petals that never fade.</p>
+              <div class="project-action-row">
+                <span class="project-action-hint">Explore Workshop ✦</span>
+                <button class="project-circle-btn" aria-label="Open Memory Garden">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </article>
@@ -340,11 +406,27 @@
 
       <!-- BOTTOM ROW: LUMI'S JOURNEY TIMELINE & THE HIDDEN ROOM -->
       <section class="bottom-grid">
-        <!-- CARD 1: LUMI'S JOURNEY -->
+        <!-- CARD 1: LUMI'S JOURNEY (MAGICAL STORYBOOK TIMELINE) -->
         <article class="card card-journey" id="story">
-          <div class="card-header">
-            <h3 class="card-title">Lumi's Journey</h3>
-            <button class="card-link-btn" id="journey-scroll-btn">
+          <!-- Ambient Storybook Dust Particles & Gentle Glow -->
+          <div class="journey-ambient-glow" aria-hidden="true"></div>
+          <div class="journey-ambient-particles" aria-hidden="true">
+            <span class="journey-dust-mote jm-1"></span>
+            <span class="journey-dust-mote jm-2"></span>
+            <span class="journey-dust-mote jm-3"></span>
+            <span class="journey-dust-mote jm-4"></span>
+          </div>
+
+          <div class="card-header journey-header">
+            <div class="journey-header-text">
+              <div class="journey-badge">
+                <span class="journey-badge-sparkle">✦</span>
+                <span class="journey-badge-text">STORYBOOK CHRONICLES</span>
+              </div>
+              <h3 class="card-title journey-main-title">Lumi's Journey</h3>
+              <p class="journey-subtitle">Follow the constellation of how a tiny spark became the Little Dream Architect</p>
+            </div>
+            <button class="card-link-btn journey-explore-btn" id="journey-scroll-btn" type="button" aria-label="Scroll to explore Lumi's journey">
               <span>Scroll to Explore</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -354,50 +436,97 @@
 
           <!-- Interactive Stepper with Connecting Constellation Track -->
           <div class="journey-timeline-container" id="journey-track">
-            <!-- SVG Constellation Line connecting the stars -->
-            <svg class="constellation-svg-line" viewBox="0 0 800 120" preserveAspectRatio="none">
-              <path class="constellation-path" d="M 100 60 Q 200 45, 300 60 T 500 60 T 700 60" />
+            <!-- SVG Constellation Line connecting the stars with dual-glow paths -->
+            <svg class="constellation-svg-line" viewBox="0 0 800 120" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="constellation-glow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#fcd34d" stop-opacity="0.85" />
+                  <stop offset="35%" stop-color="#38bdf8" stop-opacity="0.85" />
+                  <stop offset="70%" stop-color="#c084fc" stop-opacity="0.85" />
+                  <stop offset="100%" stop-color="#f472b6" stop-opacity="0.85" />
+                </linearGradient>
+              </defs>
+              <!-- Ambient soft blurry glow trail -->
+              <path class="constellation-glow-track" d="M 100 60 C 180 32, 220 88, 300 60 C 380 32, 420 88, 500 60 C 580 32, 620 88, 700 60" />
+              <!-- Animated dashed starlight constellation path -->
+              <path class="constellation-path" d="M 100 60 C 180 32, 220 88, 300 60 C 380 32, 420 88, 500 60 C 580 32, 620 88, 700 60" />
+              <!-- Intermediate sparkling constellation stars -->
+              <circle cx="200" cy="46" r="2.5" class="constellation-star-node-svg" />
+              <circle cx="400" cy="74" r="2.5" class="constellation-star-node-svg" />
+              <circle cx="600" cy="46" r="2.5" class="constellation-star-node-svg" />
             </svg>
 
             <div class="milestones-row">
               <!-- Milestone 1 -->
-              <div class="milestone-item active" data-step="1">
-                <div class="milestone-img-wrap">
-                  <img src="assets/journey1_spark_hd.jpg" alt="A Tiny Spark" class="milestone-thumb">
-                  <span class="milestone-star-node">✦</span>
+              <div class="milestone-item active milestone-step-1" data-step="1" tabindex="0" role="button" aria-label="Chapter 1: A Tiny Spark">
+                <div class="milestone-chapter-pill">
+                  <span class="chapter-dot"></span>
+                  <span class="chapter-label">Chapter I · The Wish</span>
                 </div>
-                <h4 class="milestone-title">A Tiny Spark</h4>
-                <p class="milestone-desc">I was born from a forgotten wish in the Dream Nebula.</p>
+                <div class="milestone-img-wrap">
+                  <div class="milestone-img-halo"></div>
+                  <img src="assets/journey1_spark_hd.jpg" alt="A Tiny Spark" class="milestone-thumb" loading="lazy">
+                  <span class="milestone-star-node" title="Star Spark">⭐</span>
+                </div>
+                <div class="milestone-content">
+                  <span class="milestone-epoch">Dream Nebula</span>
+                  <h4 class="milestone-title">A Tiny Spark</h4>
+                  <p class="milestone-desc">I was born from a forgotten wish in the Dream Nebula.</p>
+                </div>
               </div>
 
               <!-- Milestone 2 -->
-              <div class="milestone-item" data-step="2">
-                <div class="milestone-img-wrap">
-                  <img src="assets/journey2_portal_hd.jpg" alt="First Discovery" class="milestone-thumb">
-                  <span class="milestone-star-node">✦</span>
+              <div class="milestone-item milestone-step-2" data-step="2" tabindex="0" role="button" aria-label="Chapter 2: First Discovery">
+                <div class="milestone-chapter-pill">
+                  <span class="chapter-dot"></span>
+                  <span class="chapter-label">Chapter II · The Gateway</span>
                 </div>
-                <h4 class="milestone-title">First Discovery</h4>
-                <p class="milestone-desc">I found a portal to the dream world.</p>
+                <div class="milestone-img-wrap">
+                  <div class="milestone-img-halo"></div>
+                  <img src="assets/journey2_portal_hd.jpg" alt="First Discovery" class="milestone-thumb" loading="lazy">
+                  <span class="milestone-star-node" title="Cosmic Portal">🌀</span>
+                </div>
+                <div class="milestone-content">
+                  <span class="milestone-epoch">Cosmic Gateway</span>
+                  <h4 class="milestone-title">First Discovery</h4>
+                  <p class="milestone-desc">I found a portal to the dream world.</p>
+                </div>
               </div>
 
               <!-- Milestone 3 -->
-              <div class="milestone-item" data-step="3">
-                <div class="milestone-img-wrap">
-                  <img src="assets/journey3_machine_hd.jpg" alt="The Dream Machine" class="milestone-thumb">
-                  <span class="milestone-star-node">✦</span>
+              <div class="milestone-item milestone-step-3" data-step="3" tabindex="0" role="button" aria-label="Chapter 3: The Dream Machine">
+                <div class="milestone-chapter-pill">
+                  <span class="chapter-dot"></span>
+                  <span class="chapter-label">Chapter III · The Loom</span>
                 </div>
-                <h4 class="milestone-title">The Dream Machine</h4>
-                <p class="milestone-desc">I built my first machine to craft dreams.</p>
+                <div class="milestone-img-wrap">
+                  <div class="milestone-img-halo"></div>
+                  <img src="assets/journey3_machine_hd.jpg" alt="The Dream Machine" class="milestone-thumb" loading="lazy">
+                  <span class="milestone-star-node" title="Starlight Loom">🪄</span>
+                </div>
+                <div class="milestone-content">
+                  <span class="milestone-epoch">Starlight Forge</span>
+                  <h4 class="milestone-title">The Dream Machine</h4>
+                  <p class="milestone-desc">I built my first machine to craft dreams.</p>
+                </div>
               </div>
 
               <!-- Milestone 4 -->
-              <div class="milestone-item" data-step="4">
-                <div class="milestone-img-wrap">
-                  <img src="assets/journey4_architect_hd.jpg" alt="Becoming a Dream Architect" class="milestone-thumb">
-                  <span class="milestone-star-node">✦</span>
+              <div class="milestone-item milestone-step-4" data-step="4" tabindex="0" role="button" aria-label="Chapter 4: Becoming a Dream Architect">
+                <div class="milestone-chapter-pill">
+                  <span class="chapter-dot"></span>
+                  <span class="chapter-label">Chapter IV · The Calling</span>
                 </div>
-                <h4 class="milestone-title">Becoming a Dream Architect</h4>
-                <p class="milestone-desc">Now I travel across worlds helping dreams come true.</p>
+                <div class="milestone-img-wrap">
+                  <div class="milestone-img-halo"></div>
+                  <img src="assets/journey4_architect_hd.jpg" alt="Becoming a Dream Architect" class="milestone-thumb" loading="lazy">
+                  <span class="milestone-star-node" title="Architect Crown">👑</span>
+                </div>
+                <div class="milestone-content">
+                  <span class="milestone-epoch">Master Architect</span>
+                  <h4 class="milestone-title">Becoming a Dream Architect</h4>
+                  <p class="milestone-desc">Now I travel across worlds helping dreams come true.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -405,6 +534,10 @@
 
         <!-- CARD 2: THE HIDDEN ROOM (EASTER EGG!) -->
         <article class="card card-hidden-room" id="secret">
+          <div class="card-header">
+            <h3 class="card-title">The Hidden Room</h3>
+            <span class="secret-header-sparkle">🔒 Secret</span>
+          </div>
           <div class="hidden-room-artwork-wrap" id="hidden-arch-trigger"
             title="Click to unlock the secret room! (5 clicks)">
             <img src="assets/hidden_room_hd.jpg" alt="Secret Stone Archway" class="hidden-room-bg-img">
@@ -417,10 +550,12 @@
             </div>
           </div>
           <div class="hidden-room-body">
-            <h4 class="hidden-room-title">The Hidden Room</h4>
             <p class="hidden-room-desc">
               Click on the special star 5 times to unlock a secret lullaby and a surprise animation! ✨
             </p>
+            <div class="secret-progress-bar-wrap" title="Unlock progress">
+              <div class="secret-progress-bar-fill" id="secret-bar-fill" style="width: 0%;"></div>
+            </div>
           </div>
         </article>
       </section>
@@ -433,7 +568,6 @@
               <h3 class="guestbook-title">✨ Celestial Dream Guestbook</h3>
               <p class="guestbook-subtitle">Leave a bedtime wish or gentle blessing for Lumi's dream machine.</p>
             </div>
-            <button class="btn-wish-submit" id="open-wish-modal-btn">+ Make a Wish</button>
           </div>
           <div class="wishes-stream" id="wishes-stream">
             <!-- Dynamically populated from localStorage -->
@@ -490,7 +624,8 @@
         <!-- Dynamic Scene Title Card Overlay (Clean title and caption without sequence/time tag) -->
         <div class="cinematic-overlay-card" id="cinematic-overlay-card">
           <h3 class="overlay-scene-heading" id="overlay-scene-heading">The Magical Star</h3>
-          <p class="overlay-scene-caption" id="overlay-scene-caption">Lumi awakens in starlight and notices a tiny golden star floating toward her...</p>
+          <p class="overlay-scene-caption" id="overlay-scene-caption">Lumi awakens in starlight and notices a tiny
+            golden star floating toward her...</p>
         </div>
 
         <!-- Ending Banner "Lumi — The Dream Architect" -->
@@ -575,8 +710,8 @@
 
   <!-- 2. PROJECT INTERACTIVE PREVIEW MODAL -->
   <div class="modal-backdrop" id="modal-project" hidden>
-    <div class="modal-window project-modal-window">
-      <button class="modal-close-btn" data-close="modal-project">&times;</button>
+    <div class="modal-window project-modal-window" role="dialog" aria-modal="true" aria-label="Dream Project Details">
+      <button class="modal-close-btn" data-close="modal-project" aria-label="Close project modal">&times;</button>
       <div class="project-modal-content" id="project-modal-body">
         <!-- Injected via JavaScript -->
       </div>
@@ -585,11 +720,11 @@
 
   <!-- 3. EASTER EGG: THE HIDDEN ROOM UNLOCKED MODAL -->
   <div class="modal-backdrop" id="modal-easter-egg" hidden>
-    <div class="modal-window easter-egg-modal">
+    <div class="modal-window easter-egg-modal" role="dialog" aria-modal="true" aria-label="The Secret Starlight Chamber">
       <div class="secret-confetti-canvas-wrap">
         <canvas id="confetti-canvas"></canvas>
       </div>
-      <button class="modal-close-btn" data-close="modal-easter-egg">&times;</button>
+      <button class="modal-close-btn" data-close="modal-easter-egg" aria-label="Close secret chamber">&times;</button>
       <div class="easter-egg-header">
         <div class="secret-trophy-badge">🏆 UNLOCKED</div>
         <h2 class="easter-egg-title">The Secret Starlight Chamber!</h2>
@@ -620,8 +755,8 @@
 
   <!-- 4. MAKE A WISH / GUESTBOOK MODAL -->
   <div class="modal-backdrop" id="modal-wish" hidden>
-    <div class="modal-window wish-modal-window">
-      <button class="modal-close-btn" data-close="modal-wish">&times;</button>
+    <div class="modal-window wish-modal-window" role="dialog" aria-modal="true" aria-label="Whisper a Bedtime Wish">
+      <button class="modal-close-btn" data-close="modal-wish" aria-label="Close wish modal">&times;</button>
       <div class="wish-modal-header">
         <span class="wish-badge">⭐ Starlight Post Office</span>
         <h2>Whisper a Wish</h2>
@@ -655,11 +790,11 @@
   </div>
 
   <!-- Audio Synthesizer Script -->
-  <script src="audio.js?v=6"></script>
+  <script src="audio.js?v=7"></script>
   <!-- Lumi Cinematic Intro Engine -->
-  <script src="cinematic_player.js?v=54"></script>
+  <script src="cinematic_player.js?v=56"></script>
   <!-- Main Application Script -->
-  <script src="app.js?v=54"></script>
+  <script src="app.js?v=56"></script>
 </body>
 
 </html>
