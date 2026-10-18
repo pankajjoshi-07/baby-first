@@ -35,11 +35,6 @@
       this.timelineHandle = document.getElementById('cinematic-timeline-handle');
       this.timeDisplay = document.getElementById('cinematic-current-time');
       this.chapterIndicator = document.getElementById('cinematic-chapter-indicator');
-      this.sceneTitle = document.getElementById('cinematic-scene-title');
-      this.overlayCard = document.getElementById('cinematic-overlay-card');
-      this.overlayTag = document.getElementById('overlay-scene-tag');
-      this.overlayHeading = document.getElementById('overlay-scene-heading');
-      this.overlayCaption = document.getElementById('overlay-scene-caption');
       this.welcomeBanner = document.getElementById('cinematic-welcome-banner');
       this.exploreBtn = document.getElementById('cinematic-btn-explore');
       this.endReplayBtn = document.getElementById('cinematic-btn-replay-end');
@@ -339,24 +334,8 @@
 
       const activeScene = this.scenes.find(s => time >= s.start && time < s.end) || this.scenes[this.scenes.length - 1];
       if (this.chapterIndicator) this.chapterIndicator.textContent = activeScene.name;
-      if (this.sceneTitle) this.sceneTitle.textContent = `Lumi · ${activeScene.title}`;
-
-      // Scene Overlay Caption: shows for the first 3.5 seconds of each sequence
-      const sceneElapsed = time - activeScene.start;
-      if (this.overlayCard) {
-        if (sceneElapsed < 3.5 && time < this.duration - 4.0) {
-          const fade = sceneElapsed < 0.6 ? sceneElapsed / 0.6 : (sceneElapsed > 2.8 ? (3.5 - sceneElapsed) / 0.7 : 1);
-          this.overlayCard.style.opacity = fade;
-          this.overlayCard.classList.add('visible');
-          this.overlayCard.style.display = 'block';
-          if (this.overlayTag) this.overlayTag.textContent = activeScene.tag;
-          if (this.overlayHeading) this.overlayHeading.textContent = activeScene.title;
-          if (this.overlayCaption) this.overlayCaption.textContent = activeScene.caption;
-        } else {
-          this.overlayCard.classList.remove('visible');
-          this.overlayCard.style.display = 'none';
-        }
-      }
+      const titleEl = document.getElementById('cinematic-scene-title');
+      if (titleEl) titleEl.textContent = `Lumi · ${activeScene.title}`;
 
       // Finale Banner: appears in the final 4 seconds with bottom scrim
       if (this.welcomeBanner) {
