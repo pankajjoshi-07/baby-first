@@ -19,7 +19,7 @@
     rel="stylesheet">
 
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=25">
+  <link rel="stylesheet" href="style.css?v=51">
 </head>
 
 <body class="theme-night">
@@ -463,7 +463,7 @@
       <div class="cinematic-player-header">
         <div class="cinematic-title-box">
           <span class="cinematic-live-badge"><span class="badge-dot"></span> NOW PLAYING</span>
-          <h2 class="cinematic-title" id="cinematic-scene-title">Lumi · Every Dream Matters</h2>
+          <h2 class="cinematic-title" id="cinematic-scene-title">Lumi · The Magical Star</h2>
         </div>
         <div class="cinematic-header-actions">
           <button class="btn-cinematic-skip" id="btn-intro-skip" title="Skip to finale">
@@ -473,9 +473,10 @@
         </div>
       </div>
 
-      <!-- 16:9 Video Viewport / Canvas Stage -->
+      <!-- 16:9 Video Viewport / Stage -->
       <div class="cinematic-screen-container" id="cinematic-screen-wrap">
-        <canvas id="cinematic-canvas" width="1280" height="720"></canvas>
+        <video id="cinematic-video" class="cinematic-video" src="assets/lumi_intro.mp4" playsinline preload="auto"></video>
+        <canvas id="cinematic-canvas" width="1280" height="720" style="display:none;"></canvas>
 
         <!-- Big Play Button Overlay on Pause -->
         <button class="cinematic-big-play-btn" id="cinematic-big-play" aria-label="Play video" hidden>
@@ -484,12 +485,12 @@
 
         <!-- Dynamic Scene Title Card Overlay -->
         <div class="cinematic-overlay-card" id="cinematic-overlay-card">
-          <span class="overlay-scene-tag" id="overlay-scene-tag">Scene 1 of 5</span>
-          <h3 class="overlay-scene-heading" id="overlay-scene-heading">Galaxy Awakening</h3>
-          <p class="overlay-scene-caption" id="overlay-scene-caption">A dark purple galaxy appears as tiny stars twinkle...</p>
+          <span class="overlay-scene-tag" id="overlay-scene-tag">Sequence 1 of 3</span>
+          <h3 class="overlay-scene-heading" id="overlay-scene-heading">The Magical Star</h3>
+          <p class="overlay-scene-caption" id="overlay-scene-caption">Lumi awakens in starlight and notices a tiny golden star floating toward her...</p>
         </div>
 
-        <!-- Scene 5 Ending Banner "Lumi — The Dream Architect" -->
+        <!-- Ending Banner "Lumi — The Dream Architect" -->
         <div class="cinematic-welcome-banner" id="cinematic-welcome-banner" hidden>
           <div class="welcome-banner-glow"></div>
           <span class="welcome-pretitle">✨ EVERY DREAM MATTERS ✨</span>
@@ -508,16 +509,14 @@
 
       <!-- Player Controls Bar -->
       <div class="cinematic-controls-bar">
-        <!-- Interactive Progress Scrubber with 5 Scene Markers (45 seconds) -->
-        <div class="cinematic-timeline-track" id="cinematic-timeline-track" role="slider" aria-label="Video scrubber" aria-valuemin="0" aria-valuemax="45" aria-valuenow="0" tabindex="0">
+        <!-- Interactive Progress Scrubber with 3 Story Sequences (30 seconds) -->
+        <div class="cinematic-timeline-track" id="cinematic-timeline-track" role="slider" aria-label="Video scrubber" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0" tabindex="0">
           <div class="cinematic-timeline-fill" id="cinematic-timeline-fill"></div>
           <div class="cinematic-timeline-handle" id="cinematic-timeline-handle"></div>
-          <!-- 5 Scene Chapter Markers (0s/0%, 8s/17.8%, 17s/37.8%, 27s/60%, 37s/82.2%) -->
-          <div class="timeline-marker" style="left: 0%;" title="Scene 1: Galaxy Awakening (00:00)"></div>
-          <div class="timeline-marker" style="left: 17.78%;" title="Scene 2: Starlight Dance (00:08)"></div>
-          <div class="timeline-marker" style="left: 37.78%;" title="Scene 3: The Glowing Portal (00:17)"></div>
-          <div class="timeline-marker" style="left: 60.0%;" title="Scene 4: The Kindness Wave (00:27)"></div>
-          <div class="timeline-marker" style="left: 82.22%;" title="Scene 5: Every Dream Matters (00:37)"></div>
+          <!-- 3 Sequence Markers: 0s (0%), 10s (33.3%), 20s (66.7%) -->
+          <div class="timeline-marker" style="left: 0%;" title="Sequence A: The Magical Star (00:00)"></div>
+          <div class="timeline-marker" style="left: 33.3%;" title="Sequence B: Dream World & Portal (00:10)"></div>
+          <div class="timeline-marker" style="left: 66.7%;" title="Sequence C: Reunion & Restoration (00:20)"></div>
         </div>
 
         <!-- Controls Row -->
@@ -536,17 +535,17 @@
             <div class="cinematic-time-display">
               <span id="cinematic-current-time">00:00</span>
               <span class="time-divider">/</span>
-              <span id="cinematic-total-time">00:45</span>
+              <span id="cinematic-total-time">00:30</span>
             </div>
           </div>
 
           <div class="cinematic-chapter-indicator" id="cinematic-chapter-indicator">
-            Scene 1: Galaxy Awakening
+            Sequence A: The Magical Star
           </div>
 
           <div class="cinematic-right-controls">
-            <!-- Mute / Unmute / Sound Status -->
-            <button class="ctrl-btn" id="ctrl-mute-toggle" aria-label="Toggle Web Audio Synth" title="Web Audio Synth Sound (No external media files in project)">
+            <!-- Mute / Unmute Toggle -->
+            <button class="ctrl-btn" id="ctrl-mute-toggle" aria-label="Toggle Sound" title="Mute / Unmute (M)">
               <svg id="ctrl-icon-vol-on" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
               <svg id="ctrl-icon-vol-off" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" hidden><path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6"/></svg>
             </button>
@@ -640,9 +639,9 @@
   <!-- Audio Synthesizer Script -->
   <script src="audio.js?v=6"></script>
   <!-- Lumi Cinematic Intro Engine -->
-  <script src="cinematic_player.js?v=45"></script>
+  <script src="cinematic_player.js?v=52"></script>
   <!-- Main Application Script -->
-  <script src="app.js?v=45"></script>
+  <script src="app.js?v=52"></script>
 </body>
 
 </html>
