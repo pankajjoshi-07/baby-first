@@ -19,7 +19,7 @@
     rel="stylesheet">
 
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=53">
+  <link rel="stylesheet" href="style.css?v=54">
 </head>
 
 <body class="theme-night">
@@ -458,7 +458,8 @@
 
   <!-- 1. WATCH INTRO / REAL ANIMATED CINEMATIC VIDEO PLAYER MODAL -->
   <div class="modal-backdrop" id="modal-intro" hidden>
-    <div class="modal-window cinematic-player-window" role="dialog" aria-label="Lumi Cinematic Animated Short: Every Dream Matters">
+    <div class="modal-window cinematic-player-window" role="dialog"
+      aria-label="Lumi Cinematic Animated Short: Every Dream Matters">
       <!-- Player Header Bar -->
       <div class="cinematic-player-header">
         <div class="cinematic-title-box">
@@ -469,21 +470,29 @@
           <button class="btn-cinematic-skip" id="btn-intro-skip" title="Skip to finale">
             <span>Skip Intro ⏭</span>
           </button>
-          <button class="modal-close-btn cinematic-close-btn" data-close="modal-intro" aria-label="Close cinematic video">&times;</button>
+          <button class="modal-close-btn cinematic-close-btn" data-close="modal-intro"
+            aria-label="Close cinematic video">&times;</button>
         </div>
       </div>
 
       <!-- 16:9 Video Viewport / Stage -->
       <div class="cinematic-screen-container" id="cinematic-screen-wrap">
-        <video id="cinematic-video" class="cinematic-video" src="assets/lumi_intro.mp4" playsinline preload="auto"></video>
+        <video id="cinematic-video" class="cinematic-video" src="assets/lumi_intro.mp4" playsinline
+          preload="auto"></video>
         <canvas id="cinematic-canvas" width="1280" height="720" style="display:none;"></canvas>
 
         <!-- Big Play Button Overlay on Pause -->
         <button class="cinematic-big-play-btn" id="cinematic-big-play" aria-label="Play video" hidden>
-          <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
         </button>
 
-
+        <!-- Dynamic Scene Title Card Overlay (Clean title and caption without sequence/time tag) -->
+        <div class="cinematic-overlay-card" id="cinematic-overlay-card">
+          <h3 class="overlay-scene-heading" id="overlay-scene-heading">The Magical Star</h3>
+          <p class="overlay-scene-caption" id="overlay-scene-caption">Lumi awakens in starlight and notices a tiny golden star floating toward her...</p>
+        </div>
 
         <!-- Ending Banner "Lumi — The Dream Architect" -->
         <div class="cinematic-welcome-banner" id="cinematic-welcome-banner" hidden>
@@ -491,11 +500,13 @@
           <span class="welcome-pretitle">✨ EVERY DREAM MATTERS ✨</span>
           <h1 class="welcome-main-title">Lumi — The Dream Architect</h1>
           <p class="welcome-subtitle">“Every dream matters.”</p>
-          <div class="welcome-cta-row" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; z-index: 20;">
+          <div class="welcome-cta-row"
+            style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; z-index: 20;">
             <button class="btn-primary welcome-explore-btn" id="cinematic-btn-explore">
               <span>Explore Lumi's World ➔</span>
             </button>
-            <button class="btn-secondary welcome-replay-btn" id="cinematic-btn-replay-end" style="border-radius: var(--radius-pill); padding: 12px 24px; font-weight: 600; font-size: 0.92rem; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.25); color: #fff; cursor: pointer; transition: all 0.2s ease;">
+            <button class="btn-secondary welcome-replay-btn" id="cinematic-btn-replay-end"
+              style="border-radius: var(--radius-pill); padding: 12px 24px; font-weight: 600; font-size: 0.92rem; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.25); color: #fff; cursor: pointer; transition: all 0.2s ease;">
               <span>Replay Intro ↺</span>
             </button>
           </div>
@@ -505,7 +516,8 @@
       <!-- Player Controls Bar -->
       <div class="cinematic-controls-bar">
         <!-- Interactive Progress Scrubber with 3 Story Sequences (30 seconds) -->
-        <div class="cinematic-timeline-track" id="cinematic-timeline-track" role="slider" aria-label="Video scrubber" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0" tabindex="0">
+        <div class="cinematic-timeline-track" id="cinematic-timeline-track" role="slider" aria-label="Video scrubber"
+          aria-valuemin="0" aria-valuemax="30" aria-valuenow="0" tabindex="0">
           <div class="cinematic-timeline-fill" id="cinematic-timeline-fill"></div>
           <div class="cinematic-timeline-handle" id="cinematic-timeline-handle"></div>
           <!-- 3 Sequence Markers: 0s (0%), 10s (33.3%), 20s (66.7%) -->
@@ -519,12 +531,20 @@
           <div class="cinematic-left-controls">
             <!-- Play / Pause -->
             <button class="ctrl-btn" id="ctrl-play-pause" aria-label="Play / Pause" title="Play / Pause (Space)">
-              <svg id="ctrl-icon-play" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" hidden><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              <svg id="ctrl-icon-pause" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              <svg id="ctrl-icon-play" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" hidden>
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+              <svg id="ctrl-icon-pause" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <rect x="6" y="4" width="4" height="16" />
+                <rect x="14" y="4" width="4" height="16" />
+              </svg>
             </button>
             <!-- Replay -->
             <button class="ctrl-btn" id="ctrl-replay" aria-label="Replay from start" title="Replay">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M1 4v6h6M23 20v-6h-6" />
+                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
+              </svg>
             </button>
             <!-- Time Display -->
             <div class="cinematic-time-display">
@@ -541,8 +561,12 @@
           <div class="cinematic-right-controls">
             <!-- Mute / Unmute Toggle -->
             <button class="ctrl-btn" id="ctrl-mute-toggle" aria-label="Toggle Sound" title="Mute / Unmute (M)">
-              <svg id="ctrl-icon-vol-on" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-              <svg id="ctrl-icon-vol-off" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" hidden><path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6"/></svg>
+              <svg id="ctrl-icon-vol-on" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" />
+              </svg>
+              <svg id="ctrl-icon-vol-off" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" hidden>
+                <path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6" />
+              </svg>
             </button>
           </div>
         </div>
@@ -634,9 +658,9 @@
   <!-- Audio Synthesizer Script -->
   <script src="audio.js?v=6"></script>
   <!-- Lumi Cinematic Intro Engine -->
-  <script src="cinematic_player.js?v=53"></script>
+  <script src="cinematic_player.js?v=54"></script>
   <!-- Main Application Script -->
-  <script src="app.js?v=53"></script>
+  <script src="app.js?v=54"></script>
 </body>
 
 </html>
