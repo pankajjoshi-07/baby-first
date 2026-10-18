@@ -212,75 +212,74 @@
         </div>
       </section>
 
-      <!-- MIDDLE ROW: ABOUT LUMI, QUICK FACTS, AND MY DREAM PROJECTS -->
-      <section class="middle-grid" id="about">
-        <!-- CARD 1: ABOUT LUMI -->
-        <article class="card card-about" id="about-card">
-          <div class="card-header">
-            <h3 class="card-title">About Lumi</h3>
-            <button class="card-link-btn" id="about-view-more">
-              <span>View More</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-          <div class="about-body">
-            <div class="about-photo-wrap" id="about-photo-interactive">
-              <img src="assets/about_photo_hd.jpg" alt="Lumi Portrait with Star" class="about-photo-img">
-              <div class="photo-glow"></div>
-            </div>
-            <div class="about-text-content">
-              <p class="about-bio">
-                A curious, kind and mischievous dream architect who believes every dream — no matter how small —
-                deserves a sky of its own.
-              </p>
-            </div>
-          </div>
-          <div class="about-tags-row">
-            <span class="tag-pill" data-tag="curious">Curious</span>
-            <span class="tag-pill" data-tag="kind">Kind</span>
-            <span class="tag-pill" data-tag="creative">Creative</span>
-            <span class="tag-pill" data-tag="mischievous">Mischievous</span>
-          </div>
-        </article>
+      <!-- CINEMATIC ABOUT LUMI SHOWCASE SECTION -->
+      <section class="about-cinematic-showcase" id="about" aria-label="About Lumi">
+        <!-- Background Art Container with Parallax Layers -->
+        <div class="showcase-backdrop-wrap" id="showcase-parallax-bg">
+          <img src="assets/about_showcase_cinematic.jpg" alt="Lumi sitting on a floating island holding a glowing star" class="showcase-bg-img">
 
-        <!-- CARD 2: QUICK FACTS (Track 2 Character Sheet!) -->
-        <article class="card card-quickfacts" id="quickfacts-card">
-          <div class="card-header">
-            <h3 class="card-title">Quick Facts</h3>
-          </div>
-          <ul class="facts-list">
-            <li class="fact-item">
-              <span class="fact-icon star-icon">⭐</span>
-              <span class="fact-label">Species</span>
-              <span class="fact-value">Dream Spirit</span>
-            </li>
-            <li class="fact-item">
-              <span class="fact-icon heart-icon">❤️</span>
-              <span class="fact-label">Role</span>
-              <span class="fact-value">Dream Architect</span>
-            </li>
-            <li class="fact-item">
-              <span class="fact-icon planet-icon">🪐</span>
-              <span class="fact-label">Home</span>
-              <span class="fact-value">The Dream Nebula</span>
-            </li>
-            <li class="fact-item">
-              <span class="fact-icon wand-icon">🪄</span>
-              <span class="fact-label">Weapon</span>
-              <span class="fact-value">Star Wand</span>
-            </li>
-            <li class="fact-item">
-              <span class="fact-icon target-icon">🎯</span>
-              <span class="fact-label">Mission</span>
-              <span class="fact-value">Turn worries into light</span>
-            </li>
-          </ul>
-        </article>
+          <!-- Atmospheric lighting & vignette overlays -->
+          <div class="showcase-vignette-overlay"></div>
+          <div class="showcase-light-beam"></div>
 
-        <!-- CARD 3: MY DREAM PROJECTS -->
-        <article class="card card-projects" id="projects">
+          <!-- Floating ambient stardust & glowing motes -->
+          <div class="showcase-particles-layer" aria-hidden="true">
+            <span class="mote-particle m1"></span>
+            <span class="mote-particle m2"></span>
+            <span class="mote-particle m3"></span>
+            <span class="mote-particle m4"></span>
+            <span class="mote-particle m5"></span>
+            <span class="mote-particle m6"></span>
+          </div>
+
+          <!-- Subtle interactive starlight hotspot on Pip the Star companion -->
+          <div class="showcase-star-hotspot" id="showcase-companion-star" title="Pip the Starlight Companion · Click to hear a gentle chime ✨" role="button" tabindex="0" aria-label="Pip the golden star companion">
+            <div class="star-halo-pulse"></div>
+            <span class="star-twinkle-accent">✦</span>
+          </div>
+
+          <!-- Minimal, elegant constellation whispers -->
+          <div class="showcase-constellation-point cp-curious" data-whisper="Curious — charting uncharted skies in search of forgotten wishes." title="Curious nature">
+            <span class="constellation-star">✧</span>
+            <span class="constellation-tooltip">Curious</span>
+          </div>
+          <div class="showcase-constellation-point cp-kind" data-whisper="Kind — comforting every wandering wish so nobody dreams alone." title="Kind spirit">
+            <span class="constellation-star">✦</span>
+            <span class="constellation-tooltip">Kind</span>
+          </div>
+          <div class="showcase-constellation-point cp-creative" data-whisper="Creative — transforming ideas and starlight into living worlds." title="Creative heart">
+            <span class="constellation-star">✧</span>
+            <span class="constellation-tooltip">Creative</span>
+          </div>
+        </div>
+
+        <!-- Foreground Cinematic Introduction Text -->
+        <div class="showcase-content-overlay">
+          <div class="showcase-text-col">
+            <div class="showcase-eyebrow">
+              <span class="eyebrow-line"></span>
+              <span class="eyebrow-text">Meet Lumi</span>
+            </div>
+
+            <h2 class="showcase-title">
+              <span class="title-greeting">I'm Lumi.</span>
+              <span class="title-role">The Little Dream Architect.</span>
+            </h2>
+
+            <p class="showcase-philosophy">
+              “I turn little sparks of imagination into extraordinary dreams.”
+            </p>
+
+            <div class="showcase-whisper-hint" id="showcase-whisper-box">
+              <span class="whisper-icon">✨</span>
+              <span class="whisper-text">A curious dreamer watching over forgotten wishes in the celestial sky.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CARD 3: MY DREAM PROJECTS -->
+      <article class="card card-projects" id="projects">
           <div class="card-header">
             <h3 class="card-title">My Dream Projects</h3>
             <button class="card-link-btn" id="projects-view-all">

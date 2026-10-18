@@ -970,108 +970,349 @@ body {
 }
 
 /* ==========================================================================
-   MIDDLE ROW (3 CARDS)
+   CINEMATIC ABOUT LUMI SHOWCASE
+   An edge-to-edge cinematic fantasy character showcase
    ========================================================================== */
-.middle-grid {
-  display: grid;
-  grid-template-columns: 295px 230px 1fr;
-  gap: 16px;
-}
-
-/* 1. About Lumi Card */
-.card-about .about-body {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.about-photo-wrap {
-  width: 90px;
-  height: 90px;
-  border-radius: 14px;
-  overflow: hidden;
+.about-cinematic-showcase {
   position: relative;
-  flex-shrink: 0;
-  border: 1px solid var(--border-card);
-  cursor: pointer;
+  width: 100%;
+  min-height: 480px;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  box-shadow: var(--shadow-card), 0 0 32px rgba(139, 92, 246, 0.15);
+  background: #060818;
+  display: flex;
+  align-items: center;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-.about-photo-img {
+.about-cinematic-showcase:hover {
+  border-color: rgba(192, 132, 252, 0.55);
+  box-shadow: var(--shadow-card), 0 0 44px rgba(168, 85, 247, 0.28);
+}
+
+/* Background Scene with Layered Parallax */
+.showcase-backdrop-wrap {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  overflow: hidden;
+  pointer-events: none;
+  transition: transform 0.22s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.showcase-bg-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  object-position: 72% 45%;
+  display: block;
+  filter: saturate(1.08) contrast(1.02);
 }
 
-.about-photo-wrap:hover .about-photo-img {
-  transform: scale(1.1);
+/* Atmospheric Lighting & Deep Vignette */
+.showcase-vignette-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg,
+      rgba(7, 9, 25, 0.94) 0%,
+      rgba(7, 9, 25, 0.82) 34%,
+      rgba(7, 9, 25, 0.38) 58%,
+      rgba(7, 9, 25, 0.05) 75%,
+      rgba(7, 9, 25, 0.4) 100%),
+    linear-gradient(180deg,
+      rgba(7, 9, 25, 0.5) 0%,
+      transparent 25%,
+      transparent 75%,
+      rgba(7, 9, 25, 0.7) 100%);
 }
 
-.about-bio {
-  font-size: 0.77rem;
-  color: #cbd5e1;
-  line-height: 1.45;
+.showcase-light-beam {
+  position: absolute;
+  top: -20%;
+  right: 25%;
+  width: 350px;
+  height: 140%;
+  background: radial-gradient(ellipse at 50% 30%, rgba(252, 211, 77, 0.12) 0%, rgba(168, 85, 247, 0.05) 45%, transparent 70%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transform: rotate(-15deg);
 }
 
-.about-tags-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+/* Ambient Floating Stardust Motes */
+.showcase-particles-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-.tag-pill {
-  padding: 4px 10px;
-  border-radius: var(--radius-pill);
-  background: rgba(49, 46, 129, 0.4);
-  border: 1px solid rgba(168, 85, 247, 0.25);
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #e9d5ff;
+.mote-particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.6;
+  animation: float-mote 6s infinite ease-in-out;
+}
+
+.mote-particle.m1 { top: 28%; left: 38%; width: 3px; height: 3px; background: #fcd34d; animation-delay: 0s; }
+.mote-particle.m2 { top: 62%; left: 52%; width: 4px; height: 4px; background: #c084fc; animation-delay: 1.8s; }
+.mote-particle.m3 { top: 35%; left: 68%; width: 3px; height: 3px; background: #38bdf8; animation-delay: 3.2s; }
+.mote-particle.m4 { top: 75%; left: 42%; width: 2px; height: 2px; background: #f472b6; animation-delay: 2.1s; }
+.mote-particle.m5 { top: 18%; left: 58%; width: 3px; height: 3px; background: #fff4d4; animation-delay: 4.5s; }
+.mote-particle.m6 { top: 82%; left: 72%; width: 4px; height: 4px; background: #fcd34d; animation-delay: 1.1s; }
+
+@keyframes float-mote {
+  0%, 100% {
+    transform: translateY(0px) scale(0.9);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(-16px) scale(1.3);
+    opacity: 0.85;
+  }
+}
+
+/* Pip the Golden Star Companion Hotspot */
+.showcase-star-hotspot {
+  position: absolute;
+  top: 61%;
+  left: 63.8%;
+  width: 58px;
+  height: 58px;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
   cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.tag-pill:hover {
-  background: rgba(168, 85, 247, 0.4);
-  color: #ffffff;
-  transform: translateY(-1px);
-}
-
-/* 2. Quick Facts Card (Track 2 5-Point Character Sheet) */
-.facts-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.fact-item {
+  z-index: 15;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  font-size: 0.76rem;
-  gap: 6px;
+  justify-content: center;
 }
 
-.fact-icon {
-  font-size: 0.85rem;
-  width: 18px;
-  flex-shrink: 0;
+.star-halo-pulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(252, 211, 77, 0.45) 0%, rgba(252, 211, 77, 0.15) 50%, transparent 75%);
+  animation: star-glow-pulse 2.8s ease-in-out infinite;
 }
 
-.fact-label {
-  color: var(--text-dim);
-  width: 58px;
-  flex-shrink: 0;
+@keyframes star-glow-pulse {
+  0%, 100% {
+    transform: scale(0.92);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.22);
+    opacity: 0.95;
+  }
 }
 
-.fact-value {
-  color: #f1f5f9;
+.star-twinkle-accent {
+  position: relative;
+  font-size: 1rem;
+  color: #fff4d4;
+  text-shadow: 0 0 10px #fcd34d;
+  animation: twinkle 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Minimal Constellation Whispers */
+.showcase-constellation-point {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 12;
+  transition: transform 0.25s ease;
+}
+
+.showcase-constellation-point:hover {
+  transform: scale(1.25);
+}
+
+.showcase-constellation-point.cp-curious {
+  top: 18%;
+  left: 36%;
+}
+
+.showcase-constellation-point.cp-kind {
+  top: 14%;
+  left: 56%;
+}
+
+.showcase-constellation-point.cp-creative {
+  top: 44%;
+  left: 48%;
+}
+
+.constellation-star {
+  font-size: 0.95rem;
+  color: #d8b4fe;
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.showcase-constellation-point:hover .constellation-star {
+  color: #fde047;
+  text-shadow: 0 0 12px rgba(253, 224, 71, 0.9);
+}
+
+.constellation-tooltip {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(14, 18, 48, 0.9);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.7rem;
   font-weight: 600;
+  color: #f8fafc;
+  letter-spacing: 0.04em;
   white-space: nowrap;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* 3. My Dream Projects Card */
+.showcase-constellation-point:hover .constellation-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Foreground Cinematic Introduction Text */
+.showcase-content-overlay {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  padding: 44px 44px 44px 48px;
+  pointer-events: none;
+}
+
+.showcase-text-col {
+  max-width: 460px;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.showcase-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.eyebrow-line {
+  width: 32px;
+  height: 1.5px;
+  background: linear-gradient(90deg, #c084fc, transparent);
+}
+
+.eyebrow-text {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #d8b4fe;
+  text-shadow: 0 0 16px rgba(168, 85, 247, 0.5);
+}
+
+.showcase-title {
+  margin: 0 0 16px 0;
+  line-height: 1.15;
+}
+
+.title-greeting {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4vw, 3.2rem);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  text-shadow:
+    0 0 24px rgba(254, 215, 170, 0.4),
+    0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.title-role {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 600;
+  margin-top: 4px;
+  background: linear-gradient(135deg, #f3e8ff 0%, #c084fc 45%, #fde68a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+}
+
+.showcase-philosophy {
+  font-size: clamp(0.98rem, 1.5vw, 1.12rem);
+  color: #f1f5f9;
+  line-height: 1.6;
+  font-style: italic;
+  font-weight: 500;
+  margin: 0 0 22px 0;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.9),
+    0 0 16px rgba(15, 23, 42, 0.8);
+  max-width: 430px;
+}
+
+.showcase-whisper-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: rgba(14, 18, 48, 0.65);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  backdrop-filter: blur(12px);
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 420px;
+}
+
+.showcase-whisper-hint:hover {
+  background: rgba(22, 28, 70, 0.85);
+  border-color: rgba(252, 211, 77, 0.4);
+  color: #fff4d4;
+}
+
+.whisper-icon {
+  color: var(--accent-gold);
+  font-size: 0.88rem;
+  flex-shrink: 0;
+}
+
+.whisper-text {
+  font-size: 0.78rem;
+  color: inherit;
+}
+
+/* Standalone Dream Projects Section */
+.card-projects {
+  width: 100%;
+}
 .projects-items-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -2208,12 +2449,8 @@ body {
    RESPONSIVENESS (Mobile & Tablet)
    ========================================================================== */
 @media (max-width: 1024px) {
-  .middle-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .card-projects {
-    grid-column: span 2;
+  .showcase-text-col {
+    max-width: 400px;
   }
 
   .bottom-grid {
@@ -2274,12 +2511,39 @@ body {
     align-self: flex-start;
   }
 
-  .middle-grid {
-    grid-template-columns: 1fr;
+  .about-cinematic-showcase {
+    min-height: 520px;
+    align-items: flex-end;
   }
 
-  .card-projects {
-    grid-column: span 1;
+  .showcase-bg-img {
+    object-position: 75% 25%;
+  }
+
+  .showcase-vignette-overlay {
+    background:
+      linear-gradient(180deg,
+        rgba(7, 9, 25, 0.2) 0%,
+        rgba(7, 9, 25, 0.45) 35%,
+        rgba(7, 9, 25, 0.94) 70%,
+        rgba(7, 9, 25, 0.98) 100%);
+  }
+
+  .showcase-content-overlay {
+    padding: 24px 20px;
+  }
+
+  .showcase-text-col {
+    max-width: 100%;
+  }
+
+  .showcase-star-hotspot {
+    top: 42%;
+    left: 68%;
+  }
+
+  .showcase-constellation-point {
+    display: none;
   }
 
   .projects-items-row {

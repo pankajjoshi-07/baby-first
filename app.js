@@ -267,16 +267,106 @@ function initLumiApp() {
     });
   }
 
-  // About Photo Interactive Wink / Bounce
-  const aboutPhoto = document.getElementById('about-photo-interactive');
-  if (aboutPhoto) {
-    aboutPhoto.addEventListener('click', (e) => {
-      if (window.dreamAudio) window.dreamAudio.playChime('C5');
-      aboutPhoto.style.transform = 'scale(1.08) rotate(-4deg)';
-      setTimeout(() => { aboutPhoto.style.transform = ''; }, 300);
-      spawnFloatingFeedback(e.clientX, e.clientY, '⭐ Lumi & Star');
+  // Cinematic Showcase Background Mouse Parallax
+  const showcaseSection = document.querySelector('.about-cinematic-showcase');
+  const showcaseBg = document.getElementById('showcase-parallax-bg');
+
+  if (showcaseSection && showcaseBg && !prefersReducedMotion) {
+    let sTicking = false;
+    let sTargetX = 0, sTargetY = 0;
+    let sCurrentX = 0, sCurrentY = 0;
+
+    showcaseSection.addEventListener('mousemove', (e) => {
+      const rect = showcaseSection.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height - 0.5;
+      sTargetX = relX * 18;
+      sTargetY = relY * 12;
+
+      if (!sTicking) {
+        requestAnimationFrame(updateShowcaseParallax);
+        sTicking = true;
+      }
+    }, { passive: true });
+
+    showcaseSection.addEventListener('mouseleave', () => {
+      sTargetX = 0;
+      sTargetY = 0;
+      if (!sTicking) {
+        requestAnimationFrame(updateShowcaseParallax);
+        sTicking = true;
+      }
+    });
+
+    function updateShowcaseParallax() {
+      sCurrentX += (sTargetX - sCurrentX) * 0.1;
+      sCurrentY += (sTargetY - sCurrentY) * 0.1;
+
+      if (showcaseBg) {
+        showcaseBg.style.transform = `translate(${sCurrentX * -0.6}px, ${sCurrentY * -0.6}px)`;
+      }
+
+      if (Math.abs(sTargetX - sCurrentX) > 0.04 || Math.abs(sTargetY - sCurrentY) > 0.04) {
+        requestAnimationFrame(updateShowcaseParallax);
+      } else {
+        sTicking = false;
+      }
+    }
+  }
+
+  // Pip the Golden Star Companion Interaction
+  const companionStar = document.getElementById('showcase-companion-star');
+  if (companionStar) {
+    companionStar.addEventListener('click', (e) => {
+      if (window.dreamAudio) window.dreamAudio.playChime('C6');
+      companionStar.style.transform = 'translate(-50%, -50%) scale(1.3) rotate(15deg)';
+      setTimeout(() => { companionStar.style.transform = ''; }, 350);
+      spawnFloatingFeedback(e.clientX, e.clientY - 20, '⭐ Pip: *Twinkle!* ✨');
+      if (speechBubble) {
+        speechBubble.textContent = "Pip says: 'Lumi and I will guide your dreams tonight!' ⭐";
+      }
+    });
+
+    companionStar.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        companionStar.click();
+      }
     });
   }
+
+  // Interactive Constellation Whispers
+  const constellationPoints = document.querySelectorAll('.showcase-constellation-point');
+  const whisperBox = document.getElementById('showcase-whisper-box');
+  const whisperText = whisperBox ? whisperBox.querySelector('.whisper-text') : null;
+  const constellationNotes = ['E5', 'G5', 'A5'];
+  const defaultWhisper = "A curious dreamer watching over forgotten wishes in the celestial sky.";
+
+  constellationPoints.forEach((point, idx) => {
+    point.addEventListener('mouseenter', () => {
+      if (window.dreamAudio) window.dreamAudio.playChime(constellationNotes[idx % constellationNotes.length]);
+      const whisper = point.dataset.whisper;
+      if (whisperText && whisper) {
+        whisperText.textContent = whisper;
+        whisperBox.style.borderColor = 'var(--accent-gold)';
+        whisperBox.style.color = '#fff4d4';
+      }
+    });
+
+    point.addEventListener('mouseleave', () => {
+      if (whisperText) {
+        whisperText.textContent = defaultWhisper;
+        whisperBox.style.borderColor = '';
+        whisperBox.style.color = '';
+      }
+    });
+
+    point.addEventListener('click', (e) => {
+      if (window.dreamAudio) window.dreamAudio.playChime('C6');
+      const whisper = point.dataset.whisper || '✨ Celestial Starlight';
+      spawnFloatingFeedback(e.clientX, e.clientY - 15, `✦ ${point.title || 'Star'}`);
+    });
+  });
 
   /* ==========================================================================
      6. EASTER EGG: THE HIDDEN ROOM (5 Clicks Unlock!)
@@ -925,14 +1015,15 @@ function initLumiApp() {
   const searchDropdown = document.getElementById('search-dropdown');
 
   const searchableIndex = [
+    { title: "Meet Lumi", type: "Character", section: "#about" },
+    { title: "The Little Dream Architect", type: "Role", section: "#about" },
+    { title: "Pip the Golden Star", type: "Companion", section: "#about" },
     { title: "Dream Bubble Maker", type: "Project", section: "#projects" },
     { title: "Nightlight Guardian", type: "Project", section: "#projects" },
     { title: "Memory Garden", type: "Project", section: "#projects" },
     { title: "A Tiny Spark (Origin)", type: "Story", section: "#story" },
     { title: "The Dream Machine", type: "Story", section: "#story" },
-    { title: "The Hidden Room", type: "Secret", section: "#secret" },
-    { title: "Star Wand", type: "Quick Fact", section: "#quickfacts-card" },
-    { title: "Dream Spirit", type: "Species", section: "#quickfacts-card" }
+    { title: "The Hidden Room", type: "Secret", section: "#secret" }
   ];
 
   if (searchInput && searchDropdown) {
