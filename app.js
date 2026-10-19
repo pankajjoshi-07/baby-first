@@ -303,7 +303,7 @@ function initLumiApp() {
     pill.addEventListener('click', (e) => {
       const tag = pill.dataset.tag;
       const phrase = tagPhrases[tag] || "✨ Lumi's magical spark!";
-      
+
       document.querySelectorAll('.tag-pill').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
 
@@ -548,33 +548,33 @@ function initLumiApp() {
   const projectDetails = {
     bubble: {
       id: 'bubble',
-      title: "Dream Bubble Maker",
-      subtitle: "Turns forgotten wishes into floating worlds.",
+      title: "Dreamscape Creator (3D)",
+      subtitle: "Sculpt, populate, and illuminate your own celestial floating realm.",
       img: "assets/proj1_bubble_hd.jpg",
-      desc: "The Dream Bubble Maker encapsulates fragile bedtime thoughts inside starlight resin. When a child tosses and turns with worries, this apparatus gently floats into their thoughts and expands into a warm, safe sanctuary.",
+      desc: "An interactive real-time 3D fantasy world-builder. Place magical trees, crystal clusters, cottages, glowing portals, lanterns, and flora across an ethereal floating island. Rotate the orbit camera, switch celestial presets from Golden Sunset to Aurora Dream, and create a tranquil sanctuary under the stars.",
       stats: [
-        { label: "Stability", val: "99.8%" },
-        { label: "Memory Density", val: "4.2 Tb/Bubble" },
-        { label: "Fragrance", val: "Fresh Lavender" }
+        { label: "Render Engine", val: "Three.js 3D" },
+        { label: "Island Realm", val: "Floating Biome" },
+        { label: "Presets", val: "4 Celestial Skies" }
       ],
-      interactiveType: "bubbleToy",
-      toyTitle: "🫧 Interactive Workshop: Dream Bubble Blower",
-      toyInstruction: "Tap the button below or click anywhere in the cloud chamber to spawn floating dream bubbles. Click any bubble to pop it with a soothing chime!"
+      interactiveType: "dreamscapeToy",
+      toyTitle: "✨ 3D World-Builder: Dreamscape Creator",
+      toyInstruction: "Drag to orbit camera · Scroll or pinch to zoom · Pick fantasy items to place on the floating island · Switch celestial skies in real-time!"
     },
     nightlight: {
       id: 'nightlight',
       title: "Nightlight Guardian",
-      subtitle: "Transforms nightmares into friendly companions.",
+      subtitle: "Interactive Cozy Sanctuary & Star Guardian Spirit.",
       img: "assets/proj2_lantern_hd.jpg",
-      desc: "Crafted from fallen crescent moon porcelain and brass coils, this lantern casts a warm geometric shadow on bedroom walls. Shadow monsters passing through its beam transform into soft fluffy bunnies.",
+      desc: "An interactive cozy night-time guardian sanctuary. Drapes your room in warm amber, moon blue, lavender, or aurora light. Adjust volumetric lantern brightness, listen to gentle rain, distant thunder, or starlight drones, watch shooting stars, and drift to sleep with a 30m / 60m bedtime timer while your loyal Guardian spirit watches over you.",
       stats: [
-        { label: "Glow Radius", val: "12 Meters" },
-        { label: "Nightmare Absorption", val: "100%" },
-        { label: "Battery", val: "Moonbeam Charged" }
+        { label: "Volumetric Glow", val: "4 Light Modes" },
+        { label: "Cozy Ambience", val: "4 Soundscapes" },
+        { label: "Sleep Sanctuary", val: "30m / 60m Timer" }
       ],
       interactiveType: "lanternToy",
-      toyTitle: "💡 Interactive Workshop: Glow Spectrum Switch",
-      toyInstruction: "Toggle the lantern between Cozy Honey Amber and Cosmic Nebula Blue to see the ambient shadow transform in real-time."
+      toyTitle: "🏮 Interactive Sanctuary: Nightlight Guardian",
+      toyInstruction: "Interact with your Guardian spirit · Adjust ambient room glow · Listen to rain or thunder · Wish upon shooting stars!"
     },
     garden: {
       id: 'garden',
@@ -588,20 +588,43 @@ function initLumiApp() {
         { label: "Soil Type", val: "Stardust Loam" }
       ],
       interactiveType: "gardenToy",
-      toyTitle: "🌸 Interactive Workshop: Stardust Soil Nursery",
-      toyInstruction: "Water the cosmic stardust soil to blossom glowing memories of joy and laughter."
+      toyTitle: "🌸 Interactive Sanctuary: Memory Garden",
+      toyInstruction: "Plant precious memories as living cosmic flowers and floating crystal orbs across the ancient sanctuary."
     }
   };
 
   function openProjectModal(type) {
+    // Teardown any running 3D canvas or active audio when opening/switching modal tabs
+    if (window.DreamscapeCreator && typeof window.DreamscapeCreator.destroy === 'function') {
+      window.DreamscapeCreator.destroy();
+    }
+    if (window.NightlightGuardian && typeof window.NightlightGuardian.destroy === 'function') {
+      window.NightlightGuardian.destroy();
+    }
+    if (window.MemoryGarden && typeof window.MemoryGarden.destroy === 'function') {
+      window.MemoryGarden.destroy();
+    }
+
     const data = projectDetails[type] || projectDetails.bubble;
     if (window.dreamAudio) window.dreamAudio.playChime('C5');
+
+    const modalWindow = projectModal ? projectModal.querySelector('.project-modal-window') : null;
+    if (modalWindow) {
+      modalWindow.classList.remove('dreamscape-modal-window', 'nightlight-modal-window', 'memory-garden-modal-window');
+      if (data.id === 'bubble') {
+        modalWindow.classList.add('dreamscape-modal-window');
+      } else if (data.id === 'nightlight') {
+        modalWindow.classList.add('nightlight-modal-window');
+      } else if (data.id === 'garden') {
+        modalWindow.classList.add('memory-garden-modal-window');
+      }
+    }
 
     projectModalBody.innerHTML = `
       <!-- Project Switcher Tabs -->
       <div class="project-modal-tabs" style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;">
         <button class="project-tab-btn ${data.id === 'bubble' ? 'active' : ''}" data-project-tab="bubble" style="padding:6px 14px;border-radius:20px;font-size:0.78rem;font-weight:600;cursor:pointer;border:1px solid ${data.id === 'bubble' ? 'var(--accent-purple)' : 'var(--border-card)'};background:${data.id === 'bubble' ? 'linear-gradient(135deg, rgba(244,114,182,0.35), rgba(192,132,252,0.35))' : 'rgba(255,255,255,0.06)'};color:#fff;transition:all 0.2s;">
-          🫧 Dream Bubble Maker
+          ✨ Dreamscape Creator (3D)
         </button>
         <button class="project-tab-btn ${data.id === 'nightlight' ? 'active' : ''}" data-project-tab="nightlight" style="padding:6px 14px;border-radius:20px;font-size:0.78rem;font-weight:600;cursor:pointer;border:1px solid ${data.id === 'nightlight' ? 'var(--accent-purple)' : 'var(--border-card)'};background:${data.id === 'nightlight' ? 'linear-gradient(135deg, rgba(244,114,182,0.35), rgba(192,132,252,0.35))' : 'rgba(255,255,255,0.06)'};color:#fff;transition:all 0.2s;">
           🏮 Nightlight Guardian
@@ -631,7 +654,7 @@ function initLumiApp() {
       </div>
 
       <!-- INTERACTIVE WORKSHOP MINI-TOY -->
-      <div style="background:rgba(15,18,44,0.7);border:1px solid rgba(168,85,247,0.3);border-radius:12px;padding:14px;margin-bottom:20px;">
+      <div class="project-toy-outer-box" style="background:rgba(15,18,44,0.7);border:1px solid rgba(168,85,247,0.3);border-radius:14px;padding:14px;margin-bottom:20px;">
         <h4 style="font-family:var(--font-display);color:#fed7aa;font-size:0.95rem;margin-bottom:6px;">${data.toyTitle}</h4>
         <p style="font-size:0.78rem;color:#94a3b8;margin-bottom:12px;line-height:1.4;">${data.toyInstruction}</p>
         
@@ -664,6 +687,20 @@ function initLumiApp() {
   function mountInteractiveToy(type) {
     const container = document.getElementById('project-toy-container');
     if (!container) return;
+
+    if (type === 'dreamscapeToy') {
+      container.style.padding = '0';
+      container.style.border = 'none';
+      container.style.minHeight = '520px';
+      container.style.height = '520px';
+      container.style.background = '#060817';
+      if (window.DreamscapeCreator && typeof window.DreamscapeCreator.mount === 'function') {
+        window.DreamscapeCreator.mount(container);
+      } else {
+        container.innerHTML = '<div style="padding:24px;text-align:center;color:#fcd34d;">Loading 3D Dreamscape Engine...</div>';
+      }
+      return;
+    }
 
     if (type === 'bubbleToy') {
       container.innerHTML = `
@@ -723,65 +760,28 @@ function initLumiApp() {
       spawnBubble(180, 25);
     }
     else if (type === 'lanternToy') {
-      container.innerHTML = `
-        <div style="display:flex;gap:12px;align-items:center;">
-          <button id="btn-glow-amber" class="btn-primary" style="font-size:0.78rem;padding:6px 14px;">
-            🌟 Warm Amber
-          </button>
-          <button id="btn-glow-blue" class="btn-secondary" style="font-size:0.78rem;padding:6px 14px;">
-            🌌 Nebula Blue
-          </button>
-        </div>
-      `;
-
-      const heroImg = document.getElementById('project-modal-hero-img');
-      const glowLayer = document.getElementById('project-glow-layer');
-      const btnAmber = document.getElementById('btn-glow-amber');
-      const btnBlue = document.getElementById('btn-glow-blue');
-
-      btnAmber.addEventListener('click', () => {
-        if (window.dreamAudio) window.dreamAudio.playChime('E5');
-        if (heroImg) heroImg.style.filter = 'sepia(0.3) saturate(1.4)';
-        if (glowLayer) glowLayer.style.background = 'radial-gradient(circle at 50% 50%, rgba(252,211,77,0.3) 0%, transparent 75%)';
-      });
-
-      btnBlue.addEventListener('click', () => {
-        if (window.dreamAudio) window.dreamAudio.playChime('A5');
-        if (heroImg) heroImg.style.filter = 'hue-rotate(180deg) saturate(1.3)';
-        if (glowLayer) glowLayer.style.background = 'radial-gradient(circle at 50% 50%, rgba(96,165,250,0.3) 0%, transparent 75%)';
-      });
+      container.style.padding = '0';
+      container.style.border = 'none';
+      container.style.minHeight = '520px';
+      container.style.height = '520px';
+      container.style.background = '#060817';
+      if (window.NightlightGuardian && typeof window.NightlightGuardian.mount === 'function') {
+        window.NightlightGuardian.mount(container);
+      } else {
+        container.innerHTML = '<div style="padding:24px;text-align:center;color:#fcd34d;">Loading Nightlight Guardian Sanctuary...</div>';
+      }
     }
     else if (type === 'gardenToy') {
-      container.innerHTML = `
-        <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;">
-          <div id="garden-bloom-row" style="display:flex;gap:16px;font-size:1.6rem;min-height:36px;align-items:center;">
-            <span>🌱</span><span>🌱</span><span>🌱</span>
-          </div>
-          <button id="btn-water-garden" class="btn-secondary" style="font-size:0.78rem;padding:6px 14px;">
-            ✨ Nourish with Stardust
-          </button>
-        </div>
-      `;
-
-      const bloomRow = document.getElementById('garden-bloom-row');
-      const waterBtn = document.getElementById('btn-water-garden');
-      let bloomed = false;
-
-      waterBtn.addEventListener('click', () => {
-        if (window.dreamAudio) window.dreamAudio.playChime('C6');
-        bloomed = !bloomed;
-        if (bloomed) {
-          bloomRow.innerHTML = `
-            <span style="animation:gentle-bob 1s ease infinite;">🌸</span>
-            <span style="animation:gentle-bob 1s ease 0.2s infinite;">🌺</span>
-            <span style="animation:gentle-bob 1s ease 0.4s infinite;">🌼</span>
-          `;
-          waterBtn.textContent = '✨ Blooms are Radiant! (Reset)';
-        } else {
-          bloomRow.innerHTML = '<span>🌱</span><span>🌱</span><span>🌱</span>';
-          waterBtn.textContent = '✨ Nourish with Stardust';
-        }
-      });
+      container.style.padding = '0';
+      container.style.border = 'none';
+      container.style.minHeight = '560px';
+      container.style.height = '560px';
+      container.style.background = '#060817';
+      if (window.MemoryGarden && typeof window.MemoryGarden.mount === 'function') {
+        window.MemoryGarden.mount(container);
+      } else {
+        container.innerHTML = '<div style="padding:24px;text-align:center;color:#fcd34d;">Loading Enchanted Memory Garden...</div>';
+      }
     }
   }
 
@@ -1097,7 +1097,7 @@ function initLumiApp() {
     const stream = document.getElementById('wishes-stream');
     if (!stream) return;
     const wishes = getStoredWishes();
-    
+
     // Render clean wish cards (without cross and without inline make-a-wish tile)
     stream.innerHTML = wishes.map((w, index) => `
       <div class="wish-tile" data-index="${index}">
@@ -1215,6 +1215,17 @@ function initLumiApp() {
           if (modalId === 'modal-intro' && window.LumiCinematic) {
             window.LumiCinematic.close();
           } else {
+            if (modalId === 'modal-project') {
+              if (window.DreamscapeCreator && typeof window.DreamscapeCreator.destroy === 'function') {
+                window.DreamscapeCreator.destroy();
+              }
+              if (window.NightlightGuardian && typeof window.NightlightGuardian.destroy === 'function') {
+                window.NightlightGuardian.destroy();
+              }
+              if (window.MemoryGarden && typeof window.MemoryGarden.destroy === 'function') {
+                window.MemoryGarden.destroy();
+              }
+            }
             modal.hidden = true;
             document.body.style.overflow = '';
           }
@@ -1230,6 +1241,17 @@ function initLumiApp() {
         if (modal.id === 'modal-intro' && window.LumiCinematic) {
           window.LumiCinematic.close();
         } else {
+          if (modal.id === 'modal-project') {
+            if (window.DreamscapeCreator && typeof window.DreamscapeCreator.destroy === 'function') {
+              window.DreamscapeCreator.destroy();
+            }
+            if (window.NightlightGuardian && typeof window.NightlightGuardian.destroy === 'function') {
+              window.NightlightGuardian.destroy();
+            }
+            if (window.MemoryGarden && typeof window.MemoryGarden.destroy === 'function') {
+              window.MemoryGarden.destroy();
+            }
+          }
           modal.hidden = true;
           document.body.style.overflow = '';
         }
@@ -1240,6 +1262,15 @@ function initLumiApp() {
   // ESC key closes any open modal
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+      if (window.DreamscapeCreator && typeof window.DreamscapeCreator.destroy === 'function') {
+        window.DreamscapeCreator.destroy();
+      }
+      if (window.NightlightGuardian && typeof window.NightlightGuardian.destroy === 'function') {
+        window.NightlightGuardian.destroy();
+      }
+      if (window.MemoryGarden && typeof window.MemoryGarden.destroy === 'function') {
+        window.MemoryGarden.destroy();
+      }
       if (window.LumiCinematic && document.getElementById('modal-intro') && !document.getElementById('modal-intro').hidden) {
         window.LumiCinematic.close();
       }
