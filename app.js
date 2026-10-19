@@ -350,6 +350,11 @@ function initLumiApp() {
   const lockIcon = document.getElementById('lock-icon');
   const secretBadge = document.getElementById('secret-badge');
   const modalEasterEgg = document.getElementById('modal-easter-egg');
+  const secretHeaderBadge = document.getElementById('secret-header-badge');
+  const secretSealStatus = document.getElementById('secret-seal-status');
+  const secretBtnText = document.getElementById('secret-btn-text');
+  const secretBtnCount = document.getElementById('secret-btn-count');
+  const btnSecretTapAction = document.getElementById('btn-secret-tap-action');
 
   function spawnFloatingFeedback(x, y, text) {
     const el = document.createElement('div');
@@ -394,6 +399,15 @@ function initLumiApp() {
       clickCountText.textContent = `${starClickCount} / ${targetClicks} clicks`;
     }
 
+    if (secretBtnCount) {
+      secretBtnCount.textContent = `${starClickCount} / ${targetClicks}`;
+    }
+
+    if (secretSealStatus) {
+      const remaining = targetClicks - starClickCount;
+      secretSealStatus.textContent = remaining > 0 ? `${remaining} Tap${remaining > 1 ? 's' : ''} Remaining` : '✓ Slumber Seal Broken!';
+    }
+
     const secretBarFill = document.getElementById('secret-bar-fill');
     if (secretBarFill) {
       const pct = Math.min(100, Math.round((starClickCount / targetClicks) * 100));
@@ -405,6 +419,22 @@ function initLumiApp() {
       if (lockIcon) lockIcon.textContent = '🔓';
       if (secretBadge) secretBadge.textContent = '🌟';
       if (clickCountText) clickCountText.textContent = '✨ UNLOCKED!';
+      if (secretHeaderBadge) {
+        secretHeaderBadge.textContent = '✨ Unlocked';
+        secretHeaderBadge.classList.add('unlocked');
+      }
+      if (secretSealStatus) {
+        secretSealStatus.textContent = '✓ Slumber Seal Broken!';
+      }
+      if (secretBtnText) {
+        secretBtnText.textContent = 'Open Secret Sanctuary 🎶';
+      }
+      if (secretBtnCount) {
+        secretBtnCount.textContent = 'UNLOCKED ✨';
+      }
+      if (btnSecretTapAction) {
+        btnSecretTapAction.classList.add('unlocked');
+      }
 
       if (window.dreamAudio) {
         window.dreamAudio.playUnlockSound();
@@ -450,25 +480,223 @@ function initLumiApp() {
     });
   }
 
-  // Secret Melody Player inside Easter Egg Modal
-  const playSecretTuneBtn = document.getElementById('play-secret-tune-btn');
-  if (playSecretTuneBtn) {
-    playSecretTuneBtn.addEventListener('click', () => {
-      if (window.dreamAudio) {
-        window.dreamAudio.stopLullaby();
-        window.dreamAudio.startLullaby(window.dreamAudio.secretScore);
-        updateMusicUI(true);
-        playSecretTuneBtn.innerHTML = '<span>🎶 Playing "Lumi\'s Midnight Waltz"...</span>';
-        setTimeout(() => {
-          playSecretTuneBtn.innerHTML = '<span>🎵 Replay Secret Melody</span>';
-        }, 7000);
+  if (btnSecretTapAction) {
+    btnSecretTapAction.addEventListener('click', (e) => {
+      registerSecretClick(e);
+    });
+  }
+
+  /* ==========================================================================
+     SECRET STARLIGHT MUSIC BOX STUDIO CONTROLLER
+     ========================================================================== */
+  let currentSecretTrack = 'waltz';
+  let isSecretPlaying = false;
+  let secretTempo = 1.0;
+  let secretTimbre = 'musicbox';
+
+  const trackMeta = {
+    waltz: { title: "Lumi's Midnight Waltz", tempoTag: "3/4 Waltz" },
+    whispers: { title: "Nebula Whispers", tempoTag: "Airy Ambient" },
+    rain: { title: "Stardust Rain & Bells", tempoTag: "Crystal Droplets" }
+  };
+
+  const musicBoxDiscWrap = document.querySelector('.music-box-disc-wrap');
+  const musicBoxDisc = document.getElementById('music-box-disc');
+  const musicTrackTitle = document.getElementById('music-track-title');
+  const musicTrackTempoTag = document.getElementById('music-track-tempo-tag');
+  const musicPulseDot = document.getElementById('music-pulse-dot');
+  const soundwaveBars = document.getElementById('music-soundwave-bars');
+  const secretProgressBar = document.getElementById('secret-progress-bar');
+  const currentNoteDisplay = document.getElementById('current-note-display');
+  const btnSecretMasterPlay = document.getElementById('btn-secret-master-play');
+  const playIcon = document.getElementById('play-icon');
+  const playLabel = document.getElementById('play-label');
+
+  function updateSecretPlayerUI(playing) {
+    isSecretPlaying = !!playing;
+    if (musicBoxDiscWrap) {
+      if (isSecretPlaying) musicBoxDiscWrap.classList.add('playing');
+      else musicBoxDiscWrap.classList.remove('playing');
+    }
+    if (musicBoxDisc) {
+      if (isSecretPlaying) musicBoxDisc.classList.add('spinning');
+      else musicBoxDisc.classList.remove('spinning');
+    }
+    if (musicPulseDot) {
+      if (isSecretPlaying) musicPulseDot.classList.add('active');
+      else musicPulseDot.classList.remove('active');
+    }
+    if (soundwaveBars) {
+      if (isSecretPlaying) soundwaveBars.classList.add('active');
+      else soundwaveBars.classList.remove('active');
+    }
+    if (playIcon && playLabel) {
+      if (isSecretPlaying) {
+        playIcon.textContent = '⏸';
+        playLabel.textContent = 'Pause Music Box';
+      } else {
+        playIcon.textContent = '▶';
+        playLabel.textContent = 'Play Celestial Music Box';
+      }
+    }
+  }
+
+  function stopSecretMusicBoxUI() {
+    if (window.dreamAudio && typeof window.dreamAudio.stopSecretTrack === 'function') {
+      window.dreamAudio.stopSecretTrack();
+    }
+    updateSecretPlayerUI(false);
+    if (secretProgressBar) secretProgressBar.style.width = '0%';
+    if (currentNoteDisplay) currentNoteDisplay.textContent = '—';
+  }
+
+  function startSecretMusicBoxUI(trackId = currentSecretTrack) {
+    if (!window.dreamAudio) return;
+    currentSecretTrack = trackId;
+    window.dreamAudio.setSecretTempo(secretTempo);
+    window.dreamAudio.setSecretTimbre(secretTimbre);
+
+    const meta = trackMeta[currentSecretTrack] || trackMeta.waltz;
+    if (musicTrackTitle) musicTrackTitle.textContent = meta.title;
+    if (musicTrackTempoTag) {
+      musicTrackTempoTag.textContent = `${meta.tempoTag} · ${secretTempo}x · ${secretTimbre === 'musicbox' ? 'Music Box' : secretTimbre === 'bell' ? 'Crystal Bell' : 'Stardust Echo'}`;
+    }
+
+    const started = window.dreamAudio.playSecretTrack(currentSecretTrack, (step) => {
+      if (currentNoteDisplay) currentNoteDisplay.textContent = step.note;
+      if (secretProgressBar && step.total > 0) {
+        const pct = Math.round(((step.index + 1) / step.total) * 100);
+        secretProgressBar.style.width = `${pct}%`;
+      }
+      if (soundwaveBars) {
+        const bars = soundwaveBars.querySelectorAll('.bar');
+        const activeBarIdx = step.index % bars.length;
+        bars.forEach((b, idx) => {
+          if (idx === activeBarIdx) {
+            b.style.height = `${Math.floor(Math.random() * 14 + 14)}px`;
+            b.style.background = '#fcd34d';
+          } else {
+            b.style.background = '';
+          }
+        });
+      }
+    });
+
+    if (started) {
+      updateSecretPlayerUI(true);
+      document.querySelectorAll('.secret-track-card').forEach(card => {
+        if (card.dataset.track === currentSecretTrack) {
+          card.classList.add('active');
+          const badge = card.querySelector('.track-badge');
+          if (badge) badge.textContent = 'Playing';
+        } else {
+          card.classList.remove('active');
+          const badge = card.querySelector('.track-badge');
+          if (badge) badge.textContent = 'Select';
+        }
+      });
+    }
+  }
+
+  // Master Play / Pause
+  if (btnSecretMasterPlay) {
+    btnSecretMasterPlay.addEventListener('click', () => {
+      if (isSecretPlaying) {
+        stopSecretMusicBoxUI();
+      } else {
+        startSecretMusicBoxUI(currentSecretTrack);
       }
     });
   }
 
+  // Track Selector Cards
+  document.querySelectorAll('.secret-track-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const track = card.dataset.track;
+      if (track) {
+        currentSecretTrack = track;
+        startSecretMusicBoxUI(track);
+      }
+    });
+  });
+
+  // Timbre Pill Buttons
+  const timbrePills = document.querySelectorAll('#timbre-pills .synth-pill-btn');
+  timbrePills.forEach(btn => {
+    btn.addEventListener('click', () => {
+      timbrePills.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      secretTimbre = btn.dataset.timbre || 'musicbox';
+      if (window.dreamAudio) {
+        window.dreamAudio.setSecretTimbre(secretTimbre);
+        window.dreamAudio.playChimeWithTimbre('C5', secretTimbre);
+      }
+      const meta = trackMeta[currentSecretTrack] || trackMeta.waltz;
+      if (musicTrackTempoTag) {
+        musicTrackTempoTag.textContent = `${meta.tempoTag} · ${secretTempo}x · ${secretTimbre === 'musicbox' ? 'Music Box' : secretTimbre === 'bell' ? 'Crystal Bell' : 'Stardust Echo'}`;
+      }
+    });
+  });
+
+  // Tempo Pill Buttons
+  const tempoPills = document.querySelectorAll('#tempo-pills .synth-pill-btn');
+  tempoPills.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tempoPills.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      secretTempo = parseFloat(btn.dataset.tempo) || 1.0;
+      if (window.dreamAudio) {
+        window.dreamAudio.setSecretTempo(secretTempo);
+        window.dreamAudio.playChimeWithTimbre('E5', secretTimbre);
+      }
+      const meta = trackMeta[currentSecretTrack] || trackMeta.waltz;
+      if (musicTrackTempoTag) {
+        musicTrackTempoTag.textContent = `${meta.tempoTag} · ${secretTempo}x · ${secretTimbre === 'musicbox' ? 'Music Box' : secretTimbre === 'bell' ? 'Crystal Bell' : 'Stardust Echo'}`;
+      }
+    });
+  });
+
+  // Live Chime Keyboard Interaction
+  function triggerChimeKey(tineEl) {
+    if (!tineEl) return;
+    const note = tineEl.dataset.note;
+    if (note && window.dreamAudio) {
+      window.dreamAudio.playChimeWithTimbre(note, secretTimbre);
+    }
+    tineEl.classList.add('key-pressed');
+    setTimeout(() => tineEl.classList.remove('key-pressed'), 240);
+
+    const rect = tineEl.getBoundingClientRect();
+    spawnFloatingFeedback(rect.left + rect.width / 2, rect.top - 10, `🎵 ${note}`);
+  }
+
+  document.querySelectorAll('.chime-key-tine').forEach(tine => {
+    tine.addEventListener('click', () => triggerChimeKey(tine));
+  });
+
+  // Keyboard shortcut listener (keys 1-6 trigger chime notes when easter egg modal is open)
+  window.addEventListener('keydown', (e) => {
+    if (modalEasterEgg && !modalEasterEgg.hidden) {
+      const keyMap = {
+        '1': 'C5',
+        '2': 'D5',
+        '3': 'E5',
+        '4': 'G5',
+        '5': 'A5',
+        '6': 'C6'
+      };
+      if (keyMap[e.key]) {
+        e.preventDefault();
+        const tine = document.querySelector(`.chime-key-tine[data-note="${keyMap[e.key]}"]`);
+        if (tine) triggerChimeKey(tine);
+      }
+    }
+  });
+
   const resetSecretBtn = document.getElementById('reset-secret-btn');
   if (resetSecretBtn) {
     resetSecretBtn.addEventListener('click', () => {
+      stopSecretMusicBoxUI();
       starClickCount = 0;
       if (lockIcon) lockIcon.textContent = '🔒';
       if (secretBadge) secretBadge.textContent = '⭐';
@@ -478,7 +706,6 @@ function initLumiApp() {
       if (modalEasterEgg) modalEasterEgg.hidden = true;
       document.body.style.overflow = '';
       if (window.dreamAudio) {
-        window.dreamAudio.stopLullaby();
         window.dreamAudio.playTap();
       }
       updateMusicUI(false);
@@ -867,67 +1094,414 @@ function initLumiApp() {
   }
 
   /* ==========================================================================
-     10. SCROLL-DRIVEN ORIGIN STORY TIMELINE ANIMATION
+     10. SCROLL-DRIVEN ORIGIN STORY TIMELINE & CONSTELLATION ENGINE
      ========================================================================== */
   const milestones = document.querySelectorAll('.milestone-item');
   const storySection = document.getElementById('story');
   const constellationPath = document.querySelector('.constellation-path');
+  const travelingStarEl = document.getElementById('constellation-traveling-star');
+  const travelingStarGlow = travelingStarEl ? travelingStarEl.querySelector('.traveling-star-glow') : null;
+  const progressPill = document.getElementById('journey-progress-pill');
+  const progressText = document.getElementById('journey-progress-text');
+  const completionBadge = document.getElementById('journey-completion-badge');
+  const storyPanel = document.getElementById('journey-story-panel');
+  const journeyCard = document.querySelector('.card-journey');
 
   if (storySection && milestones.length > 0) {
+    const CHAPTER_DATA = {
+      1: {
+        id: 1,
+        chapterPill: 'Chapter I · The Wish',
+        epoch: 'Dream Nebula',
+        title: 'A Tiny Spark',
+        quote: '"I was born from a forgotten wish in the Dream Nebula."',
+        narrative: 'In the quietest folds of the starlight clouds, where forgotten wishes drift like sleeping embers, a single pure hope ignited. Not big enough to light a world yet, but warm enough to dream.',
+        img: 'assets/journey1_spark_hd.jpg',
+        relic: '⭐ Star Spark Core',
+        realm: 'Dream Nebula',
+        note: 'C5 (523 Hz)',
+        noteName: 'C5',
+        color: '#fcd34d',
+        theme: 'step-1'
+      },
+      2: {
+        id: 2,
+        chapterPill: 'Chapter II · The Gateway',
+        epoch: 'Cosmic Gateway',
+        title: 'First Discovery',
+        quote: '"I found a portal to the dream world."',
+        narrative: 'Drifting past ancient constellation arches, Lumi noticed a shimmering spiral gateway leading directly into the Great Cloud Sea—where thoughts turn into floating islands.',
+        img: 'assets/journey2_portal_hd.jpg',
+        relic: '🌀 Astral Gateway Key',
+        realm: 'Cosmic Gateway',
+        note: 'E5 (659 Hz)',
+        noteName: 'E5',
+        color: '#38bdf8',
+        theme: 'step-2'
+      },
+      3: {
+        id: 3,
+        chapterPill: 'Chapter III · The Loom',
+        epoch: 'Starlight Forge',
+        title: 'The Dream Machine',
+        quote: '"I built my first machine to craft dreams."',
+        narrative: 'With spun moonbeams and stardust brass gears, Lumi forged a magical machine capable of catching fearful night worries and turning them into calming, cozy dreamscapes.',
+        img: 'assets/journey3_machine_hd.jpg',
+        relic: '🪄 Starlight Loom Wand',
+        realm: 'Starlight Forge',
+        note: 'G5 (784 Hz)',
+        noteName: 'G5',
+        color: '#c084fc',
+        theme: 'step-3'
+      },
+      4: {
+        id: 4,
+        chapterPill: 'Chapter IV · The Calling',
+        epoch: 'Master Architect',
+        title: 'Becoming a Dream Architect',
+        quote: '"Now I travel across worlds helping dreams come true."',
+        narrative: 'Crowned by the living stars, Lumi took the eternal vow of the Dream Architect: to watch over bedtime sanctuaries, kindle comforting nightlights, and tend the Memory Garden for all who sleep.',
+        img: 'assets/journey4_architect_hd.jpg',
+        relic: '👑 Architect Diadem',
+        realm: 'Great Cloud Sea',
+        note: 'C6 (1046 Hz)',
+        noteName: 'C6',
+        color: '#f472b6',
+        theme: 'step-4'
+      }
+    };
+
+    // 1. Visited chapters persistence (localStorage)
+    const STORAGE_KEY = 'lumi_journey_visited_v1';
+    let visitedChapters = new Set();
+    let currentOpenChapter = null;
+    let isSectionInView = false;
+
+    function loadVisitedChapters() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            visitedChapters = new Set(parsed.map(Number));
+          }
+        }
+      } catch (e) {
+        console.warn('Lumi journey progress load error:', e);
+      }
+      updateProgressUI(false);
+    }
+
+    function saveVisitedChapters() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(visitedChapters)));
+      } catch (e) {
+        console.warn('Lumi journey progress save error:', e);
+      }
+    }
+
+    function updateProgressUI(triggerCelebration = true) {
+      // Update checkmarks on milestone pills
+      milestones.forEach(m => {
+        const step = parseInt(m.dataset.step, 10);
+        const pill = m.querySelector('.milestone-chapter-pill');
+        if (pill) {
+          let check = pill.querySelector('.chapter-check');
+          if (visitedChapters.has(step)) {
+            m.classList.add('visited');
+            if (!check) {
+              check = document.createElement('span');
+              check.className = 'chapter-check';
+              check.textContent = '✓';
+              check.setAttribute('aria-label', 'Explored');
+              pill.appendChild(check);
+            }
+          }
+        }
+      });
+
+      const count = visitedChapters.size;
+      if (progressText) {
+        if (count === 4) {
+          progressText.textContent = '4/4 All Chapters Explored ✨';
+          if (progressPill) progressPill.classList.add('completed');
+        } else {
+          progressText.textContent = `${count}/4 Chapters Explored`;
+          if (progressPill) progressPill.classList.remove('completed');
+        }
+      }
+
+      // Check final constellation completion
+      if (count === 4) {
+        if (journeyCard) journeyCard.classList.add('constellation-completed');
+        if (completionBadge) completionBadge.style.display = 'inline-flex';
+
+        if (triggerCelebration) {
+          triggerConstellationCelebration();
+        }
+      }
+    }
+
+    function markChapterVisited(stepId) {
+      const isFirstVisit = !visitedChapters.has(stepId);
+      visitedChapters.add(stepId);
+      saveVisitedChapters();
+      updateProgressUI(isFirstVisit);
+    }
+
+    // 2. Celebratory Celestial Audio & Star Shimmer
+    function triggerConstellationCelebration() {
+      if (window.dreamAudio && typeof window.dreamAudio.playChime === 'function') {
+        const chord = ['C5', 'E5', 'G5', 'C6'];
+        chord.forEach((note, idx) => {
+          setTimeout(() => {
+            window.dreamAudio.playChime(note);
+          }, idx * 120);
+        });
+      }
+      if (speechBubble) {
+        speechBubble.textContent = '🌟 Miracle! The full constellation is complete! Lumi is proud of you! ✨';
+      }
+    }
+
+    // 3. Expandable Story Panel Controller
+    function openChapterPanel(stepId, playAudio = true) {
+      const data = CHAPTER_DATA[stepId];
+      if (!data || !storyPanel) return;
+
+      // Avoid opening same panel or duplicate chime
+      if (currentOpenChapter === stepId && storyPanel.classList.contains('open')) {
+        return;
+      }
+
+      currentOpenChapter = stepId;
+      markChapterVisited(stepId);
+
+      // Play chapter tone
+      if (playAudio && window.dreamAudio && typeof window.dreamAudio.playChime === 'function') {
+        window.dreamAudio.playChime(data.noteName || 'C5');
+      }
+
+      // Update active milestone styling
+      milestones.forEach(m => {
+        m.classList.toggle('active', parseInt(m.dataset.step, 10) === stepId);
+      });
+
+      if (speechBubble) {
+        speechBubble.textContent = `📖 Story: "${data.title}" - ${data.quote}`;
+      }
+
+      // Populate story panel fields
+      const chPill = storyPanel.querySelector('#story-panel-ch-pill');
+      const epoch = storyPanel.querySelector('#story-panel-epoch');
+      const img = storyPanel.querySelector('#story-panel-img');
+      const relicBadge = storyPanel.querySelector('#story-panel-relic-badge');
+      const title = storyPanel.querySelector('#story-panel-title');
+      const quote = storyPanel.querySelector('#story-panel-quote');
+      const narrative = storyPanel.querySelector('#story-panel-narrative');
+      const realm = storyPanel.querySelector('#story-panel-realm');
+      const relic = storyPanel.querySelector('#story-panel-relic');
+      const note = storyPanel.querySelector('#story-panel-note');
+
+      if (chPill) chPill.textContent = data.chapterPill;
+      if (epoch) epoch.textContent = data.epoch;
+      if (img) {
+        img.src = data.img;
+        img.alt = `${data.title} Artwork`;
+      }
+      if (relicBadge) relicBadge.textContent = data.relic;
+      if (title) title.textContent = data.title;
+      if (quote) quote.textContent = data.quote;
+      if (narrative) narrative.textContent = data.narrative;
+      if (realm) realm.textContent = data.realm;
+      if (relic) relic.textContent = data.relic;
+      if (note) note.textContent = data.note;
+
+      // Distinct theme color attribute
+      storyPanel.setAttribute('data-theme', data.theme);
+      storyPanel.setAttribute('aria-hidden', 'false');
+      storyPanel.classList.add('open');
+
+      // Scroll into view gently if panel is partly outside viewport
+      setTimeout(() => {
+        const r = storyPanel.getBoundingClientRect();
+        if (r.bottom > window.innerHeight) {
+          storyPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }, 150);
+    }
+
+    function closeChapterPanel() {
+      if (!storyPanel) return;
+      storyPanel.classList.remove('open');
+      storyPanel.setAttribute('aria-hidden', 'true');
+      const prevStep = currentOpenChapter;
+      currentOpenChapter = null;
+
+      // Restore keyboard focus to closed milestone item
+      if (prevStep) {
+        const m = document.querySelector(`.milestone-step-${prevStep}`);
+        if (m) m.focus();
+      }
+    }
+
+    // Story Panel Close and Prev/Next buttons
+    const storyPanelCloseBtn = document.getElementById('story-panel-close-btn');
+    if (storyPanelCloseBtn) {
+      storyPanelCloseBtn.addEventListener('click', () => closeChapterPanel());
+    }
+
+    const storyPanelPrevBtn = document.getElementById('story-panel-prev-btn');
+    if (storyPanelPrevBtn) {
+      storyPanelPrevBtn.addEventListener('click', () => {
+        if (!currentOpenChapter) return;
+        const prev = currentOpenChapter > 1 ? currentOpenChapter - 1 : 4;
+        openChapterPanel(prev, true);
+      });
+    }
+
+    const storyPanelNextBtn = document.getElementById('story-panel-next-btn');
+    if (storyPanelNextBtn) {
+      storyPanelNextBtn.addEventListener('click', () => {
+        if (!currentOpenChapter) return;
+        const next = currentOpenChapter < 4 ? currentOpenChapter + 1 : 1;
+        openChapterPanel(next, true);
+      });
+    }
+
+    // Close on Escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && storyPanel && storyPanel.classList.contains('open')) {
+        closeChapterPanel();
+      }
+    });
+
+    // 4. Milestone item click & keyboard listeners
+    milestones.forEach(m => {
+      const step = parseInt(m.dataset.step, 10) || 1;
+
+      const triggerOpen = () => {
+        openChapterPanel(step, true);
+      };
+
+      m.addEventListener('click', triggerOpen);
+
+      m.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          triggerOpen();
+        }
+      });
+    });
+
+    // 5. Traveling Constellation Star Loop
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let starProgress = 0; // 0.0 to 1.0
+    let lastStarTime = performance.now();
+    let starAnimFrame = null;
+    const STAR_CYCLE_MS = 18000; // 18 seconds for full slow, elegant curve traversal
+
+    function animateTravelingStar(now) {
+      if (!isSectionInView || prefersReducedMotion) {
+        starAnimFrame = null;
+        return;
+      }
+
+      const dt = now - lastStarTime;
+      lastStarTime = now;
+      starProgress = (starProgress + (dt / STAR_CYCLE_MS)) % 1;
+
+      if (constellationPath && travelingStarEl) {
+        const totalLen = typeof constellationPath.getTotalLength === 'function'
+          ? constellationPath.getTotalLength()
+          : 600;
+        const currentDist = starProgress * totalLen;
+        const pt = constellationPath.getPointAtLength(currentDist);
+
+        travelingStarEl.setAttribute('transform', `translate(${pt.x.toFixed(2)}, ${pt.y.toFixed(2)})`);
+
+        // Check proximity to chapter nodes for subtle approach pulse
+        const nodes = [
+          { step: 1, p: 0.0 },
+          { step: 2, p: 0.333 },
+          { step: 3, p: 0.667 },
+          { step: 4, p: 1.0 }
+        ];
+
+        nodes.forEach(node => {
+          const diff = Math.min(Math.abs(starProgress - node.p), 1 - Math.abs(starProgress - node.p));
+          const mItem = document.querySelector(`.milestone-step-${node.step}`);
+          if (mItem) {
+            mItem.classList.toggle('node-approaching', diff < 0.075);
+          }
+        });
+
+        // Dynamic star color grading
+        if (travelingStarGlow) {
+          if (starProgress < 0.25) travelingStarGlow.style.fill = '#fcd34d';
+          else if (starProgress < 0.55) travelingStarGlow.style.fill = '#38bdf8';
+          else if (starProgress < 0.85) travelingStarGlow.style.fill = '#c084fc';
+          else travelingStarGlow.style.fill = '#f472b6';
+        }
+      }
+
+      starAnimFrame = requestAnimationFrame(animateTravelingStar);
+    }
+
+    function startStarAnimation() {
+      if (prefersReducedMotion || starAnimFrame) return;
+      lastStarTime = performance.now();
+      starAnimFrame = requestAnimationFrame(animateTravelingStar);
+    }
+
+    function stopStarAnimation() {
+      if (starAnimFrame) {
+        cancelAnimationFrame(starAnimFrame);
+        starAnimFrame = null;
+      }
+    }
+
+    // 6. Intersection Observer for lazy animation & in-view illumination
     const storyObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
+        isSectionInView = entry.isIntersecting;
         if (entry.isIntersecting) {
-          // Animate constellation path line
           if (constellationPath) {
             constellationPath.style.stroke = 'var(--accent-gold)';
             constellationPath.style.filter = 'drop-shadow(0 0 6px var(--accent-gold-glow))';
           }
 
-          // Sequentially illuminate milestones
           milestones.forEach((m, idx) => {
             setTimeout(() => {
               m.classList.add('in-view');
-              if (idx === 0) m.classList.add('active');
-            }, idx * 300);
+            }, idx * 220);
           });
+
+          startStarAnimation();
+        } else {
+          stopStarAnimation();
         }
       });
-    }, { threshold: 0.25 });
+    }, { threshold: 0.2 });
 
     storyObserver.observe(storySection);
 
-    // Interactive milestone click & keyboard activation
-    milestones.forEach(m => {
-      const activateMilestone = () => {
-        milestones.forEach(node => node.classList.remove('active'));
-        m.classList.add('active');
-        if (window.dreamAudio) {
-          const step = parseInt(m.dataset.step, 10) || 1;
-          const notes = ['C5', 'E5', 'G5', 'C6'];
-          window.dreamAudio.playChime(notes[step - 1] || 'C5');
-        }
-        const title = m.querySelector('.milestone-title')?.textContent || '';
-        if (speechBubble) {
-          speechBubble.textContent = `📖 Story: "${title}" - Lumi's journey continues! ✨`;
-        }
-      };
-
-      m.addEventListener('click', activateMilestone);
-
-      m.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          activateMilestone();
-        }
-      });
-    });
-
+    // 7. Scroll to explore button
     const journeyScrollBtn = document.getElementById('journey-scroll-btn');
     if (journeyScrollBtn) {
       journeyScrollBtn.addEventListener('click', () => {
         storySection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Also open chapter 1 if no chapter currently open
+        if (!currentOpenChapter) {
+          setTimeout(() => {
+            openChapterPanel(1, true);
+          }, 400);
+        }
       });
     }
+
+    // Initialize visited status from localStorage on startup
+    loadVisitedChapters();
   }
 
   /* ==========================================================================
@@ -1226,6 +1800,9 @@ function initLumiApp() {
                 window.MemoryGarden.destroy();
               }
             }
+            if (modalId === 'modal-easter-egg') {
+              if (typeof stopSecretMusicBoxUI === 'function') stopSecretMusicBoxUI();
+            }
             modal.hidden = true;
             document.body.style.overflow = '';
           }
@@ -1252,6 +1829,9 @@ function initLumiApp() {
               window.MemoryGarden.destroy();
             }
           }
+          if (modal.id === 'modal-easter-egg') {
+            if (typeof stopSecretMusicBoxUI === 'function') stopSecretMusicBoxUI();
+          }
           modal.hidden = true;
           document.body.style.overflow = '';
         }
@@ -1262,6 +1842,9 @@ function initLumiApp() {
   // ESC key closes any open modal
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+      if (typeof stopSecretMusicBoxUI === 'function') {
+        stopSecretMusicBoxUI();
+      }
       if (window.DreamscapeCreator && typeof window.DreamscapeCreator.destroy === 'function') {
         window.DreamscapeCreator.destroy();
       }

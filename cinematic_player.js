@@ -279,6 +279,7 @@
 
       if (this.video) {
         this.video.currentTime = 0;
+        this.video.muted = false;
         this.updateUI(0);
         const playPromise = this.video.play();
         if (playPromise !== undefined) {

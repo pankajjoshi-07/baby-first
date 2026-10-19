@@ -19,10 +19,23 @@
     rel="stylesheet">
 
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=111">
+  <link rel="stylesheet" href="style.css?v=118">
 </head>
 
 <body class="theme-night">
+  <!-- ================= PURE FULLSCREEN CINEMATIC INTRO VIDEO ================= -->
+  <div id="site-intro-gate" class="site-intro-gate" aria-label="Lumi Intro Video">
+    <video id="gate-video" class="gate-fullscreen-video" src="assets/intro_final.mp4" playsinline preload="auto"></video>
+    
+    <!-- Top-Right Skip Button -->
+    <button id="gate-skip-btn" class="pure-gate-skip-btn" type="button" aria-label="Skip Intro Video">
+      <span>Skip</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M5 4l11 8-11 8V4zm11 0h3v16h-3V4z"/>
+      </svg>
+    </button>
+  </div>
+
   <!-- Interactive Stardust Canvas for Particle Trail -->
   <canvas id="stardust-canvas"></canvas>
 
@@ -424,13 +437,23 @@
 
           <div class="card-header journey-header">
             <div class="journey-header-text">
-              <div class="journey-badge">
-                <span class="journey-badge-sparkle">✦</span>
-                <span class="journey-badge-text">STORYBOOK CHRONICLES</span>
+              <div class="journey-header-badges">
+                <div class="journey-badge">
+                  <span class="journey-badge-sparkle">✦</span>
+                  <span class="journey-badge-text">STORYBOOK CHRONICLES</span>
+                </div>
+                <div class="journey-progress-pill" id="journey-progress-pill" title="Track chapters you have explored">
+                  <span class="journey-progress-icon">🌟</span>
+                  <span class="journey-progress-text" id="journey-progress-text">0/4 Chapters Explored</span>
+                </div>
               </div>
               <h3 class="card-title journey-main-title">Lumi's Journey</h3>
               <p class="journey-subtitle">Follow the constellation of how a tiny spark became the Little Dream Architect
               </p>
+              <div class="journey-completion-badge" id="journey-completion-badge" style="display:none;" aria-live="polite">
+                <span class="completion-stars">✨ ✦ 🌟 ✦ ✨</span>
+                <span class="completion-text">Constellation Complete · Lumi's Story Shines Forever</span>
+              </div>
             </div>
             <button class="card-link-btn journey-explore-btn" id="journey-scroll-btn" type="button"
               aria-label="Scroll to explore Lumi's journey">
@@ -457,12 +480,18 @@
               <path class="constellation-glow-track"
                 d="M 100 60 C 180 32, 220 88, 300 60 C 380 32, 420 88, 500 60 C 580 32, 620 88, 700 60" />
               <!-- Animated dashed starlight constellation path -->
-              <path class="constellation-path"
+              <path class="constellation-path" id="constellation-path-el"
                 d="M 100 60 C 180 32, 220 88, 300 60 C 380 32, 420 88, 500 60 C 580 32, 620 88, 700 60" />
               <!-- Intermediate sparkling constellation stars -->
               <circle cx="200" cy="46" r="2.5" class="constellation-star-node-svg" />
               <circle cx="400" cy="74" r="2.5" class="constellation-star-node-svg" />
               <circle cx="600" cy="46" r="2.5" class="constellation-star-node-svg" />
+              <!-- Traveling Luminous Star along Constellation -->
+              <g id="constellation-traveling-star" class="constellation-traveling-star" transform="translate(100, 60)" aria-hidden="true">
+                <circle r="12" class="traveling-star-glow" />
+                <circle r="5" class="traveling-star-core" />
+                <circle r="2" class="traveling-star-center" />
+              </g>
             </svg>
 
             <div class="milestones-row">
@@ -544,6 +573,61 @@
                 </div>
               </div>
             </div>
+
+            <!-- Expanded Interactive Story Panel -->
+            <div class="journey-story-panel" id="journey-story-panel" aria-hidden="true" role="region" aria-label="Expanded Chapter Story">
+              <div class="story-panel-inner">
+                <div class="story-panel-top">
+                  <div class="story-panel-badges">
+                    <span class="story-panel-ch-pill" id="story-panel-ch-pill">Chapter I · The Wish</span>
+                    <span class="story-panel-epoch" id="story-panel-epoch">Dream Nebula</span>
+                    <span class="story-panel-status-tag" id="story-panel-status-tag">Explored ✓</span>
+                  </div>
+                  <button class="story-panel-close-btn" id="story-panel-close-btn" type="button" aria-label="Close chapter and return to constellation">
+                    <span>✕ Back to Constellation</span>
+                  </button>
+                </div>
+
+                <div class="story-panel-body">
+                  <div class="story-panel-art-col">
+                    <div class="story-panel-art-frame">
+                      <img id="story-panel-img" src="assets/journey1_spark_hd.jpg" alt="Chapter Artwork" class="story-panel-artwork">
+                      <div class="story-panel-art-glow" id="story-panel-art-glow"></div>
+                      <span class="story-panel-relic-badge" id="story-panel-relic-badge">⭐ Star Spark Core</span>
+                    </div>
+                  </div>
+                  <div class="story-panel-text-col">
+                    <h4 class="story-panel-title" id="story-panel-title">A Tiny Spark</h4>
+                    <blockquote class="story-panel-quote" id="story-panel-quote">"I was born from a forgotten wish in the Dream Nebula."</blockquote>
+                    <p class="story-panel-narrative" id="story-panel-narrative">
+                      In the quietest folds of the starlight clouds, where forgotten wishes drift like sleeping embers, a single pure hope ignited. Not big enough to light a world yet, but warm enough to dream.
+                    </p>
+                    <div class="story-panel-meta-row">
+                      <div class="story-panel-meta-item">
+                        <span class="meta-label">Origin Realm</span>
+                        <span class="meta-val" id="story-panel-realm">Dream Nebula</span>
+                      </div>
+                      <div class="story-panel-meta-item">
+                        <span class="meta-label">Sanctuary Relic</span>
+                        <span class="meta-val" id="story-panel-relic">Star Spark Core</span>
+                      </div>
+                      <div class="story-panel-meta-item">
+                        <span class="meta-label">Resonant Chime</span>
+                        <span class="meta-val" id="story-panel-note">C5 (523 Hz)</span>
+                      </div>
+                    </div>
+                    <div class="story-panel-nav-row">
+                      <button class="story-panel-nav-btn prev-btn" id="story-panel-prev-btn" type="button" aria-label="Previous Chapter">
+                        <span>← Previous Chapter</span>
+                      </button>
+                      <button class="story-panel-nav-btn next-btn" id="story-panel-next-btn" type="button" aria-label="Next Chapter">
+                        <span>Next Chapter →</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </article>
 
@@ -551,10 +635,10 @@
         <article class="card card-hidden-room" id="secret">
           <div class="card-header">
             <h3 class="card-title">The Hidden Room</h3>
-            <span class="secret-header-sparkle">🔒 Secret</span>
+            <span class="secret-header-sparkle" id="secret-header-badge">🔒 Secret</span>
           </div>
           <div class="hidden-room-artwork-wrap" id="hidden-arch-trigger"
-            title="Click to unlock the secret room! (5 clicks)">
+            title="Click to unlock the secret room! (5 clicks)" role="button" tabindex="0" aria-label="Secret stone archway and padlock">
             <img src="assets/hidden_room_hd.jpg" alt="Secret Stone Archway" class="hidden-room-bg-img">
             <div class="padlock-glow-center">
               <span class="glowing-lock-icon" id="lock-icon">🔒</span>
@@ -566,11 +650,36 @@
           </div>
           <div class="hidden-room-body">
             <p class="hidden-room-desc">
-              Click on the special star 5 times to unlock a secret lullaby and a surprise animation! ✨
+              Tap the ancient padlock or find the smiling star in the sky to break the slumber seal! ✨
             </p>
             <div class="secret-progress-bar-wrap" title="Unlock progress">
               <div class="secret-progress-bar-fill" id="secret-bar-fill" style="width: 0%;"></div>
             </div>
+
+            <!-- Secret Clues Box to eliminate empty space and add rich depth -->
+            <div class="secret-clues-box">
+              <div class="secret-clue-item">
+                <span class="clue-icon">🗝️</span>
+                <div class="clue-info">
+                  <span class="clue-label">Celestial Seal</span>
+                  <span class="clue-val" id="secret-seal-status">5 Stardust Taps Required</span>
+                </div>
+              </div>
+              <div class="secret-clue-item">
+                <span class="clue-icon">🎶</span>
+                <div class="clue-info">
+                  <span class="clue-label">Hidden Reward</span>
+                  <span class="clue-val">"Nebula Whispers" Lullaby</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Direct Interactive Tap / Enter Button -->
+            <button class="secret-action-btn" id="btn-secret-tap-action" type="button" aria-label="Tap to unlock secret room">
+              <span class="secret-btn-icon" id="secret-btn-icon">✨</span>
+              <span class="secret-btn-text" id="secret-btn-text">Tap Ancient Padlock</span>
+              <span class="secret-btn-count" id="secret-btn-count">0 / 5</span>
+            </button>
           </div>
         </article>
       </section>
@@ -625,7 +734,7 @@
 
       <!-- 16:9 Video Viewport / Stage -->
       <div class="cinematic-screen-container" id="cinematic-screen-wrap">
-        <video id="cinematic-video" class="cinematic-video" src="assets/lumi_intro.mp4" playsinline
+        <video id="cinematic-video" class="cinematic-video" src="assets/3.mp4" playsinline
           preload="auto"></video>
         <canvas id="cinematic-canvas" width="1280" height="720" style="display:none;"></canvas>
 
@@ -741,29 +850,170 @@
         <canvas id="confetti-canvas"></canvas>
       </div>
       <button class="modal-close-btn" data-close="modal-easter-egg" aria-label="Close secret chamber">&times;</button>
+      
       <div class="easter-egg-header">
-        <div class="secret-trophy-badge">🏆 UNLOCKED</div>
-        <h2 class="easter-egg-title">The Secret Starlight Chamber!</h2>
-        <p class="easter-egg-sub">You discovered Lumi's most protected secret.</p>
+        <div class="secret-trophy-badge">✨ UNLOCKED · SECRET STARLIGHT SANCTUARY</div>
+        <h2 class="easter-egg-title">Lumi's Starlight Music Box</h2>
+        <p class="easter-egg-sub">You unlocked Lumi's hidden celestial sound chamber. Compose, play, and harmonize with the stars.</p>
       </div>
+
       <div class="secret-chamber-content">
-        <div class="secret-avatar-dance">
-          <img src="assets/about_photo_hd.jpg" alt="Dancing Lumi" class="dancing-lumi-img"
-            style="border-radius:50%;width:100px;height:100px;object-fit:cover;border:3px solid var(--accent-gold);box-shadow:0 0 20px var(--accent-gold-glow);">
+        <!-- Turntable & Audio Visualizer Deck -->
+        <div class="music-box-stage">
+          <div class="music-box-disc-wrap">
+            <div class="music-box-disc" id="music-box-disc">
+              <div class="disc-grooves"></div>
+              <div class="disc-center">
+                <img src="assets/about_photo_hd.jpg" alt="Lumi Music Disc" class="dancing-lumi-img" draggable="false">
+              </div>
+            </div>
+            <div class="turntable-arm" id="turntable-arm"></div>
+          </div>
+
+          <div class="music-box-status-deck">
+            <div class="music-now-playing">
+              <span class="music-pulse-dot" id="music-pulse-dot"></span>
+              <span class="music-track-title" id="music-track-title">Lumi's Midnight Waltz</span>
+            </div>
+            <div class="music-track-tempo-tag" id="music-track-tempo-tag">3/4 Waltz · 1.0x Normal</div>
+            
+            <!-- Live Visualizer Equalizer Soundwave Bars -->
+            <div class="music-soundwave-bars" id="music-soundwave-bars" aria-label="Audio Visualizer">
+              <span class="bar bar-1"></span>
+              <span class="bar bar-2"></span>
+              <span class="bar bar-3"></span>
+              <span class="bar bar-4"></span>
+              <span class="bar bar-5"></span>
+              <span class="bar bar-6"></span>
+              <span class="bar bar-7"></span>
+              <span class="bar bar-8"></span>
+              <span class="bar bar-9"></span>
+              <span class="bar bar-10"></span>
+            </div>
+
+            <!-- Note Step Indicator & Scrubber -->
+            <div class="secret-progress-wrap">
+              <div class="secret-progress-bar" id="secret-progress-bar" style="width: 0%;"></div>
+            </div>
+            <div class="secret-note-pill" id="secret-note-pill">Current Note: <strong id="current-note-display">—</strong></div>
+
+            <!-- Master Play/Pause -->
+            <div class="music-stage-controls">
+              <button class="btn-primary btn-secret-master-play" id="btn-secret-master-play" type="button" aria-label="Play or pause secret track">
+                <span class="play-icon" id="play-icon">▶</span> <span class="play-label" id="play-label">Play Celestial Music Box</span>
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="secret-reward-box">
-          <h4>🌟 Secret Celestial Track: "Lumi's Midnight Waltz"</h4>
-          <p>You have unlocked the exclusive secret music box variation and earned the title of <strong>Honorary Master
-              Dream Architect</strong>!</p>
-          <div class="secret-track-player"
-            style="display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
-            <button class="btn-primary" id="play-secret-tune-btn">
-              <span>🎵 Play Secret Melody</span>
+
+        <!-- 3 Celestial Tracks Selection -->
+        <div class="secret-tracks-section">
+          <div class="secret-section-label">🌌 Choose Celestial Track:</div>
+          <div class="secret-track-grid">
+            <button class="secret-track-card active" data-track="waltz" type="button">
+              <div class="track-icon">🌟</div>
+              <div class="track-details">
+                <div class="track-name">Midnight Waltz</div>
+                <div class="track-desc">Classic 3/4 dream box lullaby</div>
+              </div>
+              <span class="track-badge">Playing</span>
             </button>
-            <button class="btn-secondary" id="reset-secret-btn" title="Reset click progress to try again">
-              <span>🔁 Relock Chamber</span>
+
+            <button class="secret-track-card" data-track="whispers" type="button">
+              <div class="track-icon">🌌</div>
+              <div class="track-details">
+                <div class="track-name">Nebula Whispers</div>
+                <div class="track-desc">Airy, ambient celestial chimes</div>
+              </div>
+              <span class="track-badge">Select</span>
+            </button>
+
+            <button class="secret-track-card" data-track="rain" type="button">
+              <div class="track-icon">🌧️</div>
+              <div class="track-details">
+                <div class="track-name">Stardust Rain</div>
+                <div class="track-desc">Shimmering crystal droplets</div>
+              </div>
+              <span class="track-badge">Select</span>
             </button>
           </div>
+        </div>
+
+        <!-- Synthesizer Controls: Timbre & Tempo -->
+        <div class="secret-synth-panel">
+          <div class="synth-control-group">
+            <span class="synth-label">🎵 Instrument Timbre:</span>
+            <div class="synth-pills" id="timbre-pills">
+              <button class="synth-pill-btn active" data-timbre="musicbox" type="button">🎼 Music Box</button>
+              <button class="synth-pill-btn" data-timbre="bell" type="button">🔔 Crystal Bell</button>
+              <button class="synth-pill-btn" data-timbre="echo" type="button">✨ Stardust Echo</button>
+            </div>
+          </div>
+
+          <div class="synth-control-group">
+            <span class="synth-label">⏱️ Playback Tempo:</span>
+            <div class="synth-pills" id="tempo-pills">
+              <button class="synth-pill-btn" data-tempo="0.8" type="button">🌙 0.8x Lullaby</button>
+              <button class="synth-pill-btn active" data-tempo="1.0" type="button">⭐ 1.0x Waltz</button>
+              <button class="synth-pill-btn" data-tempo="1.25" type="button">✨ 1.25x Joyful</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Live Chime Bell Keyboard -->
+        <div class="secret-keyboard-section">
+          <div class="keyboard-header">
+            <span class="secret-section-label">🎹 Live Starlight Chime Bells</span>
+            <span class="keyboard-hint">(Tap bells or press keys 1–6 on keyboard)</span>
+          </div>
+          <div class="chime-keyboard-deck" id="chime-keyboard-deck">
+            <button class="chime-key-tine" data-note="C5" data-key="1" type="button" aria-label="Play C5">
+              <div class="tine-cap"></div>
+              <div class="tine-tube" style="height: 100px;"></div>
+              <div class="tine-note">C5</div>
+              <div class="tine-hint">Key 1</div>
+            </button>
+            <button class="chime-key-tine" data-note="D5" data-key="2" type="button" aria-label="Play D5">
+              <div class="tine-cap"></div>
+              <div class="tine-tube" style="height: 92px;"></div>
+              <div class="tine-note">D5</div>
+              <div class="tine-hint">Key 2</div>
+            </button>
+            <button class="chime-key-tine" data-note="E5" data-key="3" type="button" aria-label="Play E5">
+              <div class="tine-cap"></div>
+              <div class="tine-tube" style="height: 84px;"></div>
+              <div class="tine-note">E5</div>
+              <div class="tine-hint">Key 3</div>
+            </button>
+            <button class="chime-key-tine" data-note="G5" data-key="4" type="button" aria-label="Play G5">
+              <div class="tine-cap"></div>
+              <div class="tine-tube" style="height: 76px;"></div>
+              <div class="tine-note">G5</div>
+              <div class="tine-hint">Key 4</div>
+            </button>
+            <button class="chime-key-tine" data-note="A5" data-key="5" type="button" aria-label="Play A5">
+              <div class="tine-cap"></div>
+              <div class="tine-tube" style="height: 68px;"></div>
+              <div class="tine-note">A5</div>
+              <div class="tine-hint">Key 5</div>
+            </button>
+            <button class="chime-key-tine" data-note="C6" data-key="6" type="button" aria-label="Play C6">
+              <div class="tine-cap"></div>
+              <div class="tine-tube" style="height: 60px;"></div>
+              <div class="tine-note">C6</div>
+              <div class="tine-hint">Key 6</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="secret-chamber-footer">
+          <button class="btn-secondary" id="reset-secret-btn" type="button" title="Relock chamber and reset star clicks">
+            <span>🔒 Relock Chamber</span>
+          </button>
+          <button class="btn-primary" data-close="modal-easter-egg" type="button">
+            <span>✨ Done Exploring</span>
+          </button>
         </div>
       </div>
     </div>
@@ -806,9 +1056,11 @@
   </div>
 
   <!-- Audio Synthesizer Script -->
-  <script src="audio.js?v=7"></script>
+  <script src="audio.js?v=8"></script>
+  <!-- Fullscreen Cinematic Intro Gateway -->
+  <script src="intro_gate.js?v=3"></script>
   <!-- Lumi Cinematic Intro Engine -->
-  <script src="cinematic_player.js?v=56"></script>
+  <script src="cinematic_player.js?v=57"></script>
   <!-- Three.js (Local Standalone Bundle) -->
   <script src="assets/three.min.js"></script>
   <!-- Dreamscape Creator (3D Engine) -->
@@ -818,7 +1070,7 @@
   <!-- Memory Garden (Interactive Magical Memory Preservation) -->
   <script src="memory_garden.js?v=6"></script>
   <!-- Main Application Script -->
-  <script src="app.js?v=71"></script>
+  <script src="app.js?v=77"></script>
 </body>
 
 </html>
